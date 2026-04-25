@@ -1,0 +1,1184 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chef Silmara</title>
+
+<!-- PWA / ícone na tela do iPhone -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Chef Silmara">
+<link rel="apple-touch-icon" href="icon.png">
+
+<!-- Cor da barra de status no Android -->
+<meta name="theme-color" content="#5a7520">
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #7a9a2e; --green-dark: #5a7520; --green-light: #c8d97a;
+    --green-bg: #f4f7e8; --cream: #faf9f4; --brown: #4a3728;
+    --red-accent: #c0392b; --text: #2c2c2c; --text-light: #666;
+    --border: #dde8b8; --shadow: 0 4px 24px rgba(90,117,32,0.10); --radius: 14px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text); min-height: 100vh; }
+
+  header { background: var(--green-dark); color: white; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 12px rgba(0,0,0,0.18); position: sticky; top: 0; z-index: 100; }
+  .header-brand { display: flex; align-items: center; gap: 10px; }
+  .header-brand .logo-icon { width: 40px; height: 40px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 19px; flex-shrink: 0; }
+  .header-brand h1 { font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 700; }
+  .header-brand span { font-size: 0.67rem; text-transform: uppercase; letter-spacing: 2px; opacity: 0.75; display: block; }
+  .header-actions { display: flex; gap: 6px; align-items: center; }
+  .hbtn { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 6px 12px; border-radius: 20px; cursor: pointer; font-size: 0.78rem; font-family: 'DM Sans', sans-serif; font-weight: 500; transition: background 0.2s; white-space: nowrap; }
+  .hbtn:hover { background: rgba(255,255,255,0.28); }
+
+  .tabs { background: white; border-bottom: 2px solid var(--border); display: flex; padding: 0 12px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .tab-btn { padding: 12px 14px; border: none; background: none; font-family: 'DM Sans', sans-serif; font-size: 0.83rem; font-weight: 500; color: var(--text-light); cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; transition: all 0.2s; display: flex; align-items: center; gap: 5px; white-space: nowrap; flex-shrink: 0; }
+  .tab-btn.active { color: var(--green-dark); border-bottom-color: var(--green-dark); font-weight: 600; }
+  .tab-btn:hover:not(.active) { color: var(--green); }
+
+  .main { max-width: 1200px; margin: 0 auto; padding: 18px 14px 110px; }
+  .section-title { font-family: 'Playfair Display', serif; font-size: 1.32rem; color: var(--brown); margin-bottom: 4px; }
+  .section-sub { font-size: 0.82rem; color: var(--text-light); margin-bottom: 14px; }
+
+  /* CLIENT BAR */
+  .client-bar { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 13px 16px; display: flex; align-items: center; gap: 12px; margin-bottom: 12px; box-shadow: var(--shadow); flex-wrap: wrap; }
+  .client-bar label { font-weight: 600; font-size: 0.84rem; color: var(--brown); white-space: nowrap; flex-shrink: 0; }
+  .client-inputs { display: flex; gap: 8px; flex: 1; flex-wrap: wrap; min-width: 0; }
+  .client-name-wrap { position: relative; flex: 1; min-width: 140px; }
+  .client-name-wrap input, .client-city-input { border: 1.5px solid var(--border); border-radius: 8px; padding: 8px 11px; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; color: var(--text); width: 100%; }
+  .client-city-input { max-width: 180px; flex-shrink: 0; }
+  .client-name-wrap input:focus, .client-city-input:focus { outline: none; border-color: var(--green); background: var(--green-bg); }
+  .client-suggestions { position: absolute; background: white; border: 1px solid var(--border); border-radius: 8px; box-shadow: var(--shadow); z-index: 50; min-width: 100%; max-height: 160px; overflow-y: auto; top: calc(100% + 3px); left: 0; }
+  .client-suggestions div { padding: 8px 12px; font-size: 0.83rem; cursor: pointer; border-bottom: 1px solid #f5f5ee; }
+  .client-suggestions div:last-child { border-bottom: none; }
+  .client-suggestions div:hover { background: var(--green-bg); color: var(--green-dark); }
+
+  /* PEOPLE BAR */
+  .people-bar { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 13px 16px; display: flex; align-items: center; gap: 14px; margin-bottom: 20px; box-shadow: var(--shadow); flex-wrap: wrap; }
+  .people-bar label { font-weight: 600; font-size: 0.84rem; color: var(--brown); white-space: nowrap; }
+  .people-counter { display: flex; align-items: center; gap: 10px; }
+  .people-counter button { width: 34px; height: 34px; border-radius: 50%; border: 2px solid var(--green); background: white; color: var(--green-dark); font-size: 1.2rem; cursor: pointer; font-weight: 700; transition: all 0.15s; display: flex; align-items: center; justify-content: center; }
+  .people-counter button:hover, .people-counter button:active { background: var(--green); color: white; }
+  .people-counter .count { font-family: 'Playfair Display', serif; font-size: 1.7rem; font-weight: 700; color: var(--green-dark); min-width: 34px; text-align: center; }
+
+  /* MENU CATEGORIES — flat sequential */
+  .category-block { margin-bottom: 22px; }
+  .cat-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .cat-pill { background: var(--green-dark); color: white; padding: 5px 14px; border-radius: 20px; font-size: 0.74rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; flex-shrink: 0; }
+  .cat-line { flex: 1; height: 1px; background: var(--border); }
+  .dishes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 9px; }
+
+  .dish-card { background: white; border: 2px solid var(--border); border-radius: var(--radius); padding: 12px 14px; cursor: pointer; transition: all 0.18s; position: relative; user-select: none; -webkit-tap-highlight-color: transparent; }
+  .dish-card:hover { border-color: var(--green); box-shadow: var(--shadow); transform: translateY(-1px); }
+  .dish-card.selected { border-color: var(--green-dark); background: var(--green-bg); box-shadow: 0 0 0 3px rgba(90,117,32,0.15); }
+  .dish-card .check { position: absolute; top: 9px; right: 9px; width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--border); background: white; display: flex; align-items: center; justify-content: center; font-size: 11px; transition: all 0.18s; }
+  .dish-card.selected .check { background: var(--green-dark); border-color: var(--green-dark); color: white; }
+  .dish-name { font-size: 0.85rem; font-weight: 500; color: var(--brown); padding-right: 26px; line-height: 1.3; }
+  .dish-card.selected .dish-name { color: var(--green-dark); font-weight: 600; }
+
+  /* SUMMARY BAR */
+  .summary-bar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--green-dark); color: white; padding: 12px 18px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 -4px 20px rgba(0,0,0,0.15); z-index: 99; gap: 10px; }
+  .summary-info { font-size: 0.83rem; opacity: 0.92; }
+  .gen-btn { background: var(--green-light); color: var(--green-dark); border: none; padding: 10px 20px; border-radius: 24px; font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 0.87rem; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 6px; white-space: nowrap; }
+  .gen-btn:hover { background: white; transform: scale(1.03); }
+
+  /* BUTTONS */
+  .btn { padding: 8px 15px; border-radius: 22px; border: 2px solid var(--green-dark); background: white; color: var(--green-dark); font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 0.81rem; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 5px; }
+  .btn:hover { background: var(--green-dark); color: white; }
+  .btn.primary { background: var(--green-dark); color: white; }
+  .btn.primary:hover { background: var(--green); border-color: var(--green); }
+  .btn.danger { border-color: var(--red-accent); color: var(--red-accent); }
+  .btn.danger:hover { background: var(--red-accent); color: white; }
+
+  /* SHOPPING LIST */
+  #tab-lista { display: none; }
+  .list-toolbar { display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; }
+  .list-actions { display: flex; gap: 7px; flex-wrap: wrap; }
+  .client-badge { display: inline-flex; align-items: center; gap: 6px; background: var(--green-bg); border: 1px solid var(--border); border-radius: 20px; padding: 6px 14px; font-size: 0.82rem; font-weight: 600; color: var(--green-dark); margin-bottom: 14px; flex-wrap: wrap; }
+
+  .shopping-category { margin-bottom: 15px; }
+  .shop-cat-header { display: flex; align-items: center; gap: 8px; background: var(--green-bg); border: 1px solid var(--border); border-radius: 10px 10px 0 0; padding: 9px 13px; font-weight: 700; font-size: 0.83rem; color: var(--green-dark); text-transform: uppercase; letter-spacing: 1px; }
+  .shop-cat-body { border: 1px solid var(--border); border-top: none; border-radius: 0 0 10px 10px; background: white; }
+
+  /* Shop items — big mobile-friendly check button */
+  .shop-item { display: flex; align-items: center; padding: 9px 11px; border-bottom: 1px solid #f0f3e4; gap: 9px; transition: background 0.12s; }
+  .shop-item:last-child { border-bottom: none; }
+  .shop-item.checked { background: #f8faf0; }
+  .shop-item.checked .item-name-input { text-decoration: line-through; color: var(--text-light); }
+  .shop-item.checked .item-name-secondary { text-decoration: line-through; }
+  .shop-item.checked .shop-check-btn { background: var(--green-dark); border-color: var(--green-dark); color: white; }
+
+  .shop-check-btn { width: 34px; height: 34px; min-width: 34px; border-radius: 50%; border: 2.5px solid #ccc; background: white; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700; transition: all 0.18s; color: transparent; -webkit-tap-highlight-color: transparent; }
+  .shop-check-btn:hover, .shop-check-btn:active { border-color: var(--green); }
+
+  .item-name-wrap { flex: 1; display: flex; flex-direction: column; min-width: 0; gap: 1px; }
+  .item-name-secondary { font-size: 0.7rem; color: var(--text-light); padding: 0 5px; font-style: italic; }
+  .item-name-input { border: 1px solid transparent; border-radius: 6px; padding: 3px 5px; font-family: 'DM Sans', sans-serif; font-size: 0.84rem; background: transparent; color: var(--text); transition: border 0.2s; width: 100%; }
+  .item-name-input:focus { outline: none; border-color: var(--green); background: var(--green-bg); }
+  .item-qty-input { width: 62px; border: 1px solid transparent; border-radius: 6px; padding: 3px 5px; font-family: 'DM Sans', sans-serif; font-size: 0.84rem; background: transparent; color: var(--text); text-align: right; transition: border 0.2s; }
+  .item-qty-input:focus { outline: none; border-color: var(--green); background: var(--green-bg); }
+  .item-unit-input { width: 45px; border: 1px solid transparent; border-radius: 6px; padding: 3px 4px; font-family: 'DM Sans', sans-serif; font-size: 0.77rem; background: transparent; color: var(--text-light); transition: border 0.2s; }
+  .item-unit-input:focus { outline: none; border-color: var(--green); background: var(--green-bg); }
+  .per-person-note { color: var(--text-light); font-size: 0.69rem; white-space: nowrap; min-width: 50px; text-align: right; }
+  .del-btn { background: none; border: none; color: #ccc; cursor: pointer; font-size: 0.9rem; padding: 3px 5px; border-radius: 4px; transition: color 0.15s; }
+  .del-btn:hover { color: var(--red-accent); }
+  .add-item-row { display: flex; gap: 7px; padding: 8px 11px; border-top: 2px dashed var(--border); background: #fafef4; border-radius: 0 0 10px 10px; align-items: center; flex-wrap: wrap; }
+  .add-item-row input { border: 1px solid var(--border); border-radius: 8px; padding: 6px 9px; font-family: 'DM Sans', sans-serif; font-size: 0.82rem; color: var(--text); }
+  .add-item-row input:focus { outline: none; border-color: var(--green); }
+  .inp-name { flex: 1; min-width: 90px; }
+  .inp-qty { width: 60px; }
+  .inp-unit { width: 52px; }
+
+  /* HISTORY */
+  #tab-historico { display: none; }
+  .hist-toolbar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 16px; }
+  .hist-card { background: white; border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 11px; overflow: hidden; box-shadow: 0 2px 8px rgba(90,117,32,0.06); }
+  .hist-card-header { padding: 13px 15px; display: flex; align-items: center; justify-content: space-between; gap: 10px; cursor: pointer; transition: background 0.15s; flex-wrap: wrap; -webkit-tap-highlight-color: transparent; }
+  .hist-card-header:hover { background: var(--green-bg); }
+  .hist-card-header.open { background: var(--green-bg); border-bottom: 1px solid var(--border); }
+  .hist-client { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--brown); font-weight: 700; }
+  .hist-meta { font-size: 0.77rem; color: var(--text-light); margin-top: 2px; }
+  .hist-badges { display: flex; gap: 5px; flex-wrap: wrap; }
+  .hist-badge { background: var(--green-bg); color: var(--green-dark); border: 1px solid var(--border); padding: 3px 9px; border-radius: 12px; font-size: 0.71rem; font-weight: 600; }
+  .hist-chevron { font-size: 0.75rem; color: var(--text-light); transition: transform 0.2s; flex-shrink: 0; }
+  .hist-card-header.open .hist-chevron { transform: rotate(180deg); }
+  .hist-body { display: none; padding: 14px 15px; }
+  .hist-body.open { display: block; }
+  .hist-dishes { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 12px; }
+  .hist-dish-tag { background: #f0f3e4; color: var(--brown); padding: 4px 10px; border-radius: 10px; font-size: 0.76rem; }
+  .hist-ing-cat { font-weight: 700; font-size: 0.73rem; text-transform: uppercase; letter-spacing: 1px; color: var(--green-dark); margin: 10px 0 4px; padding-bottom: 3px; border-bottom: 1px solid var(--border); }
+  .hist-ing-row { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid #f5f5ee; font-size: 0.81rem; }
+  .hist-ing-row:last-child { border-bottom: none; }
+  .hist-actions { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+
+  /* RECIPE EDITOR */
+  #tab-receitas { display: none; }
+  .recipe-grid { display: grid; grid-template-columns: 265px 1fr; gap: 16px; }
+  .recipe-sidebar { background: white; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; display: flex; flex-direction: column; }
+  .recipe-sidebar-header { background: var(--green-dark); color: white; padding: 10px 14px; font-weight: 600; font-size: 0.83rem; flex-shrink: 0; }
+  .recipe-search-box { padding: 9px 11px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+  .recipe-search-box input { width: 100%; border: 1px solid var(--border); border-radius: 8px; padding: 7px 9px 7px 28px; font-family: 'DM Sans', sans-serif; font-size: 0.82rem; color: var(--text); background: var(--cream) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='13' height='13' fill='%23999' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.099zm-5.242 1.156a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11z'/%3E%3C/svg%3E") no-repeat 8px center; }
+  .recipe-search-box input:focus { outline: none; border-color: var(--green); background-color: var(--green-bg); }
+  .recipe-list { overflow-y: auto; flex: 1; max-height: 480px; }
+  .recipe-group-label { padding: 5px 13px 3px; font-size: 0.67rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--green-dark); background: var(--green-bg); border-bottom: 1px solid var(--border); border-top: 1px solid var(--border); }
+  .recipe-item { padding: 8px 13px; border-bottom: 1px solid var(--border); font-size: 0.81rem; cursor: pointer; transition: background 0.14s; display: flex; align-items: center; justify-content: space-between; gap: 5px; }
+  .recipe-item:hover { background: var(--green-bg); }
+  .recipe-item.active { background: var(--green-bg); font-weight: 600; color: var(--green-dark); }
+  .cat-tag { font-size: 0.65rem; background: var(--border); color: var(--green-dark); padding: 2px 6px; border-radius: 10px; text-transform: uppercase; letter-spacing: 0.5px; flex-shrink: 0; }
+  .recipe-detail { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; }
+  .recipe-detail h3 { font-family: 'Playfair Display', serif; font-size: 1.18rem; color: var(--brown); margin-bottom: 4px; }
+  .cat-badge { display: inline-block; background: var(--green-bg); color: var(--green-dark); padding: 3px 11px; border-radius: 12px; font-size: 0.71rem; font-weight: 600; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; }
+  .ingredients-table { width: 100%; border-collapse: collapse; margin-bottom: 12px; }
+  .ingredients-table th { text-align: left; font-size: 0.71rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-light); padding: 6px 7px; border-bottom: 2px solid var(--border); }
+  .ingredients-table td { padding: 6px 7px; border-bottom: 1px solid #f0f3e4; font-size: 0.82rem; }
+  .ingredients-table tr:last-child td { border-bottom: none; }
+  .editable { border: 1px solid transparent; border-radius: 6px; padding: 3px 6px; width: 100%; font-family: 'DM Sans', sans-serif; font-size: 0.82rem; background: transparent; color: var(--text); transition: border 0.2s; }
+  .editable:focus { outline: none; border-color: var(--green); background: var(--green-bg); }
+  .add-ing-row { display: flex; gap: 6px; margin-top: 8px; align-items: center; flex-wrap: wrap; }
+  .add-ing-row input { border: 1px solid var(--border); border-radius: 8px; padding: 6px 9px; font-family: 'DM Sans', sans-serif; font-size: 0.81rem; color: var(--text); }
+  .add-ing-row input:focus { outline: none; border-color: var(--green); }
+  .add-dish-form { display: flex; flex-direction: column; gap: 7px; }
+  .add-dish-form label { font-size: 0.74rem; color: var(--text-light); font-weight: 500; }
+  .add-dish-form input, .add-dish-form select { border: 1px solid var(--border); border-radius: 8px; padding: 7px 10px; font-family: 'DM Sans', sans-serif; font-size: 0.82rem; color: var(--text); width: 100%; }
+  .form-group { display: flex; flex-direction: column; gap: 3px; }
+
+  /* MISC */
+  .empty-state { text-align: center; padding: 48px 20px; color: var(--text-light); }
+  .empty-state .icon { font-size: 2.5rem; margin-bottom: 10px; }
+  .empty-state p { font-size: 0.85rem; line-height: 1.6; }
+  .note-box { background: #fffbe6; border: 1px solid #f0d060; border-radius: 10px; padding: 10px 14px; font-size: 0.8rem; color: #7a6010; margin-bottom: 14px; }
+
+  /* MODAL */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 200; align-items: center; justify-content: center; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: white; border-radius: var(--radius); padding: 24px; max-width: 520px; width: 94%; box-shadow: 0 20px 60px rgba(0,0,0,0.25); position: relative; max-height: 90vh; overflow-y: auto; }
+  .modal h3 { font-family: 'Playfair Display', serif; font-size: 1.12rem; color: var(--brown); margin-bottom: 6px; }
+  .modal p { font-size: 0.8rem; color: var(--text-light); margin-bottom: 12px; line-height: 1.5; }
+  .modal textarea { width: 100%; height: 155px; border: 1px solid var(--border); border-radius: 8px; padding: 9px 11px; font-family: monospace; font-size: 0.74rem; color: var(--text); resize: vertical; }
+  .modal textarea:focus { outline: none; border-color: var(--green); }
+  .modal-actions { display: flex; gap: 8px; margin-top: 11px; justify-content: flex-end; flex-wrap: wrap; }
+  .modal-close { position: absolute; top: 12px; right: 13px; background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-light); }
+
+  /* PRINT */
+  @media print {
+    header,.tabs,.summary-bar,.list-toolbar,#tab-cardapio,#tab-receitas,#tab-historico,
+    .no-print,.add-item-row,.del-btn,.shop-check-btn { display: none !important; }
+    #tab-lista { display: block !important; }
+    body { background: white; font-size: 7.5pt; }
+    .main { padding: 0; max-width: 100%; }
+    .print-header { display: block !important; margin-bottom: 8px; padding-bottom: 6px; }
+    .print-header h2 { font-size: 13pt; }
+    .print-header p { font-size: 8pt; }
+    #shopping-list-content { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; align-items: start; }
+    .note-box,.client-badge { display: none !important; }
+    .shopping-category { break-inside: avoid; page-break-inside: avoid; margin-bottom: 6px; }
+    .shop-cat-header { padding: 4px 8px; font-size: 7pt; border-radius: 6px 6px 0 0; }
+    .shop-item { padding: 2px 8px; border-bottom: 1px solid #eee !important; align-items: baseline; gap: 4px; }
+    .item-name-wrap { flex-direction: row !important; align-items: baseline; gap: 3px; flex-wrap: wrap; }
+    .item-name-input { font-size: 7.5pt !important; border: none !important; background: transparent !important; padding: 0 !important; width: auto !important; flex: none !important; font-weight: 500; }
+    .item-name-secondary { font-size: 6.5pt !important; color: #999 !important; padding: 0 !important; white-space: nowrap; }
+    .item-qty-input { font-size: 7.5pt !important; border: none !important; background: transparent !important; padding: 0 !important; width: 28px !important; text-align: right; font-weight: 600; }
+    .item-unit-input { font-size: 6.5pt !important; border: none !important; background: transparent !important; padding: 0 !important; width: 28px !important; color: #777; }
+    .per-person-note { display: none !important; }
+    @page { margin: 0.7cm 0.8cm; size: A4 portrait; }
+  }
+  .print-header { display: none; text-align: center; margin-bottom: 12px; border-bottom: 2px solid var(--green-dark); padding-bottom: 10px; }
+  .print-header h2 { font-family: 'Playfair Display', serif; color: var(--green-dark); }
+  .print-header p { font-size: 0.77rem; color: var(--text-light); margin-top: 3px; }
+
+  @media (max-width: 640px) {
+    .recipe-grid { grid-template-columns: 1fr; }
+    .dishes-grid { grid-template-columns: repeat(auto-fill, minmax(155px, 1fr)); }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-brand">
+    <div class="logo-icon">👨‍🍳</div>
+    <div>
+      <h1>Chef Silmara</h1>
+      <span>Personal Chef · Bay Area</span>
+    </div>
+  </div>
+  <div class="header-actions">
+    <button class="hbtn" onclick="openBackupModal()">💾 Backup</button>
+    <button class="hbtn" onclick="toggleLang()">🌐 <span id="lang-label">English</span></button>
+  </div>
+</header>
+
+<div class="tabs">
+  <button class="tab-btn active" onclick="showTab('cardapio')" id="btn-cardapio">🍽️ <span data-pt="Cardápio" data-en="Menu">Cardápio</span></button>
+  <button class="tab-btn" onclick="showTab('lista')" id="btn-lista">🛒 <span data-pt="Lista de Compras" data-en="Shopping List">Lista de Compras</span></button>
+  <button class="tab-btn" onclick="showTab('historico')" id="btn-historico">📋 <span data-pt="Histórico" data-en="History">Histórico</span></button>
+  <button class="tab-btn" onclick="showTab('receitas')" id="btn-receitas">✏️ <span data-pt="Editar Receitas" data-en="Edit Recipes">Editar Receitas</span></button>
+</div>
+
+<div class="main">
+
+  <!-- CARDÁPIO -->
+  <div id="tab-cardapio">
+    <h2 class="section-title" data-pt="Seleção do Cardápio" data-en="Menu Selection">Seleção do Cardápio</h2>
+    <p class="section-sub" data-pt="Informe o cliente, número de pessoas e selecione os pratos" data-en="Enter client, number of people and select dishes">Informe o cliente, número de pessoas e selecione os pratos</p>
+
+    <div class="client-bar">
+      <label data-pt="Para quem:" data-en="For:">Para quem:</label>
+      <div class="client-inputs">
+        <div class="client-name-wrap">
+          <input type="text" id="client-name" placeholder="Nome do cliente *" autocomplete="off"
+            oninput="showClientSuggestions()" onblur="hideClientSuggestions()">
+          <div class="client-suggestions" id="client-suggestions" style="display:none;"></div>
+        </div>
+        <input type="text" id="client-city" class="client-city-input" placeholder="Cidade (opcional)">
+      </div>
+    </div>
+
+    <div class="people-bar">
+      <label data-pt="Nº de pessoas:" data-en="Number of people:">Nº de pessoas:</label>
+      <div class="people-counter">
+        <button onclick="changePeople(-1)">−</button>
+        <span class="count" id="people-count">1</span>
+        <button onclick="changePeople(1)">+</button>
+      </div>
+    </div>
+
+    <div id="menu-sections"></div>
+  </div>
+
+  <!-- LISTA DE COMPRAS -->
+  <div id="tab-lista">
+    <div class="print-header">
+      <h2>Chef Silmara Cavalcanti · Personal Chef</h2>
+      <p id="print-subtitle"></p>
+    </div>
+    <div class="list-toolbar no-print">
+      <div>
+        <h2 class="section-title" data-pt="Lista de Compras" data-en="Shopping List">Lista de Compras</h2>
+        <p class="section-sub" id="list-subtitle"></p>
+      </div>
+      <div class="list-actions">
+        <button class="btn" onclick="window.print()">🖨️ <span data-pt="Imprimir" data-en="Print">Imprimir</span></button>
+        <button class="btn primary" onclick="showTab('cardapio')">← <span data-pt="Voltar" data-en="Back">Voltar</span></button>
+      </div>
+    </div>
+    <div id="list-client-badge"></div>
+    <div id="shopping-list-content">
+      <div class="empty-state"><div class="icon">🛒</div><p data-pt="Selecione os pratos no Cardápio e clique em 'Gerar Lista'" data-en="Select dishes in the Menu tab and click 'Generate List'">Selecione os pratos no Cardápio e clique em "Gerar Lista"</p></div>
+    </div>
+  </div>
+
+  <!-- HISTÓRICO -->
+  <div id="tab-historico">
+    <div class="hist-toolbar">
+      <div>
+        <h2 class="section-title" data-pt="Histórico de Atendimentos" data-en="Service History">Histórico de Atendimentos</h2>
+        <p class="section-sub" id="hist-subtitle"></p>
+      </div>
+      <div class="list-actions">
+        <button class="btn danger" onclick="clearHistory()" id="btn-clear-hist" style="display:none;">🗑️ <span data-pt="Limpar tudo" data-en="Clear all">Limpar tudo</span></button>
+      </div>
+    </div>
+    <div id="history-content"></div>
+  </div>
+
+  <!-- EDITAR RECEITAS -->
+  <div id="tab-receitas">
+    <h2 class="section-title" data-pt="Editar Receitas & Ingredientes" data-en="Edit Recipes & Ingredients">Editar Receitas & Ingredientes</h2>
+    <p class="section-sub" data-pt="Edite ingredientes, quantidades por pessoa e categorias." data-en="Edit ingredients, quantities per person, and categories.">Edite ingredientes, quantidades por pessoa e categorias.</p>
+    <div class="recipe-grid">
+      <div class="recipe-sidebar">
+        <div class="recipe-sidebar-header" data-pt="Todas as Receitas" data-en="All Recipes">Todas as Receitas</div>
+        <div class="recipe-search-box">
+          <input type="text" id="recipe-search" placeholder="🔍 Buscar receita..." oninput="renderRecipeList()">
+        </div>
+        <div class="recipe-list" id="recipe-list"></div>
+        <div style="padding:11px;border-top:1px solid var(--border);flex-shrink:0;">
+          <p style="font-size:0.74rem;font-weight:600;color:var(--green-dark);margin-bottom:7px;" data-pt="+ Novo Prato" data-en="+ New Dish">+ Novo Prato</p>
+          <div class="add-dish-form">
+            <div class="form-group">
+              <label data-pt="Nome do prato:" data-en="Dish name:">Nome do prato:</label>
+              <input type="text" id="new-dish-name" placeholder="Ex: Frango ao limão">
+            </div>
+            <div class="form-group">
+              <label data-pt="Categoria:" data-en="Category:">Categoria:</label>
+              <select id="new-dish-cat">
+                <option value="Bovino">🥩 Bovino / Beef</option>
+                <option value="Frango">🍗 Frango / Chicken</option>
+                <option value="Suíno">🐷 Suíno / Pork</option>
+                <option value="Peixe">🐟 Peixe / Fish</option>
+                <option value="Camarão">🦐 Camarão / Shrimp</option>
+                <option value="Carboidratos">🍚 Carboidratos / Carbs</option>
+                <option value="Legumes">🥦 Legumes / Vegetables</option>
+                <option value="Massas">🍝 Massas / Pasta</option>
+                <option value="Sopas">🍲 Sopas / Soups</option>
+                <option value="Diversos">✨ Diversos / Other</option>
+              </select>
+            </div>
+            <button class="btn primary" style="width:100%;justify-content:center;" onclick="addNewDish()">
+              <span data-pt="Adicionar Prato" data-en="Add Dish">Adicionar Prato</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="recipe-detail" id="recipe-detail">
+        <div class="empty-state"><div class="icon">📋</div><p data-pt="Selecione uma receita para editar." data-en="Select a recipe to edit.">Selecione uma receita para editar.</p></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /.main -->
+
+<!-- SUMMARY BAR -->
+<div class="summary-bar" id="summary-bar" style="display:none;">
+  <div class="summary-info">
+    <strong id="summary-count"></strong>
+    <span id="summary-people" style="opacity:0.82;font-size:0.79rem;margin-left:8px;"></span>
+  </div>
+  <button class="gen-btn" onclick="generateList()">🛒 <span data-pt="Gerar Lista" data-en="Generate List">Gerar Lista</span></button>
+</div>
+
+<!-- BACKUP MODAL -->
+<div class="modal-overlay" id="backup-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeBackupModal()">✕</button>
+    <h3>💾 Backup & Restaurar</h3>
+    <p>Suas alterações são salvas <strong>automaticamente</strong> neste navegador. Use o backup manual para transferir para outro dispositivo (celular, outro computador): copie o texto abaixo e salve num arquivo .txt ou mande pelo WhatsApp.</p>
+    <textarea id="backup-textarea"></textarea>
+    <div class="modal-actions">
+      <button class="btn" onclick="copyBackup()" id="copy-btn">📋 Copiar Backup</button>
+      <button class="btn primary" onclick="restoreBackup()">♻️ Restaurar</button>
+      <button class="btn danger" onclick="closeBackupModal()">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// DATA
+// ============================================================
+let recipes = {
+  "Beef bourguignon":{ cat:"Bovino", catEN:"Beef", ingredients:[
+    {qty:1,   unit:"lb",     namePT:"Alcatra/acem",     nameEN:"Top sirloin/chuck", shopCat:"Carnes"},
+    {qty:0.5, unit:"pct",    namePT:"Bacon",            nameEN:"Bacon",             shopCat:"Carnes"},
+    {qty:1,   unit:"un",     namePT:"Cenoura",          nameEN:"Carrot",            shopCat:"Hortifruti"},
+    {qty:0.5, unit:"un",     namePT:"Cebola",           nameEN:"Onion",             shopCat:"Hortifruti"},
+    {qty:2,   unit:"dentes", namePT:"Alho",             nameEN:"Garlic",            shopCat:"Hortifruti"},
+    {qty:1,   unit:"cs",     namePT:"Farinha de trigo", nameEN:"All purpose flour", shopCat:"Mercearia"},
+    {qty:1,   unit:"bottle", namePT:"Vinho Pinot",      nameEN:"Pinot wine",        shopCat:"Mercearia"},
+    {qty:2,   unit:"un",     namePT:"Folha de louro",   nameEN:"Bay leave",         shopCat:"Temperos"},
+    {qty:1,   unit:"un",     namePT:"Caldo de carne",   nameEN:"Beef stock",        shopCat:"Mercearia"},
+    {qty:1,   unit:"pct",    namePT:"Cogumelo",         nameEN:"Mushroom",          shopCat:"Hortifruti"},
+    {qty:1,   unit:"pct",    namePT:"Mini cebola",      nameEN:"Pearl onion",       shopCat:"Hortifruti"},
+  ]},
+  "Almondegas a francesa":{ cat:"Bovino", catEN:"Beef", ingredients:[
+    {qty:180, unit:"g",       namePT:"Carne moída bovina", nameEN:"Ground beef",    shopCat:"Carnes"},
+    {qty:30,  unit:"g",       namePT:"Farinha de rosca",   nameEN:"Breadcrumbs",    shopCat:"Mercearia"},
+    {qty:0.5, unit:"un",      namePT:"Ovo",                nameEN:"Egg",            shopCat:"Laticínios"},
+    {qty:1,   unit:"dente",   namePT:"Alho",               nameEN:"Garlic clove",   shopCat:"Hortifruti"},
+    {qty:20,  unit:"g",       namePT:"Manteiga",           nameEN:"Butter",         shopCat:"Laticínios"},
+    {qty:100, unit:"ml",      namePT:"Creme de leite",     nameEN:"Heavy cream",    shopCat:"Laticínios"},
+    {qty:1,   unit:"col sopa",namePT:"Mostarda Dijon",     nameEN:"Dijon mustard",  shopCat:"Temperos"},
+    {qty:0.5, unit:"col chá", namePT:"Sal",                nameEN:"Salt",           shopCat:"Temperos"},
+    {qty:1,   unit:"pitada",  namePT:"Pimenta-do-reino",   nameEN:"Black pepper",   shopCat:"Temperos"},
+  ]},
+  "Carne moída com mix de vegetais":{ cat:"Bovino", catEN:"Beef", ingredients:[
+    {qty:180, unit:"g",       namePT:"Carne moída bovina", nameEN:"Ground beef",    shopCat:"Carnes"},
+    {qty:60,  unit:"g",       namePT:"Cenoura em cubos",   nameEN:"Diced carrot",   shopCat:"Hortifruti"},
+    {qty:60,  unit:"g",       namePT:"Abobrinha",          nameEN:"Zucchini",       shopCat:"Hortifruti"},
+    {qty:40,  unit:"g",       namePT:"Vagem",              nameEN:"Green beans",    shopCat:"Hortifruti"},
+    {qty:0.5, unit:"un",      namePT:"Cebola",             nameEN:"Onion",          shopCat:"Hortifruti"},
+    {qty:2,   unit:"dentes",  namePT:"Alho",               nameEN:"Garlic",         shopCat:"Hortifruti"},
+    {qty:1,   unit:"col sopa",namePT:"Azeite de oliva",    nameEN:"Olive oil",      shopCat:"Mercearia"},
+    {qty:0.5, unit:"col chá", namePT:"Sal",                nameEN:"Salt",           shopCat:"Temperos"},
+  ]},
+  "Carne oriental (beef broccoli)":{ cat:"Bovino", catEN:"Beef", ingredients:[
+    {qty:180, unit:"g",       namePT:"Alcatra em tiras",  nameEN:"Beef strips",    shopCat:"Carnes"},
+    {qty:150, unit:"g",       namePT:"Brócolis",          nameEN:"Broccoli",       shopCat:"Hortifruti"},
+    {qty:2,   unit:"col sopa",namePT:"Molho shoyu",       nameEN:"Soy sauce",      shopCat:"Temperos"},
+    {qty:1,   unit:"col sopa",namePT:"Óleo de gergelim",  nameEN:"Sesame oil",     shopCat:"Temperos"},
+    {qty:1,   unit:"col sopa",namePT:"Amido de milho",    nameEN:"Cornstarch",     shopCat:"Mercearia"},
+    {qty:2,   unit:"dentes",  namePT:"Alho",              nameEN:"Garlic",         shopCat:"Hortifruti"},
+    {qty:10,  unit:"g",       namePT:"Gengibre fresco",   nameEN:"Fresh ginger",   shopCat:"Hortifruti"},
+    {qty:1,   unit:"col chá", namePT:"Açúcar mascavo",    nameEN:"Brown sugar",    shopCat:"Mercearia"},
+  ]},
+  "Picadinho de carne com batata":{ cat:"Bovino", catEN:"Beef", ingredients:[
+    {qty:180, unit:"g",       namePT:"Acém em cubos",      nameEN:"Chuck beef cubes",  shopCat:"Carnes"},
+    {qty:150, unit:"g",       namePT:"Batata",             nameEN:"Potato",            shopCat:"Hortifruti"},
+    {qty:0.5, unit:"un",      namePT:"Tomate",             nameEN:"Tomato",            shopCat:"Hortifruti"},
+    {qty:0.5, unit:"un",      namePT:"Cebola",             nameEN:"Onion",             shopCat:"Hortifruti"},
+    {qty:2,   unit:"dentes",  namePT:"Alho",               nameEN:"Garlic",            shopCat:"Hortifruti"},
+    {qty:1,   unit:"col sopa",namePT:"Extrato de tomate",  nameEN:"Tomato paste",      shopCat:"Mercearia"},
+    {qty:1,   unit:"col sopa",namePT:"Óleo vegetal",       nameEN:"Vegetable oil",     shopCat:"Mercearia"},
+    {qty:0.5, unit:"col chá", namePT:"Sal",                nameEN:"Salt",              shopCat:"Temperos"},
+    {qty:1,   unit:"col chá", namePT:"Colorau/Páprica",    nameEN:"Paprika",           shopCat:"Temperos"},
+  ]},
+  "Rocambole de carne moída com bacon":{ cat:"Bovino", catEN:"Beef", ingredients:[
+    {qty:200, unit:"g",       namePT:"Carne moída bovina", nameEN:"Ground beef",           shopCat:"Carnes"},
+    {qty:40,  unit:"g",       namePT:"Bacon em fatias",    nameEN:"Bacon slices",          shopCat:"Carnes"},
+    {qty:0.5, unit:"un",      namePT:"Ovo",                nameEN:"Egg",                   shopCat:"Laticínios"},
+    {qty:30,  unit:"g",       namePT:"Farinha de rosca",   nameEN:"Breadcrumbs",           shopCat:"Mercearia"},
+    {qty:0.5, unit:"un",      namePT:"Cebola",             nameEN:"Onion",                 shopCat:"Hortifruti"},
+    {qty:2,   unit:"dentes",  namePT:"Alho",               nameEN:"Garlic",                shopCat:"Hortifruti"},
+    {qty:1,   unit:"col sopa",namePT:"Molho inglês",       nameEN:"Worcestershire sauce",  shopCat:"Temperos"},
+    {qty:0.5, unit:"col chá", namePT:"Sal",                nameEN:"Salt",                  shopCat:"Temperos"},
+  ]},
+  "Espetinho de frango com bacon":{ cat:"Frango", catEN:"Chicken", ingredients:[
+    {qty:180, unit:"g",       namePT:"Filé de frango em cubos", nameEN:"Chicken breast cubes", shopCat:"Carnes"},
+    {qty:50,  unit:"g",       namePT:"Bacon em cubos",          nameEN:"Bacon cubes",          shopCat:"Carnes"},
+    {qty:0.5, unit:"un",      namePT:"Pimentão colorido",       nameEN:"Bell pepper",          shopCat:"Hortifruti"},
+    {qty:2,   unit:"dentes",  namePT:"Alho",                    nameEN:"Garlic",               shopCat:"Hortifruti"},
+    {qty:2,   unit:"col sopa",namePT:"Azeite de oliva",         nameEN:"Olive oil",            shopCat:"Mercearia"},
+    {qty:1,   unit:"col chá", namePT:"Colorau/Páprica",         nameEN:"Paprika",              shopCat:"Temperos"},
+    {qty:0.5, unit:"col chá", namePT:"Sal",                     nameEN:"Salt",                 shopCat:"Temperos"},
+  ]},
+  "Filé de frango cremoso com tomate cereja e espinafre":{ cat:"Frango", catEN:"Chicken", ingredients:[
+    {qty:180, unit:"g",       namePT:"Filé de frango",      nameEN:"Chicken breast",   shopCat:"Carnes"},
+    {qty:80,  unit:"g",       namePT:"Tomate cereja",       nameEN:"Cherry tomatoes",  shopCat:"Hortifruti"},
+    {qty:50,  unit:"g",       namePT:"Espinafre fresco",    nameEN:"Fresh spinach",    shopCat:"Hortifruti"},
+    {qty:80,  unit:"ml",      namePT:"Creme de leite",      nameEN:"Heavy cream",      shopCat:"Laticínios"},
+    {qty:2,   unit:"dentes",  namePT:"Alho",                nameEN:"Garlic",           shopCat:"Hortifruti"},
+    {qty:1,   unit:"col sopa",namePT:"Azeite de oliva",     nameEN:"Olive oil",        shopCat:"Mercearia"},
+    {qty:0.5, unit:"col chá", namePT:"Sal",                 nameEN:"Salt",             shopCat:"Temperos"},
+  ]},
+  "Frango desfiado a caprese":{ cat:"Frango", catEN:"Chicken", ingredients:[
+    {qty:1,   unit:"lb",      namePT:"Peito de frango cozido", nameEN:"Cooked chicken breast", shopCat:"Carnes"},
+    {qty:1,   unit:"pct",     namePT:"Muçarela de búfala",     nameEN:"Buffalo mozzarella",    shopCat:"Laticínios"},
+    {qty:1,   unit:"pct",     namePT:"Tomate cereja",          nameEN:"Cherry tomatoes",       shopCat:"Hortifruti"},
+    {qty:1,   unit:"pct",     namePT:"Manjericão fresco",      nameEN:"Fresh basil",           shopCat:"Hortifruti"},
+    {qty:2,   unit:"col sopa",namePT:"Azeite de oliva",        nameEN:"Olive oil",             shopCat:"Mercearia"},
+    {qty:0.5, unit:"col chá", namePT:"Sal",                    nameEN:"Salt",                  shopCat:"Temperos"},
+  ]},
+  "Sobrecoxa ao molho de shoyo e mel":{ cat:"Frango", catEN:"Chicken", ingredients:[
+    {qty:200, unit:"g",       namePT:"Sobrecoxa de frango", nameEN:"Chicken thighs", shopCat:"Carnes"},
+    {qty:2,   unit:"col sopa",namePT:"Molho shoyu",         nameEN:"Soy sauce",      shopCat:"Temperos"},
+    {qty:1,   unit:"col sopa",namePT:"Mel",                 nameEN:"Honey",          shopCat:"Mercearia"},
+    {qty:2,   unit:"dentes",  namePT:"Alho",                nameEN:"Garlic",         shopCat:"Hortifruti"},
+    {qty:10,  unit:"g",       namePT:"Gengibre fresco",     nameEN:"Fresh ginger",   shopCat:"Hortifruti"},
+    {qty:1,   unit:"col chá", namePT:"Óleo de gergelim",    nameEN:"Sesame oil",     shopCat:"Temperos"},
+    {qty:0.5, unit:"col chá", namePT:"Amido de milho",      nameEN:"Cornstarch",     shopCat:"Mercearia"},
+  ]},
+  "Bisteca suína acebolada":{ cat:"Suíno", catEN:"Pork", ingredients:[
+    {qty:200, unit:"g",       namePT:"Bisteca suína",    nameEN:"Pork chop",    shopCat:"Carnes"},
+    {qty:1,   unit:"un",      namePT:"Cebola",           nameEN:"Onion",        shopCat:"Hortifruti"},
+    {qty:2,   unit:"dentes",  namePT:"Alho",             nameEN:"Garlic",       shopCat:"Hortifruti"},
+    {qty:2,   unit:"col sopa",namePT:"Azeite de oliva",  nameEN:"Olive oil",    shopCat:"Mercearia"},
+    {qty:0.5, unit:"col chá", namePT:"Sal",              nameEN:"Salt",         shopCat:"Temperos"},
+    {qty:1,   unit:"pitada",  namePT:"Pimenta-do-reino", nameEN:"Black pepper", shopCat:"Temperos"},
+  ]},
+  "Costelinha Barbecue":{ cat:"Suíno", catEN:"Pork", ingredients:[
+    {qty:250, unit:"g",       namePT:"Costelinha de porco", nameEN:"Pork ribs",      shopCat:"Carnes"},
+    {qty:3,   unit:"col sopa",namePT:"Molho barbecue",      nameEN:"BBQ sauce",      shopCat:"Temperos"},
+    {qty:1,   unit:"col sopa",namePT:"Mel",                 nameEN:"Honey",          shopCat:"Mercearia"},
+    {qty:2,   unit:"dentes",  namePT:"Alho",                nameEN:"Garlic",         shopCat:"Hortifruti"},
+    {qty:1,   unit:"col chá", namePT:"Páprica defumada",    nameEN:"Smoked paprika", shopCat:"Temperos"},
+    {qty:0.5, unit:"col chá", namePT:"Sal",                 nameEN:"Salt",           shopCat:"Temperos"},
+  ]},
+  "Filé mignon com molho de laranja":{ cat:"Suíno", catEN:"Pork", ingredients:[
+    {qty:1,   unit:"lb",      namePT:"Filé mignon suíno", nameEN:"Pork tenderloin", shopCat:"Carnes"},
+    {qty:1,   unit:"un",      namePT:"Laranja (suco)",    nameEN:"Orange (juice)",  shopCat:"Hortifruti"},
+    {qty:1,   unit:"col sopa",namePT:"Mel",               nameEN:"Honey",           shopCat:"Mercearia"},
+    {qty:1,   unit:"col sopa",namePT:"Mostarda Dijon",    nameEN:"Dijon mustard",   shopCat:"Temperos"},
+    {qty:20,  unit:"g",       namePT:"Manteiga",          nameEN:"Butter",          shopCat:"Laticínios"},
+    {qty:2,   unit:"dentes",  namePT:"Alho",              nameEN:"Garlic",          shopCat:"Hortifruti"},
+    {qty:0.5, unit:"col chá", namePT:"Sal",               nameEN:"Salt",            shopCat:"Temperos"},
+  ]},
+  "Bacalhau a portuguesa":{ cat:"Peixe", catEN:"Fish", ingredients:[
+    {qty:200, unit:"g",       namePT:"Bacalhau dessalgado", nameEN:"Desalted codfish", shopCat:"Carnes"},
+    {qty:1,   unit:"un",      namePT:"Cebola",              nameEN:"Onion",            shopCat:"Hortifruti"},
+    {qty:1,   unit:"un",      namePT:"Tomate",              nameEN:"Tomato",           shopCat:"Hortifruti"},
+    {qty:1,   unit:"un",      namePT:"Pimentão",            nameEN:"Bell pepper",      shopCat:"Hortifruti"},
+    {qty:150, unit:"g",       namePT:"Batata",              nameEN:"Potato",           shopCat:"Hortifruti"},
+    {qty:3,   unit:"col sopa",namePT:"Azeite de oliva",     nameEN:"Olive oil",        shopCat:"Mercearia"},
+    {qty:10,  unit:"un",      namePT:"Azeitona preta",      nameEN:"Black olives",     shopCat:"Mercearia"},
+    {qty:2,   unit:"dentes",  namePT:"Alho",                nameEN:"Garlic",           shopCat:"Hortifruti"},
+  ]},
+  "Moqueca":{ cat:"Peixe", catEN:"Fish", ingredients:[
+    {qty:200, unit:"g",       namePT:"Filé de peixe branco", nameEN:"White fish fillet", shopCat:"Carnes"},
+    {qty:100, unit:"ml",      namePT:"Leite de coco",        nameEN:"Coconut milk",      shopCat:"Mercearia"},
+    {qty:1,   unit:"col sopa",namePT:"Azeite de dendê",      nameEN:"Palm oil",          shopCat:"Mercearia"},
+    {qty:0.5, unit:"un",      namePT:"Cebola",               nameEN:"Onion",             shopCat:"Hortifruti"},
+    {qty:0.5, unit:"un",      namePT:"Tomate",               nameEN:"Tomato",            shopCat:"Hortifruti"},
+    {qty:0.5, unit:"un",      namePT:"Pimentão",             nameEN:"Bell pepper",       shopCat:"Hortifruti"},
+    {qty:0.5, unit:"un",      namePT:"Limão",                nameEN:"Lemon",             shopCat:"Hortifruti"},
+    {qty:2,   unit:"dentes",  namePT:"Alho",                 nameEN:"Garlic",            shopCat:"Hortifruti"},
+    {qty:10,  unit:"folhas",  namePT:"Coentro fresco",       nameEN:"Fresh cilantro",    shopCat:"Hortifruti"},
+  ]},
+  "Salmão assado com páprica":{ cat:"Peixe", catEN:"Fish", ingredients:[
+    {qty:1,   unit:"lb",      namePT:"Filé de salmão",   nameEN:"Salmon fillet",  shopCat:"Carnes"},
+    {qty:1,   unit:"col chá", namePT:"Páprica defumada", nameEN:"Smoked paprika", shopCat:"Temperos"},
+    {qty:1,   unit:"dentes",  namePT:"Alho",             nameEN:"Garlic",         shopCat:"Hortifruti"},
+    {qty:1,   unit:"un",      namePT:"Limão",            nameEN:"Lemon",          shopCat:"Hortifruti"},
+    {qty:2,   unit:"col sopa",namePT:"Azeite de oliva",  nameEN:"Olive oil",      shopCat:"Mercearia"},
+    {qty:0.5, unit:"col chá", namePT:"Sal",              nameEN:"Salt",           shopCat:"Temperos"},
+  ]},
+  "Camarão ao Alho e Óleo":{ cat:"Camarão", catEN:"Shrimp", ingredients:[
+    {qty:180, unit:"g",       namePT:"Camarão limpo",    nameEN:"Cleaned shrimp",  shopCat:"Carnes"},
+    {qty:4,   unit:"dentes",  namePT:"Alho",             nameEN:"Garlic",          shopCat:"Hortifruti"},
+    {qty:3,   unit:"col sopa",namePT:"Azeite de oliva",  nameEN:"Olive oil",       shopCat:"Mercearia"},
+    {qty:0.5, unit:"un",      namePT:"Limão",            nameEN:"Lemon",           shopCat:"Hortifruti"},
+    {qty:10,  unit:"folhas",  namePT:"Salsa fresca",     nameEN:"Fresh parsley",   shopCat:"Hortifruti"},
+    {qty:0.5, unit:"col chá", namePT:"Sal",              nameEN:"Salt",            shopCat:"Temperos"},
+  ]},
+  "Camarão cremoso com palmito":{ cat:"Camarão", catEN:"Shrimp", ingredients:[
+    {qty:180, unit:"g",       namePT:"Camarão limpo",    nameEN:"Cleaned shrimp", shopCat:"Carnes"},
+    {qty:80,  unit:"g",       namePT:"Palmito pupunha",  nameEN:"Heart of palm",  shopCat:"Mercearia"},
+    {qty:100, unit:"ml",      namePT:"Creme de leite",   nameEN:"Heavy cream",    shopCat:"Laticínios"},
+    {qty:2,   unit:"dentes",  namePT:"Alho",             nameEN:"Garlic",         shopCat:"Hortifruti"},
+    {qty:1,   unit:"col sopa",namePT:"Manteiga",         nameEN:"Butter",         shopCat:"Laticínios"},
+    {qty:0.5, unit:"col chá", namePT:"Sal",              nameEN:"Salt",           shopCat:"Temperos"},
+    {qty:1,   unit:"pitada",  namePT:"Pimenta-do-reino", nameEN:"Black pepper",   shopCat:"Temperos"},
+  ]},
+  "Camarão Gratinado":{ cat:"Camarão", catEN:"Shrimp", ingredients:[
+    {qty:180, unit:"g",       namePT:"Camarão limpo",         nameEN:"Cleaned shrimp",  shopCat:"Carnes"},
+    {qty:80,  unit:"ml",      namePT:"Creme de leite",        nameEN:"Heavy cream",     shopCat:"Laticínios"},
+    {qty:50,  unit:"g",       namePT:"Queijo parmesão ralado",nameEN:"Grated parmesan", shopCat:"Laticínios"},
+    {qty:20,  unit:"g",       namePT:"Manteiga",              nameEN:"Butter",          shopCat:"Laticínios"},
+    {qty:2,   unit:"dentes",  namePT:"Alho",                  nameEN:"Garlic",          shopCat:"Hortifruti"},
+    {qty:0.5, unit:"col chá", namePT:"Sal",                   nameEN:"Salt",            shopCat:"Temperos"},
+  ]},
+  "Arroz branco":{ cat:"Carboidratos", catEN:"Carbs", ingredients:[
+    {qty:80,  unit:"g",       namePT:"Arroz branco", nameEN:"White rice",    shopCat:"Mercearia"},
+    {qty:1,   unit:"dente",   namePT:"Alho",         nameEN:"Garlic",        shopCat:"Hortifruti"},
+    {qty:1,   unit:"col sopa",namePT:"Óleo vegetal", nameEN:"Vegetable oil", shopCat:"Mercearia"},
+    {qty:0.5, unit:"col chá", namePT:"Sal",          nameEN:"Salt",          shopCat:"Temperos"},
+  ]},
+  "Arroz de cúrcuma":{ cat:"Carboidratos", catEN:"Carbs", ingredients:[
+    {qty:80,  unit:"g",       namePT:"Arroz branco",    nameEN:"White rice",  shopCat:"Mercearia"},
+    {qty:1,   unit:"col chá", namePT:"Cúrcuma/Açafrão", nameEN:"Turmeric",    shopCat:"Temperos"},
+    {qty:1,   unit:"dente",   namePT:"Alho",            nameEN:"Garlic",      shopCat:"Hortifruti"},
+    {qty:1,   unit:"col sopa",namePT:"Azeite de oliva", nameEN:"Olive oil",   shopCat:"Mercearia"},
+    {qty:0.5, unit:"col chá", namePT:"Sal",             nameEN:"Salt",        shopCat:"Temperos"},
+  ]},
+  "Batata doce na manteiga de alho":{ cat:"Carboidratos", catEN:"Carbs", ingredients:[
+    {qty:200, unit:"g",       namePT:"Batata doce", nameEN:"Sweet potato", shopCat:"Hortifruti"},
+    {qty:20,  unit:"g",       namePT:"Manteiga",    nameEN:"Butter",       shopCat:"Laticínios"},
+    {qty:2,   unit:"dentes",  namePT:"Alho",        nameEN:"Garlic",       shopCat:"Hortifruti"},
+    {qty:0.5, unit:"col chá", namePT:"Sal",         nameEN:"Salt",         shopCat:"Temperos"},
+  ]},
+  "Batata sauté":{ cat:"Carboidratos", catEN:"Carbs", ingredients:[
+    {qty:200, unit:"g",       namePT:"Batata",          nameEN:"Potato",         shopCat:"Hortifruti"},
+    {qty:2,   unit:"col sopa",namePT:"Azeite de oliva", nameEN:"Olive oil",      shopCat:"Mercearia"},
+    {qty:2,   unit:"dentes",  namePT:"Alho",            nameEN:"Garlic",         shopCat:"Hortifruti"},
+    {qty:5,   unit:"g",       namePT:"Alecrim fresco",  nameEN:"Fresh rosemary", shopCat:"Hortifruti"},
+    {qty:0.5, unit:"col chá", namePT:"Sal",             nameEN:"Salt",           shopCat:"Temperos"},
+  ]},
+  "Creme de milho":{ cat:"Carboidratos", catEN:"Carbs", ingredients:[
+    {qty:150, unit:"g",       namePT:"Milho verde",    nameEN:"Corn kernels", shopCat:"Hortifruti"},
+    {qty:80,  unit:"ml",      namePT:"Creme de leite", nameEN:"Heavy cream",  shopCat:"Laticínios"},
+    {qty:10,  unit:"g",       namePT:"Manteiga",       nameEN:"Butter",       shopCat:"Laticínios"},
+    {qty:0.5, unit:"col chá", namePT:"Sal",            nameEN:"Salt",         shopCat:"Temperos"},
+  ]},
+  "Feijão de caldo":{ cat:"Carboidratos", catEN:"Carbs", ingredients:[
+    {qty:80,  unit:"g",       namePT:"Feijão carioca", nameEN:"Pinto beans",   shopCat:"Mercearia"},
+    {qty:40,  unit:"g",       namePT:"Bacon em cubos", nameEN:"Bacon cubes",   shopCat:"Carnes"},
+    {qty:2,   unit:"dentes",  namePT:"Alho",           nameEN:"Garlic",        shopCat:"Hortifruti"},
+    {qty:0.5, unit:"un",      namePT:"Cebola",         nameEN:"Onion",         shopCat:"Hortifruti"},
+    {qty:1,   unit:"col sopa",namePT:"Óleo vegetal",   nameEN:"Vegetable oil", shopCat:"Mercearia"},
+    {qty:0.5, unit:"col chá", namePT:"Sal",            nameEN:"Salt",          shopCat:"Temperos"},
+  ]},
+  "Quinoa com cenoura ralada":{ cat:"Carboidratos", catEN:"Carbs", ingredients:[
+    {qty:70,  unit:"g",       namePT:"Quinoa",          nameEN:"Quinoa",        shopCat:"Mercearia"},
+    {qty:80,  unit:"g",       namePT:"Cenoura ralada",  nameEN:"Grated carrot", shopCat:"Hortifruti"},
+    {qty:1,   unit:"col sopa",namePT:"Azeite de oliva", nameEN:"Olive oil",     shopCat:"Mercearia"},
+    {qty:0.5, unit:"col chá", namePT:"Sal",             nameEN:"Salt",          shopCat:"Temperos"},
+  ]},
+  "Tutu de feijão/tropeiro":{ cat:"Carboidratos", catEN:"Carbs", ingredients:[
+    {qty:80,  unit:"g",       namePT:"Feijão carioca cozido", nameEN:"Cooked pinto beans", shopCat:"Mercearia"},
+    {qty:40,  unit:"g",       namePT:"Farinha de mandioca",   nameEN:"Cassava flour",      shopCat:"Mercearia"},
+    {qty:30,  unit:"g",       namePT:"Bacon em cubos",        nameEN:"Bacon cubes",        shopCat:"Carnes"},
+    {qty:2,   unit:"dentes",  namePT:"Alho",                  nameEN:"Garlic",             shopCat:"Hortifruti"},
+    {qty:0.5, unit:"un",      namePT:"Cebola",                nameEN:"Onion",              shopCat:"Hortifruti"},
+    {qty:0.5, unit:"col chá", namePT:"Sal",                   nameEN:"Salt",               shopCat:"Temperos"},
+  ]},
+  "Aspargos ao alho":{ cat:"Legumes", catEN:"Vegetables", ingredients:[
+    {qty:150, unit:"g",       namePT:"Aspargos",        nameEN:"Asparagus", shopCat:"Hortifruti"},
+    {qty:3,   unit:"dentes",  namePT:"Alho",            nameEN:"Garlic",    shopCat:"Hortifruti"},
+    {qty:2,   unit:"col sopa",namePT:"Azeite de oliva", nameEN:"Olive oil", shopCat:"Mercearia"},
+    {qty:0.5, unit:"un",      namePT:"Limão",           nameEN:"Lemon",     shopCat:"Hortifruti"},
+    {qty:0.5, unit:"col chá", namePT:"Sal",             nameEN:"Salt",      shopCat:"Temperos"},
+  ]},
+  "Brócolis no alho":{ cat:"Legumes", catEN:"Vegetables", ingredients:[
+    {qty:150, unit:"g",       namePT:"Brócolis",        nameEN:"Broccoli",  shopCat:"Hortifruti"},
+    {qty:3,   unit:"dentes",  namePT:"Alho",            nameEN:"Garlic",    shopCat:"Hortifruti"},
+    {qty:2,   unit:"col sopa",namePT:"Azeite de oliva", nameEN:"Olive oil", shopCat:"Mercearia"},
+    {qty:0.5, unit:"col chá", namePT:"Sal",             nameEN:"Salt",      shopCat:"Temperos"},
+  ]},
+  "Couscous marroquino":{ cat:"Legumes", catEN:"Vegetables", ingredients:[
+    {qty:0.5, unit:"pct",     namePT:"Couscous marroquino", nameEN:"Moroccan couscous", shopCat:"Mercearia"},
+    {qty:0.5, unit:"un",      namePT:"Abobrinha",           nameEN:"Zucchini",          shopCat:"Hortifruti"},
+    {qty:0.5, unit:"pct",     namePT:"Espinafre",           nameEN:"Spinach",           shopCat:"Hortifruti"},
+    {qty:2,   unit:"col sopa",namePT:"Azeite de oliva",     nameEN:"Olive oil",         shopCat:"Mercearia"},
+    {qty:0.5, unit:"un",      namePT:"Limão",               nameEN:"Lemon",             shopCat:"Hortifruti"},
+    {qty:0.5, unit:"un",      namePT:"Pimentão vermelho",   nameEN:"Red bell pepper",   shopCat:"Hortifruti"},
+    {qty:0.5, unit:"un",      namePT:"Cenoura",             nameEN:"Carrot",            shopCat:"Hortifruti"},
+  ]},
+  "Couve flor gratinada":{ cat:"Legumes", catEN:"Vegetables", ingredients:[
+    {qty:150, unit:"g",       namePT:"Couve-flor",             nameEN:"Cauliflower",     shopCat:"Hortifruti"},
+    {qty:60,  unit:"ml",      namePT:"Creme de leite",         nameEN:"Heavy cream",     shopCat:"Laticínios"},
+    {qty:40,  unit:"g",       namePT:"Queijo parmesão ralado", nameEN:"Grated parmesan", shopCat:"Laticínios"},
+    {qty:10,  unit:"g",       namePT:"Manteiga",               nameEN:"Butter",          shopCat:"Laticínios"},
+    {qty:0.5, unit:"col chá", namePT:"Sal",                    nameEN:"Salt",            shopCat:"Temperos"},
+  ]},
+  "Legumes Mediterrâneos":{ cat:"Legumes", catEN:"Vegetables", ingredients:[
+    {qty:1,   unit:"un",      namePT:"Abobrinha",         nameEN:"Zucchini",        shopCat:"Hortifruti"},
+    {qty:0.5, unit:"un",      namePT:"Pimentão vermelho", nameEN:"Red bell pepper", shopCat:"Hortifruti"},
+    {qty:0.5, unit:"cx",      namePT:"Tomate cereja",     nameEN:"Cherry tomatoes", shopCat:"Hortifruti"},
+    {qty:3,   unit:"col sopa",namePT:"Azeite de oliva",   nameEN:"Olive oil",       shopCat:"Mercearia"},
+    {qty:1,   unit:"pc",      namePT:"Tomilho",           nameEN:"Thyme",           shopCat:"Temperos"},
+    {qty:0.5, unit:"un",      namePT:"Abobrinha amarela", nameEN:"Yellow squash",   shopCat:"Hortifruti"},
+    {qty:1,   unit:"un",      namePT:"Cenoura",           nameEN:"Carrot",          shopCat:"Hortifruti"},
+    {qty:1,   unit:"un",      namePT:"Cebola roxa",       nameEN:"Red onion",       shopCat:"Hortifruti"},
+  ]},
+  "Pure de abobora":{ cat:"Legumes", catEN:"Vegetables", ingredients:[
+    {qty:1,   unit:"un",  namePT:"Abobora",  nameEN:"Butternut squash", shopCat:"Hortifruti"},
+    {qty:1,   unit:"cs",  namePT:"Manteiga", nameEN:"Butter",           shopCat:"Laticínios"},
+  ]},
+  "Quiabo":{ cat:"Legumes", catEN:"Vegetables", ingredients:[
+    {qty:1, unit:"pct", namePT:"Quiabo", nameEN:"Okra cut", shopCat:"Hortifruti"},
+  ]},
+  "Salada de bifum":{ cat:"Legumes", catEN:"Vegetables", ingredients:[
+    {qty:1,  unit:"pct", namePT:"Bifum",            nameEN:"Bifum",        shopCat:"Mercearia"},
+    {qty:1,  unit:"un",  namePT:"Cenoura",          nameEN:"Carrot",       shopCat:"Hortifruti"},
+    {qty:1,  unit:"pct", namePT:"Kani kama",        nameEN:"Kani kama",    shopCat:"Carnes"},
+    {qty:2,  unit:"cs",  namePT:"Vinagre de arroz", nameEN:"Rice vinegar", shopCat:"Mercearia"},
+    {qty:2,  unit:"cs",  namePT:"Gergelim preto",   nameEN:"Black sesame", shopCat:"Mercearia"},
+  ]},
+  "Salada de macarrão":{ cat:"Legumes", catEN:"Vegetables", ingredients:[
+    {qty:80,  unit:"g",       namePT:"Macarrão parafuso", nameEN:"Rotini pasta",    shopCat:"Mercearia"},
+    {qty:50,  unit:"g",       namePT:"Azeitonas",         nameEN:"Olives",          shopCat:"Mercearia"},
+    {qty:50,  unit:"g",       namePT:"Tomate cereja",     nameEN:"Cherry tomatoes", shopCat:"Hortifruti"},
+    {qty:30,  unit:"g",       namePT:"Atum enlatado",     nameEN:"Canned tuna",     shopCat:"Mercearia"},
+    {qty:2,   unit:"col sopa",namePT:"Azeite de oliva",   nameEN:"Olive oil",       shopCat:"Mercearia"},
+    {qty:0.5, unit:"col chá", namePT:"Sal",               nameEN:"Salt",            shopCat:"Temperos"},
+  ]},
+  "Salada de repolho e maionese proteica":{ cat:"Legumes", catEN:"Vegetables", ingredients:[
+    {qty:120, unit:"g",       namePT:"Repolho roxo/branco", nameEN:"Cabbage",          shopCat:"Hortifruti"},
+    {qty:50,  unit:"g",       namePT:"Cenoura ralada",      nameEN:"Grated carrot",    shopCat:"Hortifruti"},
+    {qty:2,   unit:"col sopa",namePT:"Maionese light",      nameEN:"Light mayonnaise", shopCat:"Mercearia"},
+    {qty:1,   unit:"col sopa",namePT:"Iogurte natural",     nameEN:"Plain yogurt",     shopCat:"Laticínios"},
+    {qty:0.5, unit:"col chá", namePT:"Sal",                 nameEN:"Salt",             shopCat:"Temperos"},
+  ]},
+  "Molho bolonhesa":{ cat:"Massas", catEN:"Pasta", ingredients:[
+    {qty:80,  unit:"g",       namePT:"Macarrão espaguete", nameEN:"Spaghetti",    shopCat:"Mercearia"},
+    {qty:150, unit:"g",       namePT:"Carne moída bovina", nameEN:"Ground beef",  shopCat:"Carnes"},
+    {qty:100, unit:"ml",      namePT:"Molho de tomate",    nameEN:"Tomato sauce", shopCat:"Mercearia"},
+    {qty:0.5, unit:"un",      namePT:"Cebola",             nameEN:"Onion",        shopCat:"Hortifruti"},
+    {qty:2,   unit:"dentes",  namePT:"Alho",               nameEN:"Garlic",       shopCat:"Hortifruti"},
+    {qty:1,   unit:"col sopa",namePT:"Azeite de oliva",    nameEN:"Olive oil",    shopCat:"Mercearia"},
+  ]},
+  "Molho branco":{ cat:"Massas", catEN:"Pasta", ingredients:[
+    {qty:80,  unit:"g",       namePT:"Macarrão (sua escolha)", nameEN:"Pasta (your choice)", shopCat:"Mercearia"},
+    {qty:100, unit:"ml",      namePT:"Creme de leite",         nameEN:"Heavy cream",         shopCat:"Laticínios"},
+    {qty:20,  unit:"g",       namePT:"Manteiga",               nameEN:"Butter",              shopCat:"Laticínios"},
+    {qty:30,  unit:"g",       namePT:"Queijo parmesão",        nameEN:"Parmesan cheese",     shopCat:"Laticínios"},
+    {qty:1,   unit:"dente",   namePT:"Alho",                   nameEN:"Garlic",              shopCat:"Hortifruti"},
+    {qty:0.5, unit:"col chá", namePT:"Sal",                    nameEN:"Salt",                shopCat:"Temperos"},
+  ]},
+  "Molho de almondegas":{ cat:"Massas", catEN:"Pasta", ingredients:[
+    {qty:80,  unit:"g",       namePT:"Macarrão (sua escolha)", nameEN:"Pasta (your choice)", shopCat:"Mercearia"},
+    {qty:150, unit:"g",       namePT:"Carne moída bovina",     nameEN:"Ground beef",         shopCat:"Carnes"},
+    {qty:100, unit:"ml",      namePT:"Molho de tomate",        nameEN:"Tomato sauce",        shopCat:"Mercearia"},
+    {qty:30,  unit:"g",       namePT:"Farinha de rosca",       nameEN:"Breadcrumbs",         shopCat:"Mercearia"},
+    {qty:0.5, unit:"un",      namePT:"Ovo",                    nameEN:"Egg",                 shopCat:"Laticínios"},
+    {qty:2,   unit:"dentes",  namePT:"Alho",                   nameEN:"Garlic",              shopCat:"Hortifruti"},
+  ]},
+  "Pesto":{ cat:"Massas", catEN:"Pasta", ingredients:[
+    {qty:80,  unit:"g",       namePT:"Macarrão (sua escolha)", nameEN:"Pasta (your choice)", shopCat:"Mercearia"},
+    {qty:30,  unit:"g",       namePT:"Manjericão fresco",      nameEN:"Fresh basil",         shopCat:"Hortifruti"},
+    {qty:30,  unit:"g",       namePT:"Pinhão/Nozes",           nameEN:"Pine nuts/Walnuts",   shopCat:"Mercearia"},
+    {qty:30,  unit:"g",       namePT:"Queijo parmesão",        nameEN:"Parmesan cheese",     shopCat:"Laticínios"},
+    {qty:3,   unit:"col sopa",namePT:"Azeite de oliva",        nameEN:"Olive oil",           shopCat:"Mercearia"},
+    {qty:2,   unit:"dentes",  namePT:"Alho",                   nameEN:"Garlic",              shopCat:"Hortifruti"},
+  ]},
+  "Abóbora com carne":{ cat:"Sopas", catEN:"Soups", ingredients:[
+    {qty:150, unit:"g",       namePT:"Abóbora cabotiá",        nameEN:"Kabocha squash", shopCat:"Hortifruti"},
+    {qty:100, unit:"g",       namePT:"Carne moída ou patinho", nameEN:"Ground beef",    shopCat:"Carnes"},
+    {qty:0.5, unit:"un",      namePT:"Cebola",                 nameEN:"Onion",          shopCat:"Hortifruti"},
+    {qty:2,   unit:"dentes",  namePT:"Alho",                   nameEN:"Garlic",         shopCat:"Hortifruti"},
+    {qty:1,   unit:"col sopa",namePT:"Azeite de oliva",        nameEN:"Olive oil",      shopCat:"Mercearia"},
+    {qty:0.5, unit:"col chá", namePT:"Sal",                    nameEN:"Salt",           shopCat:"Temperos"},
+  ]},
+  "Caldo verde":{ cat:"Sopas", catEN:"Soups", ingredients:[
+    {qty:150, unit:"g",       namePT:"Batata",             nameEN:"Potato",          shopCat:"Hortifruti"},
+    {qty:50,  unit:"g",       namePT:"Couve em tiras",     nameEN:"Shredded kale",   shopCat:"Hortifruti"},
+    {qty:50,  unit:"g",       namePT:"Linguiça calabresa", nameEN:"Chorizo sausage", shopCat:"Carnes"},
+    {qty:0.5, unit:"un",      namePT:"Cebola",             nameEN:"Onion",           shopCat:"Hortifruti"},
+    {qty:2,   unit:"dentes",  namePT:"Alho",               nameEN:"Garlic",          shopCat:"Hortifruti"},
+    {qty:2,   unit:"col sopa",namePT:"Azeite de oliva",    nameEN:"Olive oil",       shopCat:"Mercearia"},
+  ]},
+  "Ervilha com frango":{ cat:"Sopas", catEN:"Soups", ingredients:[
+    {qty:100, unit:"g",       namePT:"Frango desfiado", nameEN:"Shredded chicken", shopCat:"Carnes"},
+    {qty:80,  unit:"g",       namePT:"Ervilha",         nameEN:"Green peas",       shopCat:"Hortifruti"},
+    {qty:0.5, unit:"un",      namePT:"Cebola",          nameEN:"Onion",            shopCat:"Hortifruti"},
+    {qty:2,   unit:"dentes",  namePT:"Alho",            nameEN:"Garlic",           shopCat:"Hortifruti"},
+    {qty:1,   unit:"col sopa",namePT:"Azeite de oliva", nameEN:"Olive oil",        shopCat:"Mercearia"},
+    {qty:0.5, unit:"col chá", namePT:"Sal",             nameEN:"Salt",             shopCat:"Temperos"},
+  ]},
+  "Sopa de Legumes":{ cat:"Sopas", catEN:"Soups", ingredients:[
+    {qty:80,  unit:"g",       namePT:"Cenoura",         nameEN:"Carrot",   shopCat:"Hortifruti"},
+    {qty:80,  unit:"g",       namePT:"Batata",          nameEN:"Potato",   shopCat:"Hortifruti"},
+    {qty:60,  unit:"g",       namePT:"Abobrinha",       nameEN:"Zucchini", shopCat:"Hortifruti"},
+    {qty:0.5, unit:"un",      namePT:"Cebola",          nameEN:"Onion",    shopCat:"Hortifruti"},
+    {qty:2,   unit:"dentes",  namePT:"Alho",            nameEN:"Garlic",   shopCat:"Hortifruti"},
+    {qty:1,   unit:"col sopa",namePT:"Azeite de oliva", nameEN:"Olive oil",shopCat:"Mercearia"},
+    {qty:0.5, unit:"col chá", namePT:"Sal",             nameEN:"Salt",     shopCat:"Temperos"},
+  ]},
+  "Fricassê de frango":{ cat:"Diversos", catEN:"Other", ingredients:[
+    {qty:180, unit:"g",       namePT:"Frango desfiado", nameEN:"Shredded chicken", shopCat:"Carnes"},
+    {qty:100, unit:"ml",      namePT:"Creme de leite",  nameEN:"Heavy cream",      shopCat:"Laticínios"},
+    {qty:50,  unit:"g",       namePT:"Milho verde",     nameEN:"Corn kernels",     shopCat:"Hortifruti"},
+    {qty:50,  unit:"g",       namePT:"Ervilha",         nameEN:"Green peas",       shopCat:"Hortifruti"},
+    {qty:30,  unit:"g",       namePT:"Queijo parmesão", nameEN:"Parmesan cheese",  shopCat:"Laticínios"},
+    {qty:2,   unit:"dentes",  namePT:"Alho",            nameEN:"Garlic",           shopCat:"Hortifruti"},
+    {qty:0.5, unit:"col chá", namePT:"Sal",             nameEN:"Salt",             shopCat:"Temperos"},
+  ]},
+  "Galinhada (com ou sem pequi)":{ cat:"Diversos", catEN:"Other", ingredients:[
+    {qty:200, unit:"g",       namePT:"Frango em pedaços", nameEN:"Chicken pieces",   shopCat:"Carnes"},
+    {qty:80,  unit:"g",       namePT:"Arroz branco",      nameEN:"White rice",       shopCat:"Mercearia"},
+    {qty:0.5, unit:"un",      namePT:"Cebola",            nameEN:"Onion",            shopCat:"Hortifruti"},
+    {qty:0.5, unit:"un",      namePT:"Tomate",            nameEN:"Tomato",           shopCat:"Hortifruti"},
+    {qty:2,   unit:"dentes",  namePT:"Alho",              nameEN:"Garlic",           shopCat:"Hortifruti"},
+    {qty:1,   unit:"col chá", namePT:"Colorau/Cúrcuma",   nameEN:"Paprika/Turmeric", shopCat:"Temperos"},
+    {qty:1,   unit:"col sopa",namePT:"Azeite de oliva",   nameEN:"Olive oil",        shopCat:"Mercearia"},
+  ]},
+  "Quibe assado Gluten free":{ cat:"Diversos", catEN:"Other", ingredients:[
+    {qty:150, unit:"g",      namePT:"Carne moída bovina",               nameEN:"Ground beef",               shopCat:"Carnes"},
+    {qty:60,  unit:"g",      namePT:"Trigo para quibe (ou flocos aveia)",nameEN:"Bulgur wheat (or oat flakes)",shopCat:"Mercearia"},
+    {qty:0.5, unit:"un",     namePT:"Cebola",                           nameEN:"Onion",                     shopCat:"Hortifruti"},
+    {qty:10,  unit:"folhas", namePT:"Hortelã fresca",                   nameEN:"Fresh mint",                shopCat:"Hortifruti"},
+    {qty:1,   unit:"col chá",namePT:"Canela em pó",                     nameEN:"Cinnamon powder",           shopCat:"Temperos"},
+    {qty:0.5, unit:"col chá",namePT:"Sal",                              nameEN:"Salt",                      shopCat:"Temperos"},
+  ]},
+};
+
+// ============================================================
+// STATE
+// ============================================================
+let lang = 'pt';
+let people = 1;
+let selectedDishes = new Set();
+let activeRecipe = null;
+let history = [];
+
+const allCatOrder = ["Bovino","Frango","Suíno","Peixe","Camarão","Carboidratos","Legumes","Massas","Sopas","Diversos"];
+const shopCatOrder = ["Carnes","Hortifruti","Laticínios","Mercearia","Temperos"];
+const shopCatEN = {"Carnes":"Meat & Fish","Hortifruti":"Produce","Laticínios":"Dairy","Mercearia":"Pantry","Temperos":"Spices & Condiments"};
+const catEmoji = {"Bovino":"🥩","Frango":"🍗","Suíno":"🐷","Peixe":"🐟","Camarão":"🦐","Carboidratos":"🍚","Legumes":"🥦","Massas":"🍝","Sopas":"🍲","Diversos":"✨"};
+const catEN = {"Bovino":"Beef","Frango":"Chicken","Suíno":"Pork","Peixe":"Fish","Camarão":"Shrimp","Carboidratos":"Carbs","Legumes":"Vegetables","Massas":"Pasta","Sopas":"Soups","Diversos":"Other"};
+
+// ============================================================
+// CLIENT AUTOCOMPLETE
+// ============================================================
+function getKnownClients() {
+  const names = new Set();
+  history.forEach(h => { if (h.clientName) names.add(h.clientName); });
+  return [...names].sort();
+}
+function showClientSuggestions() {
+  const val = document.getElementById('client-name').value.toLowerCase().trim();
+  const clients = getKnownClients().filter(c => !val || c.toLowerCase().includes(val));
+  const box = document.getElementById('client-suggestions');
+  if (!clients.length) { box.style.display='none'; return; }
+  box.innerHTML = clients.map(c => `<div onmousedown="selectClient('${c.replace(/'/g,"\\'")}')">👤 ${c}</div>`).join('');
+  box.style.display = 'block';
+}
+function hideClientSuggestions() {
+  setTimeout(() => { const b=document.getElementById('client-suggestions'); if(b) b.style.display='none'; }, 180);
+}
+function selectClient(name) {
+  document.getElementById('client-name').value = name;
+  const last = [...history].find(h => h.clientName === name);
+  if (last && last.clientCity) document.getElementById('client-city').value = last.clientCity;
+  document.getElementById('client-suggestions').style.display='none';
+}
+
+// ============================================================
+// MENU — flat, no protein limit
+// ============================================================
+function renderMenu() {
+  const container = document.getElementById('menu-sections');
+  container.innerHTML = '';
+  for (const cat of allCatOrder) {
+    const dishes = Object.entries(recipes).filter(([,r])=>r.cat===cat).sort((a,b)=>a[0].localeCompare(b[0]));
+    if (!dishes.length) continue;
+    const div = document.createElement('div');
+    div.className = 'category-block';
+    div.innerHTML = `<div class="cat-header"><span class="cat-pill">${catEmoji[cat]} ${lang==='pt'?cat:catEN[cat]}</span><div class="cat-line"></div></div><div class="dishes-grid" id="cg-${cat}"></div>`;
+    container.appendChild(div);
+    const grid = div.querySelector(`#cg-${cat}`);
+    for (const [name] of dishes) {
+      const isSel = selectedDishes.has(name);
+      const card = document.createElement('div');
+      card.className = 'dish-card'+(isSel?' selected':'');
+      card.onclick = () => toggleDish(name);
+      card.innerHTML = `<span class="check">${isSel?'✓':''}</span><div class="dish-name">${name}</div>`;
+      grid.appendChild(card);
+    }
+  }
+  updateSummaryBar();
+}
+
+function updateSummaryBar() {
+  const bar = document.getElementById('summary-bar');
+  const total = selectedDishes.size;
+  if (total > 0) {
+    bar.style.display = 'flex';
+    document.getElementById('summary-count').textContent = lang==='pt' ? `${total} prato(s) selecionado(s)` : `${total} dish(es) selected`;
+    document.getElementById('summary-people').textContent = lang==='pt' ? `· ${people} pessoa(s)` : `· ${people} person(s)`;
+  } else bar.style.display = 'none';
+}
+
+// ============================================================
+// SHOPPING LIST
+// ============================================================
+function buildAggr() {
+  const aggr = {};
+  for (const dishName of selectedDishes) {
+    const r = recipes[dishName]; if (!r) continue;
+    for (const ing of r.ingredients) {
+      const key = ing.namePT+'|||'+ing.shopCat;
+      if (!aggr[key]) aggr[key] = {...ing, totalQty:0, perPersonQty:0};
+      aggr[key].totalQty += ing.qty * people;
+      aggr[key].perPersonQty += ing.qty;
+    }
+  }
+  return aggr;
+}
+
+function generateList() {
+  if (!selectedDishes.size) return;
+  const clientName = document.getElementById('client-name').value.trim();
+  const clientCity = document.getElementById('client-city').value.trim();
+  if (!clientName) {
+    const inp = document.getElementById('client-name');
+    inp.style.borderColor = 'var(--red-accent)';
+    inp.focus();
+    inp.placeholder = '⚠️ Nome obrigatório!';
+    setTimeout(() => { inp.style.borderColor=''; inp.placeholder='Nome do cliente *'; }, 2500);
+    return;
+  }
+
+  const aggr = buildAggr();
+  const now = new Date();
+  const entry = {
+    id: now.getTime(),
+    date: now.toLocaleDateString('pt-BR'),
+    dateISO: now.toISOString(),
+    clientName,
+    clientCity,
+    people,
+    dishes: [...selectedDishes],
+    aggr: JSON.parse(JSON.stringify(aggr))
+  };
+  history.unshift(entry);
+  saveToLocalStorage();
+
+  const clientLabel = clientCity ? `${clientName} · ${clientCity}` : clientName;
+  const subtitle = `${clientLabel} · ${entry.date} · ${selectedDishes.size} pratos · ${people} pessoa(s)`;
+  document.getElementById('list-subtitle').textContent = subtitle;
+  document.getElementById('print-subtitle').textContent = `Chef Silmara Cavalcanti · ${subtitle}`;
+  document.getElementById('list-client-badge').innerHTML =
+    `<div class="client-badge no-print">👤 <strong>${clientLabel}</strong> &nbsp;·&nbsp; 📅 ${entry.date} &nbsp;·&nbsp; 👥 ${people} pessoa(s)</div>`;
+
+  const byCat = {};
+  for (const item of Object.values(aggr)) {
+    if (!byCat[item.shopCat]) byCat[item.shopCat] = [];
+    byCat[item.shopCat].push(item);
+  }
+
+  let html = `<div class="note-box no-print">✅ <strong>Dica:</strong> Toque no círculo ○ para marcar o item como pego. Toque nos campos para editar quantidades.</div>`;
+  for (const cat of shopCatOrder) {
+    if (!byCat[cat]) continue;
+    const catLabel = lang==='pt' ? cat : shopCatEN[cat];
+    const items = byCat[cat].sort((a,b)=>(lang==='pt'?a.namePT:a.nameEN).localeCompare(lang==='pt'?b.namePT:b.nameEN));
+    html += `<div class="shopping-category">
+      <div class="shop-cat-header">${shopEmoji(cat)} ${catLabel}</div>
+      <div class="shop-cat-body" id="body-${cat}">`;
+    for (const item of items) {
+      const namePrimary = lang==='pt' ? item.namePT : item.nameEN;
+      const nameSecondary = lang==='pt' ? item.nameEN : item.namePT;
+      const totalNum = rawNum(item.totalQty, item.unit);
+      const unitDisp = unitAfterConvert(item.totalQty, item.unit);
+      const perP = fmtQty(item.perPersonQty, item.unit)+item.unit;
+      html += shopItemHTML(namePrimary, nameSecondary, totalNum, unitDisp, perP);
+    }
+    html += `</div>
+      <div class="add-item-row no-print">
+        <input class="inp-name" type="text" placeholder="${lang==='pt'?'Novo item...':'New item...'}" id="an-${cat}">
+        <input class="inp-qty" type="number" placeholder="Qtd" id="aq-${cat}" min="0" step="0.5">
+        <input class="inp-unit" type="text" placeholder="un" id="au-${cat}">
+        <button class="btn primary" onclick="addItem('${cat}')">+</button>
+      </div>
+    </div>`;
+  }
+  document.getElementById('shopping-list-content').innerHTML = html;
+  showTab('lista');
+}
+
+function shopItemHTML(namePrimary, nameSecondary, qty, unit, perP) {
+  const sec = (nameSecondary && nameSecondary !== namePrimary)
+    ? `<span class="item-name-secondary">${nameSecondary}</span>` : '';
+  return `<div class="shop-item">
+    <button class="shop-check-btn" onclick="toggleShopItem(this)">✓</button>
+    <div class="item-name-wrap">
+      <input type="text" class="item-name-input" value="${namePrimary}">
+      ${sec}
+    </div>
+    <input type="number" class="item-qty-input" value="${qty}" min="0" step="0.1">
+    <input type="text" class="item-unit-input" value="${unit}">
+    <span class="per-person-note no-print">(${perP}/p)</span>
+    <button class="del-btn no-print" onclick="this.closest('.shop-item').remove()" title="Remover">✕</button>
+  </div>`;
+}
+
+function toggleShopItem(btn) { btn.closest('.shop-item').classList.toggle('checked'); }
+
+function addItem(cat) {
+  const n=document.getElementById('an-'+cat), q=document.getElementById('aq-'+cat), u=document.getElementById('au-'+cat);
+  if(!n.value.trim()) return;
+  document.getElementById('body-'+cat).insertAdjacentHTML('beforeend', shopItemHTML(n.value.trim(),'',q.value||1,u.value||'un','—'));
+  n.value=''; q.value=''; u.value='';
+}
+
+function rawNum(qty,unit){if(qty>=1000&&unit==='g')return+(qty/1000).toFixed(2);if(qty>=1000&&unit==='ml')return+(qty/1000).toFixed(2);return+qty.toFixed(2);}
+function unitAfterConvert(qty,unit){if(qty>=1000&&unit==='g')return'kg';if(qty>=1000&&unit==='ml')return'L';return unit;}
+function fmtQty(qty,unit){if(qty>=1000&&unit==='g')return(qty/1000).toFixed(1).replace(/\.0$/,'');if(qty>=1000&&unit==='ml')return(qty/1000).toFixed(1).replace(/\.0$/,'');return String(+qty.toFixed(1)).replace(/\.0$/,'');}
+function shopEmoji(c){return{"Carnes":"🥩","Hortifruti":"🥬","Laticínios":"🧀","Mercearia":"🛒","Temperos":"🧂"}[c]||'📦';}
+
+// ============================================================
+// HISTORY
+// ============================================================
+function renderHistory() {
+  const content = document.getElementById('history-content');
+  const sub = document.getElementById('hist-subtitle');
+  const clearBtn = document.getElementById('btn-clear-hist');
+  if (!history.length) {
+    sub.textContent = '';
+    clearBtn.style.display='none';
+    content.innerHTML=`<div class="empty-state"><div class="icon">📋</div><p>${lang==='pt'?'Nenhum atendimento salvo ainda. Gere uma lista de compras para começar.':'No history yet. Generate a shopping list to start.'}</p></div>`;
+    return;
+  }
+  sub.textContent = lang==='pt' ? `${history.length} atendimento(s) salvo(s)` : `${history.length} saved service(s)`;
+  clearBtn.style.display='inline-flex';
+
+  content.innerHTML = history.map((entry, idx) => {
+    const clientLabel = entry.clientCity ? `${entry.clientName} · ${entry.clientCity}` : entry.clientName;
+    const dishesHTML = entry.dishes.map(d=>`<span class="hist-dish-tag">${catEmoji[recipes[d]?.cat]||'🍽️'} ${d}</span>`).join('');
+    let ingHTML = '';
+    if (entry.aggr) {
+      const byCat = {};
+      Object.values(entry.aggr).forEach(item=>{ if(!byCat[item.shopCat]) byCat[item.shopCat]=[]; byCat[item.shopCat].push(item); });
+      shopCatOrder.forEach(cat => {
+        if (!byCat[cat]) return;
+        ingHTML += `<div class="hist-ing-cat">${shopEmoji(cat)} ${lang==='pt'?cat:shopCatEN[cat]}</div>`;
+        byCat[cat].sort((a,b)=>a.namePT.localeCompare(b.namePT)).forEach(item => {
+          const n=rawNum(item.totalQty,item.unit), u=unitAfterConvert(item.totalQty,item.unit);
+          ingHTML += `<div class="hist-ing-row"><span>${lang==='pt'?item.namePT:item.nameEN}</span><span style="font-weight:600;color:var(--green-dark)">${n} ${u}</span></div>`;
+        });
+      });
+    }
+    return `<div class="hist-card">
+      <div class="hist-card-header" onclick="toggleHistCard(${idx})" id="hh-${idx}">
+        <div style="min-width:0;flex:1;">
+          <div class="hist-client">👤 ${clientLabel}</div>
+          <div class="hist-meta">📅 ${entry.date} &nbsp;·&nbsp; 👥 ${entry.people} pessoa(s)</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+          <span class="hist-badge">🍽️ ${entry.dishes.length} pratos</span>
+          <span class="hist-chevron">▼</span>
+        </div>
+      </div>
+      <div class="hist-body" id="hb-${idx}">
+        <p style="font-size:0.77rem;font-weight:600;color:var(--brown);margin-bottom:7px;">${lang==='pt'?'Pratos:':'Dishes:'}</p>
+        <div class="hist-dishes">${dishesHTML}</div>
+        <p style="font-size:0.77rem;font-weight:600;color:var(--brown);margin:12px 0 4px;">${lang==='pt'?'Lista de compras:':'Shopping list:'}</p>
+        <div>${ingHTML}</div>
+        <div class="hist-actions">
+          <button class="btn primary" onclick="reloadFromHistory(${idx})">🔄 ${lang==='pt'?'Reabrir no Cardápio':'Reopen in Menu'}</button>
+          <button class="btn danger" onclick="deleteHistEntry(${idx})">🗑️ ${lang==='pt'?'Remover':'Delete'}</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleHistCard(idx) {
+  document.getElementById('hh-'+idx).classList.toggle('open');
+  document.getElementById('hb-'+idx).classList.toggle('open');
+}
+function deleteHistEntry(idx) {
+  if (!confirm(lang==='pt'?'Remover este atendimento do histórico?':'Remove this entry from history?')) return;
+  history.splice(idx,1); saveToLocalStorage(); renderHistory();
+}
+function clearHistory() {
+  if (!confirm(lang==='pt'?'Limpar todo o histórico de atendimentos?':'Clear all history?')) return;
+  history=[]; saveToLocalStorage(); renderHistory();
+}
+function reloadFromHistory(idx) {
+  const e=history[idx];
+  selectedDishes=new Set(e.dishes.filter(d=>recipes[d]));
+  people=e.people;
+  document.getElementById('people-count').textContent=people;
+  document.getElementById('client-name').value=e.clientName;
+  document.getElementById('client-city').value=e.clientCity||'';
+  renderMenu(); showTab('cardapio');
+}
+
+// ============================================================
+// RECIPE EDITOR
+// ============================================================
+function renderRecipeList() {
+  const list=document.getElementById('recipe-list');
+  const search=(document.getElementById('recipe-search')?.value||'').toLowerCase().trim();
+  list.innerHTML='';
+  for (const cat of allCatOrder) {
+    const entries=Object.entries(recipes).filter(([name,r])=>r.cat===cat&&(!search||name.toLowerCase().includes(search))).sort((a,b)=>a[0].localeCompare(b[0]));
+    if(!entries.length) continue;
+    if(!search){const lbl=document.createElement('div');lbl.className='recipe-group-label';lbl.textContent=`${catEmoji[cat]} ${lang==='pt'?cat:catEN[cat]}`;list.appendChild(lbl);}
+    for(const[name,r]of entries){const item=document.createElement('div');item.className='recipe-item'+(activeRecipe===name?' active':'');item.onclick=()=>{activeRecipe=name;renderRecipeList();renderRecipeDetail();};item.innerHTML=`<span>${name}</span><span class="cat-tag">${lang==='pt'?r.cat:r.catEN}</span>`;list.appendChild(item);}
+  }
+}
+function renderRecipeDetail() {
+  const detail=document.getElementById('recipe-detail');
+  if(!activeRecipe||!recipes[activeRecipe]){detail.innerHTML=`<div class="empty-state"><div class="icon">📋</div><p>${lang==='pt'?'Selecione uma receita para editar.':'Select a recipe to edit.'}</p></div>`;return;}
+  const r=recipes[activeRecipe];
+  detail.innerHTML=`<h3>${activeRecipe}</h3><span class="cat-badge">${catEmoji[r.cat]||''} ${lang==='pt'?r.cat:r.catEN}</span><p style="font-size:0.75rem;color:var(--text-light);margin-bottom:11px;">${lang==='pt'?'Quantidades por pessoa. Edite diretamente nos campos.':'Quantities per person. Edit directly in the fields.'}</p>
+    <table class="ingredients-table"><thead><tr><th>PT</th><th>EN</th><th>${lang==='pt'?'Qtd/p':'Qty/p'}</th><th>${lang==='pt'?'Und':'Unit'}</th><th>Cat.</th><th></th></tr></thead><tbody id="ing-body"></tbody></table>
+    <p style="font-size:0.74rem;font-weight:600;color:var(--green-dark);margin:9px 0 6px;">+ ${lang==='pt'?'Adicionar ingrediente':'Add ingredient'}</p>
+    <div class="add-ing-row">
+      <input type="text" id="npt" placeholder="PT" style="flex:1;min-width:80px;">
+      <input type="text" id="nen" placeholder="EN" style="flex:1;min-width:80px;">
+      <input type="number" id="nqty" placeholder="Qtd" style="width:56px;">
+      <input type="text" id="nunit" placeholder="Unit" style="width:50px;">
+      <select id="ncat" style="border:1px solid var(--border);border-radius:8px;padding:5px 7px;font-family:inherit;font-size:0.81rem;">${shopCatOrder.map(c=>`<option value="${c}">${c}</option>`).join('')}</select>
+      <button class="btn primary" onclick="addIngredient()">+</button>
+    </div>`;
+  renderIngBody();
+}
+function renderIngBody(){
+  const r=recipes[activeRecipe];const tbody=document.getElementById('ing-body');if(!tbody)return;tbody.innerHTML='';
+  r.ingredients.forEach((ing,i)=>{const tr=document.createElement('tr');tr.innerHTML=`<td><input class="editable" value="${ing.namePT}" onchange="upd(${i},'namePT',this.value)"></td><td><input class="editable" value="${ing.nameEN}" onchange="upd(${i},'nameEN',this.value)"></td><td><input class="editable" type="number" value="${ing.qty}" style="width:52px;" onchange="upd(${i},'qty',parseFloat(this.value))"></td><td><input class="editable" value="${ing.unit}" style="width:48px;" onchange="upd(${i},'unit',this.value)"></td><td><select class="editable" onchange="upd(${i},'shopCat',this.value)">${shopCatOrder.map(c=>`<option value="${c}"${c===ing.shopCat?' selected':''}>${c}</option>`).join('')}</select></td><td><button class="del-btn" onclick="rmIng(${i})">✕</button></td>`;tbody.appendChild(tr);});
+}
+function _upd(i,f,v){recipes[activeRecipe].ingredients[i][f]=v;}
+function _rmIng(i){recipes[activeRecipe].ingredients.splice(i,1);renderIngBody();}
+function _addIngredient(){const pt=document.getElementById('npt').value.trim();if(!pt)return;recipes[activeRecipe].ingredients.push({qty:parseFloat(document.getElementById('nqty').value)||0,unit:document.getElementById('nunit').value.trim()||'un',namePT:pt,nameEN:document.getElementById('nen').value.trim()||pt,shopCat:document.getElementById('ncat').value});renderIngBody();['npt','nen','nqty','nunit'].forEach(id=>document.getElementById(id).value='');}
+function _addNewDish(){const name=document.getElementById('new-dish-name').value.trim();const cat=document.getElementById('new-dish-cat').value;if(!name)return;const enM={"Bovino":"Beef","Frango":"Chicken","Suíno":"Pork","Peixe":"Fish","Camarão":"Shrimp","Carboidratos":"Carbs","Legumes":"Vegetables","Massas":"Pasta","Sopas":"Soups","Diversos":"Other"};recipes[name]={cat,catEN:enM[cat]||cat,ingredients:[]};document.getElementById('new-dish-name').value='';activeRecipe=name;renderRecipeList();renderRecipeDetail();renderMenu();}
+
+// ============================================================
+// LOCAL STORAGE — v2 key, migrates from v1
+// ============================================================
+const LS_KEY='chefsilmara_v2';
+function saveToLocalStorage(){try{localStorage.setItem(LS_KEY,JSON.stringify({recipes,selectedDishes:[...selectedDishes],people,lang,history}));}catch(e){console.warn('save failed',e);}}
+function loadFromLocalStorage(){
+  try{
+    let raw=localStorage.getItem(LS_KEY)||localStorage.getItem('chefsilmara_v1');
+    if(!raw)return false;
+    const d=JSON.parse(raw);if(!d.recipes)return false;
+    recipes=d.recipes;selectedDishes=new Set(d.selectedDishes||[]);
+    if(d.people)people=d.people;if(d.lang)lang=d.lang;if(d.history)history=d.history;
+    return true;
+  }catch(e){return false;}
+}
+
+function toggleDish(name){if(selectedDishes.has(name))selectedDishes.delete(name);else selectedDishes.add(name);renderMenu();saveToLocalStorage();}
+function changePeople(delta){people=Math.max(1,people+delta);document.getElementById('people-count').textContent=people;updateSummaryBar();saveToLocalStorage();}
+function toggleLang(){_origToggleLang();saveToLocalStorage();}
+function upd(i,f,v){_upd(i,f,v);saveToLocalStorage();}
+function rmIng(i){_rmIng(i);saveToLocalStorage();}
+function addIngredient(){_addIngredient();saveToLocalStorage();}
+function addNewDish(){_addNewDish();saveToLocalStorage();}
+
+// ============================================================
+// BACKUP & RESTORE
+// ============================================================
+function openBackupModal(){document.getElementById('backup-textarea').value=JSON.stringify({recipes,selectedDishes:[...selectedDishes],people,lang,history},null,2);document.getElementById('backup-modal').classList.add('open');}
+function closeBackupModal(){document.getElementById('backup-modal').classList.remove('open');}
+function copyBackup(){const ta=document.getElementById('backup-textarea');ta.select();document.execCommand('copy');const btn=document.getElementById('copy-btn');btn.textContent='✅ Copiado!';setTimeout(()=>{btn.innerHTML='📋 Copiar Backup';},2500);}
+function restoreBackup(){try{const d=JSON.parse(document.getElementById('backup-textarea').value);if(!d.recipes)throw 0;recipes=d.recipes;selectedDishes=new Set(d.selectedDishes||[]);if(d.people)people=d.people;if(d.lang)lang=d.lang;if(d.history)history=d.history;document.getElementById('people-count').textContent=people;document.getElementById('lang-label').textContent=lang==='pt'?'English':'Português';saveToLocalStorage();renderMenu();closeBackupModal();alert(lang==='pt'?'✅ Backup restaurado e salvo!':'✅ Backup restored and saved!');}catch(e){alert(lang==='pt'?'❌ Backup inválido.':'❌ Invalid backup.');}}
+
+// ============================================================
+// TABS & LANGUAGE
+// ============================================================
+function showTab(tab){
+  ['cardapio','lista','historico','receitas'].forEach(t=>{document.getElementById('tab-'+t).style.display=t===tab?'block':'none';document.getElementById('btn-'+t).classList.toggle('active',t===tab);});
+  if(tab==='receitas'){renderRecipeList();renderRecipeDetail();}
+  if(tab==='historico'){renderHistory();}
+  document.getElementById('summary-bar').style.display=(tab==='cardapio'&&selectedDishes.size>0)?'flex':'none';
+  if(tab==='cardapio')updateSummaryBar();
+  window.scrollTo(0,0);
+}
+function _origToggleLang(){
+  lang=lang==='pt'?'en':'pt';
+  document.getElementById('lang-label').textContent=lang==='pt'?'English':'Português';
+  document.querySelectorAll('[data-pt]').forEach(el=>{el.textContent=lang==='pt'?el.getAttribute('data-pt'):el.getAttribute('data-en');});
+  renderMenu();
+  if(document.getElementById('tab-receitas').style.display==='block'){renderRecipeList();renderRecipeDetail();}
+  if(document.getElementById('tab-historico').style.display==='block'){renderHistory();}
+  const si=document.getElementById('recipe-search');if(si)si.placeholder=lang==='pt'?'🔍 Buscar receita...':'🔍 Search recipe...';
+}
+
+// ============================================================
+// INIT
+// ============================================================
+(function init(){
+  const loaded=loadFromLocalStorage();
+  document.getElementById('people-count').textContent=people;
+  document.getElementById('lang-label').textContent=lang==='pt'?'English':'Português';
+  if(lang==='en'){document.querySelectorAll('[data-pt]').forEach(el=>{el.textContent=el.getAttribute('data-en');});}
+  renderMenu();
+  if(loaded){
+    const ind=document.createElement('div');
+    ind.style.cssText='position:fixed;bottom:16px;left:16px;background:var(--green-dark);color:white;padding:8px 15px;border-radius:20px;font-size:0.77rem;font-family:"DM Sans",sans-serif;z-index:999;opacity:0;transition:opacity 0.4s;pointer-events:none;';
+    ind.textContent='✅ Dados carregados automaticamente';
+    document.body.appendChild(ind);
+    setTimeout(()=>ind.style.opacity='1',100);
+    setTimeout(()=>{ind.style.opacity='0';setTimeout(()=>ind.remove(),500);},3000);
+  }
+})();
+</script>
+</body>
+</html>
