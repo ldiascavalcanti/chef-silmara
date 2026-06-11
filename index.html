@@ -446,7 +446,7 @@ const SUPABASE_KEY = 'sb_publishable_h7ZloQDgAwd1Oo_BthaGQg_7npf8xxL';
 const SUPABASE_TABLE = 'app_state';
 const SUPABASE_ROW_ID = 'silmara';
 
-let supabase = null;
+let sbClient = null;
 let cloudReady = false;
 let saveDebounceTimer = null;
 let lastCloudSync = 0;
@@ -458,7 +458,7 @@ function initSupabase() {
       setSyncStatus('offline', 'Sem conexão com nuvem');
       return false;
     }
-    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
     cloudReady = true;
     return true;
   } catch (e) {
@@ -494,7 +494,7 @@ async function loadFromCloud() {
   if (!cloudReady) return null;
   try {
     setSyncStatus('syncing', 'Carregando da nuvem...');
-    const { data, error } = await supabase
+    const { data, error } = await sbClient
       .from(SUPABASE_TABLE)
       .select('data, updated_at')
       .eq('id', SUPABASE_ROW_ID)
@@ -515,7 +515,7 @@ async function saveToCloudNow() {
   try {
     setSyncStatus('syncing', 'Enviando para nuvem...');
     const snap = buildSnapshot();
-    const { error } = await supabase
+    const { error } = await sbClient
       .from(SUPABASE_TABLE)
       .upsert({ id: SUPABASE_ROW_ID, data: snap, updated_at: new Date().toISOString() });
     if (error) { console.error('[sync] saveToCloud erro:', error); setSyncStatus('error', error.message || 'Erro ao salvar'); return false; }
