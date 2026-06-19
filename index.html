@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chef Silmara — Cardápio & Lista de Compras</title>
+<title>Chef Silmara — Personal Chef</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -258,6 +258,137 @@
 @media print {
   .sync-status { display: none !important; }
 }
+
+/* ===== HAMBURGER MENU & SIDE DRAWER ===== */
+.hamburger { display: none; background: none; border: none; color: white; font-size: 1.4rem; cursor: pointer; padding: 4px 8px; margin-right: 4px; }
+.side-drawer { position: fixed; top: 0; left: -300px; width: 280px; height: 100vh; background: white; box-shadow: 4px 0 24px rgba(0,0,0,0.2); z-index: 1000; transition: left 0.25s ease; display: flex; flex-direction: column; }
+.side-drawer.open { left: 0; }
+.drawer-header { background: var(--green-dark); color: white; padding: 18px 22px; }
+.drawer-header h2 { font-family: 'Playfair Display', serif; font-size: 1.2rem; }
+.drawer-header p { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; opacity: 0.8; margin-top: 2px; }
+.drawer-nav { flex: 1; padding: 10px 0; overflow-y: auto; }
+.drawer-item { display: flex; align-items: center; gap: 12px; padding: 14px 22px; cursor: pointer; border-left: 3px solid transparent; color: var(--text); font-size: 0.95rem; transition: background 0.15s; }
+.drawer-item:hover { background: var(--green-bg); }
+.drawer-item.active { background: var(--green-bg); border-left-color: var(--green-dark); color: var(--green-dark); font-weight: 600; }
+.drawer-item .icon { font-size: 1.2rem; width: 24px; text-align: center; }
+.drawer-footer { padding: 14px 22px; border-top: 1px solid var(--border); }
+.drawer-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 999; }
+.drawer-backdrop.open { display: block; }
+
+/* ===== CLIENTS ===== */
+.clients-toolbar { display: flex; gap: 12px; margin-bottom: 18px; flex-wrap: wrap; align-items: center; }
+.clients-toolbar input { flex: 1; min-width: 180px; border: 1px solid var(--border); border-radius: 10px; padding: 9px 14px; font-size: 0.9rem; }
+.clients-toolbar input:focus { outline: none; border-color: var(--green); }
+.clients-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+.client-card { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; box-shadow: var(--shadow); cursor: pointer; transition: transform 0.15s, box-shadow 0.15s; }
+.client-card:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(90,117,32,0.18); }
+.client-card h3 { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--brown); margin-bottom: 6px; }
+.client-card .meta { font-size: 0.8rem; color: var(--text-light); line-height: 1.6; }
+.client-card .meta strong { color: var(--text); font-weight: 500; }
+.client-bday-badge { display: inline-block; background: #ffe7c4; color: #a04400; font-size: 0.7rem; padding: 2px 9px; border-radius: 12px; margin-top: 6px; font-weight: 600; }
+.client-history-list { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border); }
+.client-history-list h4 { font-size: 0.78rem; color: var(--text-light); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+.client-history-item { font-size: 0.8rem; color: var(--brown); padding: 4px 0; }
+.client-history-item .date { color: var(--green-dark); font-weight: 600; margin-right: 6px; }
+
+/* Modal form fields */
+.form-group { margin-bottom: 14px; }
+.form-group label { display: block; font-size: 0.82rem; font-weight: 600; color: var(--brown); margin-bottom: 5px; }
+.form-group input, .form-group textarea, .form-group select { width: 100%; border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; font-family: 'DM Sans', sans-serif; font-size: 0.88rem; color: var(--text); }
+.form-group textarea { min-height: 60px; resize: vertical; font-family: 'DM Sans', sans-serif; }
+.form-group input:focus, .form-group textarea:focus, .form-group select:focus { outline: none; border-color: var(--green); }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+@media (max-width: 600px) { .form-row, .form-row-3 { grid-template-columns: 1fr; } }
+
+/* ===== SCHEDULE ===== */
+.schedule-toolbar { display: flex; gap: 10px; align-items: center; margin-bottom: 14px; flex-wrap: wrap; }
+.schedule-toolbar .nav-btn { background: white; border: 1px solid var(--border); border-radius: 50%; width: 36px; height: 36px; cursor: pointer; font-size: 1rem; color: var(--green-dark); }
+.schedule-toolbar .nav-btn:hover { background: var(--green-bg); }
+.schedule-month-label { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--brown); flex: 1; text-align: center; min-width: 180px; }
+.cal-grid { background: white; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
+.cal-weekdays { display: grid; grid-template-columns: repeat(7, 1fr); background: var(--green-bg); border-bottom: 1px solid var(--border); }
+.cal-weekdays div { padding: 9px 6px; font-size: 0.75rem; font-weight: 600; color: var(--brown); text-transform: uppercase; letter-spacing: 1px; text-align: center; }
+.cal-days { display: grid; grid-template-columns: repeat(7, 1fr); }
+.cal-day { min-height: 92px; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 5px 6px; cursor: pointer; transition: background 0.12s; position: relative; }
+.cal-day:hover { background: var(--green-bg); }
+.cal-day.other-month { background: #fafafa; color: #aaa; }
+.cal-day.today { background: #fffde7; }
+.cal-day .day-num { font-size: 0.78rem; font-weight: 600; color: var(--brown); margin-bottom: 4px; }
+.cal-day.today .day-num { background: var(--green-dark); color: white; border-radius: 50%; width: 22px; height: 22px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.72rem; }
+.cal-event { background: var(--green); color: white; border-radius: 4px; padding: 2px 6px; font-size: 0.7rem; margin-bottom: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cal-event.alt { background: #b97a3e; }
+.cal-event.alt2 { background: #7a64a8; }
+.cal-event.alt3 { background: #c0392b; }
+
+/* Mobile schedule list */
+.sched-mobile-tabs { display: flex; gap: 6px; margin-bottom: 14px; }
+.sched-mobile-tabs button { flex: 1; padding: 8px 6px; border: 1px solid var(--border); background: white; border-radius: 10px; font-size: 0.78rem; cursor: pointer; color: var(--text-light); }
+.sched-mobile-tabs button.active { background: var(--green-dark); color: white; border-color: var(--green-dark); }
+.sched-day-group { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 13px 16px; margin-bottom: 12px; box-shadow: var(--shadow); }
+.sched-day-group h4 { font-family: 'Playfair Display', serif; color: var(--green-dark); font-size: 0.95rem; margin-bottom: 8px; }
+.sched-event-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-top: 1px solid var(--border); cursor: pointer; }
+.sched-event-row:first-of-type { border-top: none; }
+.sched-event-row:hover { background: var(--green-bg); }
+.sched-event-time { font-weight: 700; color: var(--green-dark); font-size: 0.85rem; min-width: 60px; }
+.sched-event-name { flex: 1; font-size: 0.88rem; color: var(--brown); margin-left: 10px; }
+.sched-event-meta { font-size: 0.74rem; color: var(--text-light); }
+
+/* ===== INVOICE ===== */
+.invoice-list-card { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 18px; box-shadow: var(--shadow); margin-bottom: 10px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; transition: transform 0.15s; }
+.invoice-list-card:hover { transform: translateY(-2px); }
+.inv-card-info { flex: 1; min-width: 180px; }
+.inv-card-info h4 { font-family: 'Playfair Display', serif; color: var(--brown); font-size: 1.05rem; }
+.inv-card-info .inv-meta { font-size: 0.78rem; color: var(--text-light); margin-top: 3px; }
+.inv-card-total { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--green-dark); font-weight: 700; }
+.inv-card-status { font-size: 0.72rem; padding: 4px 12px; border-radius: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+.inv-card-status.pendente, .inv-card-status.pending { background: #fff3d4; color: #a06b00; }
+.inv-card-status.pago, .inv-card-status.paid { background: #d4edda; color: #155724; }
+
+.inv-item-row { display: grid; grid-template-columns: 1fr 100px 30px; gap: 8px; margin-bottom: 6px; align-items: center; }
+.inv-item-row input { border: 1px solid var(--border); border-radius: 6px; padding: 7px 10px; font-size: 0.85rem; font-family: 'DM Sans', sans-serif; }
+.inv-item-row .del-row { background: none; border: none; color: var(--red-accent); font-size: 1rem; cursor: pointer; padding: 4px; }
+.inv-total-display { font-family: 'Playfair Display', serif; font-size: 1.6rem; color: var(--green-dark); text-align: right; margin: 14px 0 6px; font-weight: 700; }
+
+/* Invoice card visual (output) */
+.invoice-card-output { background: white; border-radius: 16px; padding: 28px; max-width: 460px; margin: 0 auto; box-shadow: 0 8px 32px rgba(0,0,0,0.08); border: 1px solid var(--border); }
+.invoice-card-output .inv-brand { text-align: center; margin-bottom: 22px; }
+.invoice-card-output .inv-brand h1 { font-family: 'Playfair Display', serif; color: var(--brown); font-size: 1.4rem; font-weight: 700; }
+.invoice-card-output .inv-brand p { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 2.5px; color: var(--text-light); margin-top: 4px; }
+.invoice-card-output .inv-client-box { background: var(--cream); border-radius: 10px; padding: 12px 16px; margin-bottom: 14px; }
+.invoice-card-output .inv-client-box .lbl { font-size: 0.65rem; color: var(--text-light); text-transform: uppercase; letter-spacing: 1.5px; }
+.invoice-card-output .inv-client-box .val { font-size: 1rem; color: var(--brown); font-weight: 600; margin-top: 2px; }
+.invoice-card-output .inv-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+.invoice-card-output .inv-stats > div { background: var(--cream); border-radius: 8px; padding: 10px 12px; }
+.invoice-card-output .inv-stats .lbl { font-size: 0.62rem; color: var(--text-light); text-transform: uppercase; letter-spacing: 1.2px; }
+.invoice-card-output .inv-stats .val { font-size: 0.85rem; color: var(--brown); font-weight: 600; margin-top: 3px; }
+.invoice-card-output .inv-items-list { margin: 14px 0; }
+.invoice-card-output .inv-items-list .inv-items-header { display: flex; justify-content: space-between; font-size: 0.65rem; color: var(--text-light); text-transform: uppercase; letter-spacing: 1.5px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
+.invoice-card-output .inv-items-list .inv-item-line { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f0f0f0; font-size: 0.88rem; color: var(--brown); }
+.invoice-card-output .inv-items-list .inv-item-line:last-child { border-bottom: none; }
+.invoice-card-output .inv-total-line { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-top: 2px solid var(--brown); margin-top: 6px; }
+.invoice-card-output .inv-total-line .lbl { font-weight: 700; color: var(--brown); font-size: 0.95rem; letter-spacing: 1px; text-transform: uppercase; }
+.invoice-card-output .inv-total-line .val { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--brown); font-weight: 700; }
+.invoice-card-output .inv-footer { background: var(--green-dark); color: white; border-radius: 10px; padding: 12px 16px; margin-top: 16px; display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+.invoice-card-output .inv-footer .inv-pay-method { font-weight: 600; font-size: 0.88rem; }
+.invoice-card-output .inv-footer .inv-pay-details { font-size: 0.78rem; opacity: 0.92; }
+.invoice-card-output .inv-footer .inv-pay-right { text-align: right; font-size: 0.78rem; }
+.invoice-card-output .inv-footer .inv-status-marker { display: inline-block; font-size: 0.7rem; }
+
+@media print {
+  body * { visibility: hidden; }
+  #invoice-output, #invoice-output * { visibility: visible; }
+  #invoice-output { position: absolute; top: 0; left: 0; width: 100%; padding: 20px; }
+  .invoice-card-output { box-shadow: none; border: 1px solid #ddd; max-width: 100%; }
+  .no-print { display: none !important; }
+}
+
+/* Mobile - mostra hamburger, esconde tabs horizontais */
+@media (max-width: 720px) {
+  .hamburger { display: inline-flex; }
+  .tabs { display: none; }
+}
+
 </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -265,23 +396,49 @@
 
 <header>
   <div class="header-brand">
+    <button class="hamburger" onclick="toggleDrawer()" aria-label="Menu">☰</button>
     <div class="logo-icon">👨‍🍳</div>
     <div>
-      <h1>Chef Silmara</h1>
-      <span>Personal Chef · Bay Area</span>
+      <h1 id="brand-name">Chef Silmara</h1>
+      <span id="brand-subtitle">Personal Chef · Bay Area</span>
     </div>
   </div>
   <div class="header-actions">
     <span id="sync-status" class="sync-status" title="Status da sincronização com a nuvem">☁️</span>
-    <button class="hbtn" onclick="openBackupModal()">💾 Backup</button>
+    <button class="hbtn" onclick="openSettingsModal()" title="Ajustes">⚙️</button>
+    <button class="hbtn" onclick="openBackupModal()">💾 <span data-pt="Backup" data-en="Backup">Backup</span></button>
     <button class="hbtn" onclick="toggleLang()">🌐 <span id="lang-label">English</span></button>
   </div>
 </header>
+
+<!-- Side Drawer (Mobile menu) -->
+<div class="drawer-backdrop" id="drawer-backdrop" onclick="toggleDrawer()"></div>
+<aside class="side-drawer" id="side-drawer">
+  <div class="drawer-header">
+    <h2 id="drawer-brand-name">Chef Silmara</h2>
+    <p id="drawer-brand-subtitle">Personal Chef</p>
+  </div>
+  <nav class="drawer-nav">
+    <div class="drawer-item" data-tab="cardapio" onclick="showTab('cardapio')"><span class="icon">🍽️</span><span data-pt="Cardápio" data-en="Menu">Cardápio</span></div>
+    <div class="drawer-item" data-tab="lista" onclick="showTab('lista')"><span class="icon">🛒</span><span data-pt="Lista" data-en="List">Lista</span></div>
+    <div class="drawer-item" data-tab="historico" onclick="showTab('historico')"><span class="icon">📋</span><span data-pt="Histórico" data-en="History">Histórico</span></div>
+    <div class="drawer-item" data-tab="clientes" onclick="showTab('clientes')"><span class="icon">👥</span><span data-pt="Clientes" data-en="Clients">Clientes</span></div>
+    <div class="drawer-item" data-tab="schedule" onclick="showTab('schedule')"><span class="icon">📅</span><span data-pt="Agenda" data-en="Schedule">Agenda</span></div>
+    <div class="drawer-item" data-tab="invoice" onclick="showTab('invoice')"><span class="icon">🧾</span><span data-pt="Invoice" data-en="Invoice">Invoice</span></div>
+    <div class="drawer-item" data-tab="receitas" onclick="showTab('receitas')"><span class="icon">✏️</span><span data-pt="Receitas" data-en="Recipes">Receitas</span></div>
+  </nav>
+  <div class="drawer-footer">
+    <button class="hbtn" style="background:var(--green-bg);color:var(--green-dark);border-color:var(--border);width:100%;" onclick="openSettingsModal();toggleDrawer();">⚙️ <span data-pt="Ajustes" data-en="Settings">Ajustes</span></button>
+  </div>
+</aside>
 
 <div class="tabs">
   <button class="tab-btn active" onclick="showTab('cardapio')" id="btn-cardapio">🍽️ <span data-pt="Cardápio" data-en="Menu">Cardápio</span></button>
   <button class="tab-btn" onclick="showTab('lista')" id="btn-lista">🛒 <span data-pt="Lista" data-en="List">Lista</span></button>
   <button class="tab-btn" onclick="showTab('historico')" id="btn-historico">📋 <span data-pt="Histórico" data-en="History">Histórico</span></button>
+  <button class="tab-btn" onclick="showTab('clientes')" id="btn-clientes">👥 <span data-pt="Clientes" data-en="Clients">Clientes</span></button>
+  <button class="tab-btn" onclick="showTab('schedule')" id="btn-schedule">📅 <span data-pt="Agenda" data-en="Schedule">Agenda</span></button>
+  <button class="tab-btn" onclick="showTab('invoice')" id="btn-invoice">🧾 <span data-pt="Invoice" data-en="Invoice">Invoice</span></button>
   <button class="tab-btn" onclick="showTab('receitas')" id="btn-receitas">✏️ <span data-pt="Receitas" data-en="Recipes">Receitas</span></button>
 </div>
 
@@ -395,6 +552,66 @@
     <span id="summary-people" style="opacity:0.85;font-size:0.82rem;margin-left:12px;"></span>
   </div>
   <button class="gen-btn" onclick="generateList()" id="gen-btn">🛒 <span data-pt="Gerar Lista de Compras" data-en="Generate Shopping List">Gerar Lista de Compras</span></button>
+  <!-- ===== CLIENTES ===== -->
+  <div id="tab-clientes" style="display:none;">
+    <h2 class="section-title" data-pt="Clientes" data-en="Clients">Clientes</h2>
+    <p class="section-sub" data-pt="Gerencie seus clientes — nome, contato, aniversário e histórico." data-en="Manage your clients — name, contact, birthday and history.">Gerencie seus clientes — nome, contato, aniversário e histórico.</p>
+
+    <div id="client-bday-banner" style="display:none;"></div>
+
+    <div class="clients-toolbar">
+      <input type="search" id="client-search" placeholder="🔍 Buscar cliente..." oninput="renderClients()">
+      <button class="btn primary" onclick="openClientModal()">➕ <span data-pt="Novo cliente" data-en="New client">Novo cliente</span></button>
+    </div>
+
+    <div id="clients-list" class="clients-grid"></div>
+  </div>
+
+  <!-- ===== SCHEDULE ===== -->
+  <div id="tab-schedule" style="display:none;">
+    <h2 class="section-title" data-pt="Agenda" data-en="Schedule">Agenda</h2>
+    <p class="section-sub" data-pt="Visualize seus compromissos. Recorrentes ou pontuais." data-en="View your appointments. Recurring or one-off.">Visualize seus compromissos. Recorrentes ou pontuais.</p>
+
+    <div class="schedule-toolbar">
+      <button class="nav-btn" onclick="schedulePrevMonth()">◀</button>
+      <div class="schedule-month-label" id="schedule-month-label">—</div>
+      <button class="nav-btn" onclick="scheduleNextMonth()">▶</button>
+      <button class="btn primary" onclick="openScheduleEventModal()">➕ <span data-pt="Novo compromisso" data-en="New appointment">Novo</span></button>
+    </div>
+
+    <!-- Mobile tabs -->
+    <div class="sched-mobile-tabs" id="sched-mobile-tabs" style="display:none;">
+      <button class="active" onclick="setMobileSchedView('week')" data-pt="Esta semana" data-en="This week">Esta semana</button>
+      <button onclick="setMobileSchedView('next')" data-pt="Próxima semana" data-en="Next week">Próxima semana</button>
+      <button onclick="setMobileSchedView('recurring')" data-pt="Recorrentes" data-en="Recurring">Recorrentes</button>
+    </div>
+
+    <div id="schedule-desktop-view" class="cal-grid">
+      <div class="cal-weekdays" id="cal-weekdays"></div>
+      <div class="cal-days" id="cal-days"></div>
+    </div>
+
+    <div id="schedule-mobile-view" style="display:none;"></div>
+  </div>
+
+  <!-- ===== INVOICE ===== -->
+  <div id="tab-invoice" style="display:none;">
+    <div id="invoice-list-view">
+      <h2 class="section-title" data-pt="Faturas (Invoices)" data-en="Invoices">Faturas (Invoices)</h2>
+      <p class="section-sub" data-pt="Gere e gerencie cobranças. Imprima ou compartilhe." data-en="Create and manage invoices. Print or share.">Gere e gerencie cobranças. Imprima ou compartilhe.</p>
+
+      <div style="margin: 14px 0;">
+        <button class="btn primary" onclick="openInvoiceForm()">➕ <span data-pt="Nova fatura" data-en="New invoice">Nova fatura</span></button>
+      </div>
+
+      <div id="invoices-list"></div>
+    </div>
+
+    <div id="invoice-form-view" style="display:none;"></div>
+    <div id="invoice-output-view" style="display:none;"></div>
+  </div>
+
+
 </div>
 
 <div class="modal-overlay" id="backup-modal">
@@ -430,12 +647,36 @@ let recipes = JSON.parse(RECIPES_JSON);
 // STATE
 // ============================================================
 let lang = 'pt';
-let people = 1;
-let selectedDishes = new Set(["Arroz de camarão","Salmão assado com páprica","Carne moida na cama de batatas","Mandioca com curmuma","Batata doce na manteiga de alho","Quinoa com cenoura ralada","Legumes Mediterrâneos","Cenoura baby refogada com laranja","Frango desfiado a caprese","Tempero"]);
+let people = 2;
+let selectedDishes = new Set(["Abobrinha com haloumi", "Legumes Mediterrâneos", "Brócolis no alho", "Feijão de caldo", "Salmão assado com páprica", "Green Goddess chicken meatballs", "Escondidinho de carne moida", "Tempero"]);
 let activeRecipe = null;
 let clientName = "Marina";
 let clientCity = "Sao Francisco";
-let history = JSON.parse(`[{"id":1780961980390,"date":"08/06/2026","dateISO":"2026-06-08T23:39:40.390Z","clientName":"Marina","clientCity":"Sao Francisco","people":1,"dishes":["Arroz de camarão","Salmão assado com páprica","Carne moida na cama de batatas","Mandioca com curmuma","Batata doce na manteiga de alho","Quinoa com cenoura ralada","Legumes Mediterrâneos","Cenoura baby refogada com laranja","Frango desfiado a caprese","Tempero"],"aggr":{"Arroz|||Mercearia":{"qty":1,"unit":"cup","namePT":"Arroz","nameEN":"Rice","shopCat":"Mercearia","totalQty":1,"perPersonQty":1},"Camarão|||Carnes":{"qty":1,"unit":"lb","namePT":"Camarão","nameEN":"Shrimp","shopCat":"Carnes","totalQty":1,"perPersonQty":1},"Tomate|||Hortifruti":{"qty":1,"unit":"un","namePT":"Tomate","nameEN":"Roma tomato","shopCat":"Hortifruti","totalQty":2,"perPersonQty":2},"Pimentão vermelho|||Hortifruti":{"qty":1,"unit":"un","namePT":"Pimentão vermelho","nameEN":"Red bell pepper","shopCat":"Hortifruti","totalQty":1.5,"perPersonQty":1.5},"Filé de salmão|||Carnes":{"qty":1,"unit":"lb","namePT":"Filé de salmão","nameEN":"Salmon fillet","shopCat":"Carnes","totalQty":1,"perPersonQty":1},"Páprica defumada|||Temperos":{"qty":1,"unit":"col chá","namePT":"Páprica defumada","nameEN":"Smoked paprika","shopCat":"Temperos","totalQty":1,"perPersonQty":1},"Alho|||Hortifruti":{"qty":1,"unit":"dentes","namePT":"Alho","nameEN":"Garlic","shopCat":"Hortifruti","totalQty":3,"perPersonQty":3},"Limão|||Hortifruti":{"qty":1,"unit":"un","namePT":"Limão","nameEN":"Lemon","shopCat":"Hortifruti","totalQty":1,"perPersonQty":1},"Azeite de oliva|||Mercearia":{"qty":2,"unit":"col sopa","namePT":"Azeite de oliva","nameEN":"Olive oil","shopCat":"Mercearia","totalQty":6,"perPersonQty":6},"Sal|||Temperos":{"qty":0.5,"unit":"col chá","namePT":"Sal","nameEN":"Salt","shopCat":"Temperos","totalQty":2.5,"perPersonQty":2.5},"Carne moida|||Carnes":{"qty":1,"unit":"lb","namePT":"Carne moida","nameEN":"Ground beef","shopCat":"Carnes","totalQty":1,"perPersonQty":1},"Batata|||Hortifruti":{"qty":3,"unit":"un","namePT":"Batata","nameEN":"Russet potato","shopCat":"Hortifruti","totalQty":3,"perPersonQty":3},"Extrato de tomate|||Mercearia":{"qty":1,"unit":"tbsp","namePT":"Extrato de tomate","nameEN":"Tomato paste","shopCat":"Mercearia","totalQty":1,"perPersonQty":1},"Mandioca|||Hortifruti":{"qty":1,"unit":"pct","namePT":"Mandioca","nameEN":"Yuka","shopCat":"Hortifruti","totalQty":1,"perPersonQty":1},"Curcuma|||Temperos":{"qty":1,"unit":"tbsp","namePT":"Curcuma","nameEN":"Tumeric","shopCat":"Temperos","totalQty":1,"perPersonQty":1},"Batata doce|||Hortifruti":{"qty":200,"unit":"g","namePT":"Batata doce","nameEN":"Sweet potato","shopCat":"Hortifruti","totalQty":200,"perPersonQty":200},"Manteiga|||Laticínios":{"qty":20,"unit":"g","namePT":"Manteiga","nameEN":"Butter","shopCat":"Laticínios","totalQty":20,"perPersonQty":20},"Quinoa|||Mercearia":{"qty":70,"unit":"g","namePT":"Quinoa","nameEN":"Quinoa","shopCat":"Mercearia","totalQty":70,"perPersonQty":70},"Cenoura |||Hortifruti":{"qty":1,"unit":"un","namePT":"Cenoura ","nameEN":"Carrot ","shopCat":"Hortifruti","totalQty":1,"perPersonQty":1},"Abobrinha|||Hortifruti":{"qty":1,"unit":"un","namePT":"Abobrinha","nameEN":"Zucchini","shopCat":"Hortifruti","totalQty":1,"perPersonQty":1},"Tomate cereja|||Hortifruti":{"qty":0.5,"unit":"cx","namePT":"Tomate cereja","nameEN":"Cherry tomatoes","shopCat":"Hortifruti","totalQty":1.5,"perPersonQty":1.5},"Tomilho|||Temperos":{"qty":1,"unit":"pc","namePT":"Tomilho","nameEN":"Thyme","shopCat":"Temperos","totalQty":1,"perPersonQty":1},"Abobrinha amarela|||Hortifruti":{"qty":0.5,"unit":"un","namePT":"Abobrinha amarela","nameEN":"Yellow squash","shopCat":"Hortifruti","totalQty":0.5,"perPersonQty":0.5},"Cenoura|||Hortifruti":{"qty":1,"unit":"un","namePT":"Cenoura","nameEN":"Carrot","shopCat":"Hortifruti","totalQty":1,"perPersonQty":1},"Cebola roxa|||Hortifruti":{"qty":1,"unit":"un","namePT":"Cebola roxa","nameEN":"Red onion","shopCat":"Hortifruti","totalQty":1,"perPersonQty":1},"Cenoura baby|||Hortifruti":{"qty":1,"unit":"pct","namePT":"Cenoura baby","nameEN":"Baby carrots","shopCat":"Hortifruti","totalQty":1,"perPersonQty":1},"Laranja|||Hortifruti":{"qty":1,"unit":"un","namePT":"Laranja","nameEN":"orange","shopCat":"Hortifruti","totalQty":1,"perPersonQty":1},"Peito de frango |||Carnes":{"qty":1,"unit":"lb","namePT":"Peito de frango ","nameEN":" chicken breast","shopCat":"Carnes","totalQty":1,"perPersonQty":1},"Manjericão fresco|||Hortifruti":{"qty":1,"unit":"pct","namePT":"Manjericão fresco","nameEN":"Fresh basil","shopCat":"Hortifruti","totalQty":1,"perPersonQty":1},"Cebola|||Temperos":{"qty":0.5,"unit":"un","namePT":"Cebola","nameEN":"Onion","shopCat":"Temperos","totalQty":0.5,"perPersonQty":0.5},"Alho descascado|||Temperos":{"qty":0.5,"unit":"pct","namePT":"Alho descascado","nameEN":"Peeled garlic","shopCat":"Temperos","totalQty":0.5,"perPersonQty":0.5},"Coentro/salsinha|||Temperos":{"qty":0.5,"unit":"pct","namePT":"Coentro/salsinha","nameEN":"Cilantro/Parsley","shopCat":"Temperos","totalQty":0.5,"perPersonQty":0.5},"Paprica|||Temperos":{"qty":1,"unit":"un","namePT":"Paprica","nameEN":"Paprika","shopCat":"Temperos","totalQty":1,"perPersonQty":1},"Azeite|||Temperos":{"qty":1,"unit":"un","namePT":"Azeite","nameEN":"Olive oil","shopCat":"Temperos","totalQty":1,"perPersonQty":1}}},{"id":1780548382538,"date":"03/06/2026","dateISO":"2026-06-04T04:46:22.538Z","clientName":"Marina","clientCity":"Sao Francisco","people":1,"dishes":["Tutu de feijão/tropeiro","Legumes Mediterrâneos","Brócolis no alho","Quibe assado Gluten free","Frango desfiado a caprese","Salmão ao molho de laranja","Abobrinha com haloumi","Cafta","Tempero"],"aggr":{"Feijão carioca cozido|||Mercearia":{"qty":80,"unit":"g","namePT":"Feijão carioca cozido","nameEN":"Cooked pinto beans","shopCat":"Mercearia","totalQty":80,"perPersonQty":80},"Farinha de mandioca|||Mercearia":{"qty":42,"unit":"g","namePT":"Farinha de mandioca","nameEN":"Italian Style Bread crumbs","shopCat":"Mercearia","totalQty":42,"perPersonQty":42},"Linguica|||Carnes":{"qty":0.5,"unit":"pct","namePT":"Linguica","nameEN":"Smoked sausage","shopCat":"Carnes","totalQty":0.5,"perPersonQty":0.5},"Abobrinha|||Hortifruti":{"qty":1,"unit":"un","namePT":"Abobrinha","nameEN":"Zucchini","shopCat":"Hortifruti","totalQty":2,"perPersonQty":2},"Pimentão vermelho|||Hortifruti":{"qty":0.5,"unit":"un","namePT":"Pimentão vermelho","nameEN":"Red bell pepper","shopCat":"Hortifruti","totalQty":0.5,"perPersonQty":0.5},"Tomate cereja|||Hortifruti":{"qty":0.5,"unit":"cx","namePT":"Tomate cereja","nameEN":"Cherry tomatoes","shopCat":"Hortifruti","totalQty":1.5,"perPersonQty":1.5},"Azeite de oliva|||Mercearia":{"qty":3,"unit":"col sopa","namePT":"Azeite de oliva","nameEN":"Olive oil","shopCat":"Mercearia","totalQty":5,"perPersonQty":5},"Tomilho|||Temperos":{"qty":1,"unit":"pc","namePT":"Tomilho","nameEN":"Thyme","shopCat":"Temperos","totalQty":1,"perPersonQty":1},"Abobrinha amarela|||Hortifruti":{"qty":0.5,"unit":"un","namePT":"Abobrinha amarela","nameEN":"Yellow squash","shopCat":"Hortifruti","totalQty":0.5,"perPersonQty":0.5},"Cenoura|||Hortifruti":{"qty":1,"unit":"un","namePT":"Cenoura","nameEN":"Carrot","shopCat":"Hortifruti","totalQty":1,"perPersonQty":1},"Cebola roxa|||Hortifruti":{"qty":1,"unit":"un","namePT":"Cebola roxa","nameEN":"Red onion","shopCat":"Hortifruti","totalQty":1,"perPersonQty":1},"Brócolis|||Hortifruti":{"qty":150,"unit":"g","namePT":"Brócolis","nameEN":"Broccoli","shopCat":"Hortifruti","totalQty":150,"perPersonQty":150},"Alho|||Hortifruti":{"qty":3,"unit":"dentes","namePT":"Alho","nameEN":"Garlic","shopCat":"Hortifruti","totalQty":3,"perPersonQty":3},"Sal|||Temperos":{"qty":0.5,"unit":"col chá","namePT":"Sal","nameEN":"Salt","shopCat":"Temperos","totalQty":2,"perPersonQty":2},"Carne moída bovina|||Carnes":{"qty":0.5,"unit":"lb","namePT":"Carne moída bovina","nameEN":"Ground beef","shopCat":"Carnes","totalQty":0.5,"perPersonQty":0.5},"Quinoa|||Mercearia":{"qty":1,"unit":"xc","namePT":"Quinoa","nameEN":"Quinoa","shopCat":"Mercearia","totalQty":1,"perPersonQty":1},"Cebola|||Hortifruti":{"qty":0.5,"unit":"un","namePT":"Cebola","nameEN":"Onion","shopCat":"Hortifruti","totalQty":0.5,"perPersonQty":0.5},"Hortelã fresca|||Hortifruti":{"qty":0.5,"unit":"pct","namePT":"Hortelã fresca","nameEN":"Fresh mint","shopCat":"Hortifruti","totalQty":0.5,"perPersonQty":0.5},"Mussarela|||Laticínios":{"qty":0.5,"unit":"pct","namePT":"Mussarela","nameEN":"Mozzarella","shopCat":"Laticínios","totalQty":1.5,"perPersonQty":1.5},"Azeite|||Temperos":{"qty":1,"unit":"cs","namePT":"Azeite","nameEN":"Olice oil","shopCat":"Temperos","totalQty":2,"perPersonQty":2},"Peito de frango |||Carnes":{"qty":1,"unit":"lb","namePT":"Peito de frango ","nameEN":" chicken breast","shopCat":"Carnes","totalQty":1,"perPersonQty":1},"Manjericão fresco|||Hortifruti":{"qty":1,"unit":"pct","namePT":"Manjericão fresco","nameEN":"Fresh basil","shopCat":"Hortifruti","totalQty":1,"perPersonQty":1},"Salmão|||Carnes":{"qty":1,"unit":"lb","namePT":"Salmão","nameEN":"Salmon","shopCat":"Carnes","totalQty":1,"perPersonQty":1},"Laranja|||Hortifruti":{"qty":1,"unit":"un","namePT":"Laranja","nameEN":"Orange","shopCat":"Hortifruti","totalQty":1,"perPersonQty":1},"Amido de milho|||Mercearia":{"qty":1,"unit":"cc","namePT":"Amido de milho","nameEN":"Corn Starch","shopCat":"Mercearia","totalQty":1,"perPersonQty":1},"Mel|||Mercearia":{"qty":1,"unit":"cs","namePT":"Mel","nameEN":"Honey","shopCat":"Mercearia","totalQty":1,"perPersonQty":1},"Shoyo|||Mercearia":{"qty":1,"unit":"cs","namePT":"Shoyo","nameEN":"Shoyo","shopCat":"Mercearia","totalQty":1,"perPersonQty":1},"Vinagre de vinho|||Mercearia":{"qty":1,"unit":"tbsp","namePT":"Vinagre de vinho","nameEN":"Wine vinager","shopCat":"Mercearia","totalQty":1,"perPersonQty":1},"Queijo de cabra|||Laticínios":{"qty":1,"unit":"un","namePT":"Queijo de cabra","nameEN":"Halloumi","shopCat":"Laticínios","totalQty":1,"perPersonQty":1},"Horterlã|||Hortifruti":{"qty":1,"unit":"un","namePT":"Horterlã","nameEN":"Mint","shopCat":"Hortifruti","totalQty":1,"perPersonQty":1},"Manjericão|||Hortifruti":{"qty":1,"unit":"un","namePT":"Manjericão","nameEN":"Basil","shopCat":"Hortifruti","totalQty":1,"perPersonQty":1},"Carne moída|||Carnes":{"qty":1,"unit":"lb","namePT":"Carne moída","nameEN":"Ground beef","shopCat":"Carnes","totalQty":1,"perPersonQty":1},"Hortela|||Hortifruti":{"qty":1,"unit":"un","namePT":"Hortela","nameEN":"MInt","shopCat":"Hortifruti","totalQty":1,"perPersonQty":1},"Parmesão|||Laticínios":{"qty":1,"unit":"un","namePT":"Parmesão","nameEN":"Reggiano parmeggiano","shopCat":"Laticínios","totalQty":1,"perPersonQty":1},"Limão|||Hortifruti":{"qty":1,"unit":"un","namePT":"Limão","nameEN":"Lime","shopCat":"Hortifruti","totalQty":1,"perPersonQty":1},"Cebola|||Temperos":{"qty":0.5,"unit":"un","namePT":"Cebola","nameEN":"Onion","shopCat":"Temperos","totalQty":0.5,"perPersonQty":0.5},"Alho descascado|||Temperos":{"qty":0.5,"unit":"pct","namePT":"Alho descascado","nameEN":"Peeled garlic","shopCat":"Temperos","totalQty":0.5,"perPersonQty":0.5},"Coentro/salsinha|||Temperos":{"qty":0.5,"unit":"pct","namePT":"Coentro/salsinha","nameEN":"Cilantro/Parsley","shopCat":"Temperos","totalQty":0.5,"perPersonQty":0.5},"Paprica|||Temperos":{"qty":1,"unit":"un","namePT":"Paprica","nameEN":"Paprika","shopCat":"Temperos","totalQty":1,"perPersonQty":1}}},{"id":1780548102577,"date":"03/06/2026","dateISO":"2026-06-04T04:41:42.577Z","clientName":"Marina","clientCity":"Sao Francisco","people":1,"dishes":["Tutu de feijão/tropeiro","Legumes Mediterrâneos","Brócolis no alho","Quibe assado Gluten free","Frango desfiado a caprese","Salmão ao molho de laranja","Abobrinha com haloumi","Cafta","Tempero"],"aggr":{"Feijão carioca cozido|||Mercearia":{"qty":80,"unit":"g","namePT":"Feijão carioca cozido","nameEN":"Cooked pinto beans","shopCat":"Mercearia","totalQty":80,"perPersonQty":80},"Farinha de mandioca|||Mercearia":{"qty":42,"unit":"g","namePT":"Farinha de mandioca","nameEN":"Italian Style Bread crumbs","shopCat":"Mercearia","totalQty":42,"perPersonQty":42},"Linguica|||Carnes":{"qty":0.5,"unit":"pct","namePT":"Linguica","nameEN":"Smoked sausage","shopCat":"Carnes","totalQty":0.5,"perPersonQty":0.5},"Abobrinha|||Hortifruti":{"qty":1,"unit":"un","namePT":"Abobrinha","nameEN":"Zucchini","shopCat":"Hortifruti","totalQty":2,"perPersonQty":2},"Pimentão vermelho|||Hortifruti":{"qty":0.5,"unit":"un","namePT":"Pimentão vermelho","nameEN":"Red bell pepper","shopCat":"Hortifruti","totalQty":0.5,"perPersonQty":0.5},"Tomate cereja|||Hortifruti":{"qty":0.5,"unit":"cx","namePT":"Tomate cereja","nameEN":"Cherry tomatoes","shopCat":"Hortifruti","totalQty":1.5,"perPersonQty":1.5},"Azeite de oliva|||Mercearia":{"qty":3,"unit":"col sopa","namePT":"Azeite de oliva","nameEN":"Olive oil","shopCat":"Mercearia","totalQty":5,"perPersonQty":5},"Tomilho|||Temperos":{"qty":1,"unit":"pc","namePT":"Tomilho","nameEN":"Thyme","shopCat":"Temperos","totalQty":1,"perPersonQty":1},"Abobrinha amarela|||Hortifruti":{"qty":0.5,"unit":"un","namePT":"Abobrinha amarela","nameEN":"Yellow squash","shopCat":"Hortifruti","totalQty":0.5,"perPersonQty":0.5},"Cenoura|||Hortifruti":{"qty":1,"unit":"un","namePT":"Cenoura","nameEN":"Carrot","shopCat":"Hortifruti","totalQty":1,"perPersonQty":1},"Cebola roxa|||Hortifruti":{"qty":1,"unit":"un","namePT":"Cebola roxa","nameEN":"Red onion","shopCat":"Hortifruti","totalQty":1,"perPersonQty":1},"Brócolis|||Hortifruti":{"qty":150,"unit":"g","namePT":"Brócolis","nameEN":"Broccoli","shopCat":"Hortifruti","totalQty":150,"perPersonQty":150},"Alho|||Hortifruti":{"qty":3,"unit":"dentes","namePT":"Alho","nameEN":"Garlic","shopCat":"Hortifruti","totalQty":3,"perPersonQty":3},"Sal|||Temperos":{"qty":0.5,"unit":"col chá","namePT":"Sal","nameEN":"Salt","shopCat":"Temperos","totalQty":2,"perPersonQty":2},"Carne moída bovina|||Carnes":{"qty":0.5,"unit":"lb","namePT":"Carne moída bovina","nameEN":"Ground beef","shopCat":"Carnes","totalQty":0.5,"perPersonQty":0.5},"Quinoa|||Mercearia":{"qty":1,"unit":"xc","namePT":"Quinoa","nameEN":"Quinoa","shopCat":"Mercearia","totalQty":1,"perPersonQty":1},"Cebola|||Hortifruti":{"qty":0.5,"unit":"un","namePT":"Cebola","nameEN":"Onion","shopCat":"Hortifruti","totalQty":0.5,"perPersonQty":0.5},"Hortelã fresca|||Hortifruti":{"qty":0.5,"unit":"pct","namePT":"Hortelã fresca","nameEN":"Fresh mint","shopCat":"Hortifruti","totalQty":0.5,"perPersonQty":0.5},"Mussarela|||Laticínios":{"qty":0.5,"unit":"pct","namePT":"Mussarela","nameEN":"Mozzarella","shopCat":"Laticínios","totalQty":1.5,"perPersonQty":1.5},"Azeite|||Temperos":{"qty":1,"unit":"cs","namePT":"Azeite","nameEN":"Olice oil","shopCat":"Temperos","totalQty":2,"perPersonQty":2},"Peito de frango |||Carnes":{"qty":1,"unit":"lb","namePT":"Peito de frango ","nameEN":" chicken breast","shopCat":"Carnes","totalQty":1,"perPersonQty":1},"Manjericão fresco|||Hortifruti":{"qty":1,"unit":"pct","namePT":"Manjericão fresco","nameEN":"Fresh basil","shopCat":"Hortifruti","totalQty":1,"perPersonQty":1},"Salmão|||Carnes":{"qty":1,"unit":"lb","namePT":"Salmão","nameEN":"Salmon","shopCat":"Carnes","totalQty":1,"perPersonQty":1},"Laranja|||Hortifruti":{"qty":1,"unit":"un","namePT":"Laranja","nameEN":"Orange","shopCat":"Hortifruti","totalQty":1,"perPersonQty":1},"Amido de milho|||Mercearia":{"qty":1,"unit":"cc","namePT":"Amido de milho","nameEN":"Corn Starch","shopCat":"Mercearia","totalQty":1,"perPersonQty":1},"Mel|||Mercearia":{"qty":1,"unit":"cs","namePT":"Mel","nameEN":"Honey","shopCat":"Mercearia","totalQty":1,"perPersonQty":1},"Shoyo|||Mercearia":{"qty":1,"unit":"cs","namePT":"Shoyo","nameEN":"Shoyo","shopCat":"Mercearia","totalQty":1,"perPersonQty":1},"Vinagre de vinho|||Mercearia":{"qty":1,"unit":"tbsp","namePT":"Vinagre de vinho","nameEN":"Wine vinager","shopCat":"Mercearia","totalQty":1,"perPersonQty":1},"Queijo de cabra|||Laticínios":{"qty":1,"unit":"un","namePT":"Queijo de cabra","nameEN":"Halloumi","shopCat":"Laticínios","totalQty":1,"perPersonQty":1},"Horterlã|||Hortifruti":{"qty":1,"unit":"un","namePT":"Horterlã","nameEN":"Mint","shopCat":"Hortifruti","totalQty":1,"perPersonQty":1},"Manjericão|||Hortifruti":{"qty":1,"unit":"un","namePT":"Manjericão","nameEN":"Basil","shopCat":"Hortifruti","totalQty":1,"perPersonQty":1},"Carne moída|||Carnes":{"qty":1,"unit":"lb","namePT":"Carne moída","nameEN":"Ground beef","shopCat":"Carnes","totalQty":1,"perPersonQty":1},"Hortela|||Hortifruti":{"qty":1,"unit":"un","namePT":"Hortela","nameEN":"MInt","shopCat":"Hortifruti","totalQty":1,"perPersonQty":1},"Parmesão|||Laticínios":{"qty":1,"unit":"un","namePT":"Parmesão","nameEN":"Reggiano parmeggiano","shopCat":"Laticínios","totalQty":1,"perPersonQty":1},"Limão|||Hortifruti":{"qty":1,"unit":"un","namePT":"Limão","nameEN":"Lime","shopCat":"Hortifruti","totalQty":1,"perPersonQty":1},"Cebola|||Temperos":{"qty":0.5,"unit":"un","namePT":"Cebola","nameEN":"Onion","shopCat":"Temperos","totalQty":0.5,"perPersonQty":0.5},"Alho descascado|||Temperos":{"qty":0.5,"unit":"pct","namePT":"Alho descascado","nameEN":"Peeled garlic","shopCat":"Temperos","totalQty":0.5,"perPersonQty":0.5},"Coentro/salsinha|||Temperos":{"qty":0.5,"unit":"pct","namePT":"Coentro/salsinha","nameEN":"Cilantro/Parsley","shopCat":"Temperos","totalQty":0.5,"perPersonQty":0.5},"Paprica|||Temperos":{"qty":1,"unit":"un","namePT":"Paprica","nameEN":"Paprika","shopCat":"Temperos","totalQty":1,"perPersonQty":1}}},{"id":1779895936152,"date":"27/05/2026","dateISO":"2026-05-27T15:32:16.152Z","clientName":"Amanda","clientCity":"San Jose","people":2,"dishes":["Hamburguer caseiro","Fricassê de frango","Tutu de feijão/tropeiro","Molho de almondegas","Tempero"],"aggr":{"Carne moida|||Carnes":{"qty":1,"unit":"lb","namePT":"Carne moida","nameEN":"Ground beef","shopCat":"Carnes","totalQty":2,"perPersonQty":1},"Panko|||Mercearia":{"qty":0.5,"unit":"cup","namePT":"Panko","nameEN":"Panko","shopCat":"Mercearia","totalQty":1,"perPersonQty":0.5},"Ovo|||Laticínios":{"qty":1,"unit":"un","namePT":"Ovo","nameEN":"Egg","shopCat":"Laticínios","totalQty":3,"perPersonQty":1.5},"Frango desfiado|||Carnes":{"qty":1,"unit":"lb","namePT":"Frango desfiado","nameEN":"Shredded chicken","shopCat":"Carnes","totalQty":2,"perPersonQty":1},"Leite|||Laticínios":{"qty":2,"unit":"cup","namePT":"Leite","nameEN":"Milk","shopCat":"Laticínios","totalQty":4,"perPersonQty":2},"Milho verde|||Mercearia":{"qty":2,"unit":"can","namePT":"Milho verde","nameEN":"Corn kernels","shopCat":"Mercearia","totalQty":4,"perPersonQty":2},"Farinha sem gluten|||Mercearia":{"qty":1,"unit":"tbsp","namePT":"Farinha sem gluten","nameEN":"Gluten free all porpose flour","shopCat":"Mercearia","totalQty":2,"perPersonQty":1},"Mussarela|||Laticínios":{"qty":1,"unit":"cup","namePT":"Mussarela","nameEN":"Mozzarella","shopCat":"Laticínios","totalQty":2,"perPersonQty":1},"Parmesão|||Laticínios":{"qty":0.5,"unit":"cup","namePT":"Parmesão","nameEN":"reggiano parmeggiano","shopCat":"Laticínios","totalQty":1,"perPersonQty":0.5},"Feijão carioca cozido|||Mercearia":{"qty":80,"unit":"g","namePT":"Feijão carioca cozido","nameEN":"Cooked pinto beans","shopCat":"Mercearia","totalQty":160,"perPersonQty":80},"Farinha de mandioca|||Mercearia":{"qty":42,"unit":"g","namePT":"Farinha de mandioca","nameEN":"Italian Style Bread crumbs","shopCat":"Mercearia","totalQty":84,"perPersonQty":42},"Linguica|||Carnes":{"qty":0.5,"unit":"pct","namePT":"Linguica","nameEN":"Smoked sausage","shopCat":"Carnes","totalQty":1,"perPersonQty":0.5},"Macarrão (sua escolha)|||Mercearia":{"qty":0.5,"unit":"pct","namePT":"Macarrão (sua escolha)","nameEN":"Pasta (your choice)","shopCat":"Mercearia","totalQty":1,"perPersonQty":0.5},"Carne moída bovina|||Carnes":{"qty":1,"unit":"lb","namePT":"Carne moída bovina","nameEN":"Ground beef","shopCat":"Carnes","totalQty":2,"perPersonQty":1},"Molho de tomate|||Mercearia":{"qty":0.5,"unit":"vidro","namePT":"Molho de tomate","nameEN":"Tomato sauce","shopCat":"Mercearia","totalQty":1,"perPersonQty":0.5},"Farinha de rosca|||Mercearia":{"qty":30,"unit":"g","namePT":"Farinha de rosca","nameEN":"Breadcrumbs","shopCat":"Mercearia","totalQty":60,"perPersonQty":30},"Cebola|||Temperos":{"qty":0.5,"unit":"un","namePT":"Cebola","nameEN":"Onion","shopCat":"Temperos","totalQty":1,"perPersonQty":0.5},"Alho descascado|||Temperos":{"qty":0.5,"unit":"pct","namePT":"Alho descascado","nameEN":"Peeled garlic","shopCat":"Temperos","totalQty":1,"perPersonQty":0.5},"Coentro/salsinha|||Temperos":{"qty":0.5,"unit":"pct","namePT":"Coentro/salsinha","nameEN":"Cilantro/Parsley","shopCat":"Temperos","totalQty":1,"perPersonQty":0.5},"Paprica|||Temperos":{"qty":1,"unit":"un","namePT":"Paprica","nameEN":"Paprika","shopCat":"Temperos","totalQty":2,"perPersonQty":1},"Azeite|||Temperos":{"qty":1,"unit":"un","namePT":"Azeite","nameEN":"Olive oil","shopCat":"Temperos","totalQty":2,"perPersonQty":1},"Sal|||Temperos":{"qty":1,"unit":"un","namePT":"Sal","nameEN":"Salt","shopCat":"Temperos","totalQty":2,"perPersonQty":1}}},{"id":1779234394465,"date":"19/05/2026","dateISO":"2026-05-19T23:46:34.465Z","clientName":"Iza","clientCity":"Montain View","people":3,"dishes":["Pernil suino desfiado","Picadinho suino agridoce","Frango com mel","Parmegiana de frango","Torta pizza","Batata gratinada","Arroz branco","Legumes Mediterrâneos","Tempero"],"aggr":{"Pernil suino|||Carnes":{"qty":1,"unit":"lb","namePT":"Pernil suino","nameEN":"Pork leg or Shoulder","shopCat":"Carnes","totalQty":3,"perPersonQty":1},"Pimentao vermelho|||Hortifruti":{"qty":0.5,"unit":"un","namePT":"Pimentao vermelho","nameEN":"Red bell pepper","shopCat":"Hortifruti","totalQty":1.5,"perPersonQty":0.5},"Cebola|||Hortifruti":{"qty":0.5,"unit":"un","namePT":"Cebola","nameEN":"Yellow onion","shopCat":"Hortifruti","totalQty":1.5,"perPersonQty":0.5},"Paleta suina|||Carnes":{"qty":1,"unit":"lb","namePT":"Paleta suina","nameEN":"Pork sholder","shopCat":"Carnes","totalQty":3,"perPersonQty":1},"Laranja|||Hortifruti":{"qty":1,"unit":"un","namePT":"Laranja","nameEN":"Orange","shopCat":"Hortifruti","totalQty":3,"perPersonQty":1},"Shoyo|||Mercearia":{"qty":1,"unit":"tbsp","namePT":"Shoyo","nameEN":"Shoyo","shopCat":"Mercearia","totalQty":4.5,"perPersonQty":1.5},"Mel|||Mercearia":{"qty":1,"unit":"tbsp","namePT":"Mel","nameEN":"Honey","shopCat":"Mercearia","totalQty":6,"perPersonQty":2},"Coxa de frango|||Carnes":{"qty":1,"unit":"lb","namePT":"Coxa de frango","nameEN":"Chicken thigh","shopCat":"Carnes","totalQty":3,"perPersonQty":1},"Peito de frango|||Carnes":{"qty":1,"unit":"lb","namePT":"Peito de frango","nameEN":"Chicken breast boneless","shopCat":"Carnes","totalQty":3,"perPersonQty":1},"panko|||Mercearia":{"qty":1,"unit":"cup","namePT":"panko","nameEN":"Panko","shopCat":"Mercearia","totalQty":3,"perPersonQty":1},"Molho tomate|||Mercearia":{"qty":1,"unit":"un","namePT":"Molho tomate","nameEN":"Tomato sauce","shopCat":"Mercearia","totalQty":3,"perPersonQty":1},"Ovo|||Laticínios":{"qty":1,"unit":"un","namePT":"Ovo","nameEN":"Egg","shopCat":"Laticínios","totalQty":9,"perPersonQty":3},"Mussarela|||Laticínios":{"qty":1,"unit":"cup","namePT":"Mussarela","nameEN":"Mozzarella","shopCat":"Laticínios","totalQty":9,"perPersonQty":3},"Presunto|||Carnes":{"qty":1,"unit":"cup","namePT":"Presunto","nameEN":"ham","shopCat":"Carnes","totalQty":3,"perPersonQty":1},"Farinha|||Mercearia":{"qty":2,"unit":"cup","namePT":"Farinha","nameEN":"Farinha","shopCat":"Mercearia","totalQty":6,"perPersonQty":2},"Milho|||Mercearia":{"qty":0.5,"unit":"can","namePT":"Milho","nameEN":"Milho","shopCat":"Mercearia","totalQty":1.5,"perPersonQty":0.5},"Batata|||Hortifruti":{"qty":2,"unit":"un","namePT":"Batata","nameEN":"Russet potato","shopCat":"Hortifruti","totalQty":6,"perPersonQty":2},"Leite|||Laticínios":{"qty":1,"unit":"cup","namePT":"Leite","nameEN":"Milk","shopCat":"Laticínios","totalQty":3,"perPersonQty":1},"Arroz branco|||Mercearia":{"qty":80,"unit":"g","namePT":"Arroz branco","nameEN":"White rice","shopCat":"Mercearia","totalQty":240,"perPersonQty":80},"Alho|||Hortifruti":{"qty":1,"unit":"dente","namePT":"Alho","nameEN":"Garlic","shopCat":"Hortifruti","totalQty":3,"perPersonQty":1},"Óleo vegetal|||Mercearia":{"qty":1,"unit":"col sopa","namePT":"Óleo vegetal","nameEN":"Vegetable oil","shopCat":"Mercearia","totalQty":3,"perPersonQty":1},"Sal|||Temperos":{"qty":0.5,"unit":"col chá","namePT":"Sal","nameEN":"Salt","shopCat":"Temperos","totalQty":4.5,"perPersonQty":1.5},"Abobrinha|||Hortifruti":{"qty":1,"unit":"un","namePT":"Abobrinha","nameEN":"Zucchini","shopCat":"Hortifruti","totalQty":3,"perPersonQty":1},"Pimentão vermelho|||Hortifruti":{"qty":0.5,"unit":"un","namePT":"Pimentão vermelho","nameEN":"Red bell pepper","shopCat":"Hortifruti","totalQty":1.5,"perPersonQty":0.5},"Tomate cereja|||Hortifruti":{"qty":0.5,"unit":"cx","namePT":"Tomate cereja","nameEN":"Cherry tomatoes","shopCat":"Hortifruti","totalQty":1.5,"perPersonQty":0.5},"Azeite de oliva|||Mercearia":{"qty":3,"unit":"col sopa","namePT":"Azeite de oliva","nameEN":"Olive oil","shopCat":"Mercearia","totalQty":9,"perPersonQty":3},"Tomilho|||Temperos":{"qty":1,"unit":"pc","namePT":"Tomilho","nameEN":"Thyme","shopCat":"Temperos","totalQty":3,"perPersonQty":1},"Abobrinha amarela|||Hortifruti":{"qty":0.5,"unit":"un","namePT":"Abobrinha amarela","nameEN":"Yellow squash","shopCat":"Hortifruti","totalQty":1.5,"perPersonQty":0.5},"Cenoura|||Hortifruti":{"qty":1,"unit":"un","namePT":"Cenoura","nameEN":"Carrot","shopCat":"Hortifruti","totalQty":3,"perPersonQty":1},"Cebola roxa|||Hortifruti":{"qty":1,"unit":"un","namePT":"Cebola roxa","nameEN":"Red onion","shopCat":"Hortifruti","totalQty":3,"perPersonQty":1},"Cebola|||Temperos":{"qty":0.5,"unit":"un","namePT":"Cebola","nameEN":"Onion","shopCat":"Temperos","totalQty":1.5,"perPersonQty":0.5},"Alho descascado|||Temperos":{"qty":0.5,"unit":"pct","namePT":"Alho descascado","nameEN":"Peeled garlic","shopCat":"Temperos","totalQty":1.5,"perPersonQty":0.5},"Coentro/salsinha|||Temperos":{"qty":0.5,"unit":"pct","namePT":"Coentro/salsinha","nameEN":"Cilantro/Parsley","shopCat":"Temperos","totalQty":1.5,"perPersonQty":0.5},"Paprica|||Temperos":{"qty":1,"unit":"un","namePT":"Paprica","nameEN":"Paprika","shopCat":"Temperos","totalQty":3,"perPersonQty":1},"Azeite|||Temperos":{"qty":1,"unit":"un","namePT":"Azeite","nameEN":"Olive oil","shopCat":"Temperos","totalQty":3,"perPersonQty":1}}},{"id":1778734037577,"date":"13/05/2026","dateISO":"2026-05-14T04:47:17.577Z","clientName":"Iza","clientCity":"Montain View","people":3,"dishes":["Tempero","Frango com mel","Escondidinho de carne moida","Molho bolonhesa","Short ribs","Frango cremoso de limao","Arroz branco","Farofa de cenoura e ovo","Tabule"],"aggr":{"Cebola|||Temperos":{"qty":0.5,"unit":"un","namePT":"Cebola","nameEN":"Onion","shopCat":"Temperos","totalQty":1.5,"perPersonQty":0.5},"Alho descascado|||Temperos":{"qty":0.5,"unit":"pct","namePT":"Alho descascado","nameEN":"Peeled garlic","shopCat":"Temperos","totalQty":1.5,"perPersonQty":0.5},"Coentro/salsinha|||Temperos":{"qty":0.5,"unit":"pct","namePT":"Coentro/salsinha","nameEN":"Cilantro/Parsley","shopCat":"Temperos","totalQty":1.5,"perPersonQty":0.5},"Paprica|||Temperos":{"qty":1,"unit":"un","namePT":"Paprica","nameEN":"Paprika","shopCat":"Temperos","totalQty":3,"perPersonQty":1},"Azeite|||Temperos":{"qty":1,"unit":"un","namePT":"Azeite","nameEN":"Olive oil","shopCat":"Temperos","totalQty":3,"perPersonQty":1},"Sal|||Temperos":{"qty":1,"unit":"un","namePT":"Sal","nameEN":"Salt","shopCat":"Temperos","totalQty":4.5,"perPersonQty":1.5},"Coxa de frango|||Carnes":{"qty":1,"unit":"lb","namePT":"Coxa de frango","nameEN":"Chicken thigh","shopCat":"Carnes","totalQty":3,"perPersonQty":1},"Mel|||Mercearia":{"qty":1,"unit":"tbsp","namePT":"Mel","nameEN":"Honey","shopCat":"Mercearia","totalQty":3,"perPersonQty":1},"Shoyo|||Mercearia":{"qty":0.5,"unit":"tbsp","namePT":"Shoyo","nameEN":"Shoyo","shopCat":"Mercearia","totalQty":1.5,"perPersonQty":0.5},"Carne moida|||Carnes":{"qty":0.5,"unit":"lb","namePT":"Carne moida","nameEN":"Ground beef 90%/10%","shopCat":"Carnes","totalQty":1.5,"perPersonQty":0.5},"Batata|||Hortifruti":{"qty":2,"unit":"un","namePT":"Batata","nameEN":"Russet potato","shopCat":"Hortifruti","totalQty":6,"perPersonQty":2},"Leite|||Laticínios":{"qty":0.5,"unit":"cup","namePT":"Leite","nameEN":"Milk","shopCat":"Laticínios","totalQty":4.5,"perPersonQty":1.5},"Manteiga|||Laticínios":{"qty":1,"unit":"tbsp","namePT":"Manteiga","nameEN":"Butter","shopCat":"Laticínios","totalQty":6,"perPersonQty":2},"Mussarela ralada|||Laticínios":{"qty":0.5,"unit":"pct","namePT":"Mussarela ralada","nameEN":"Shredded mozzarella","shopCat":"Laticínios","totalQty":1.5,"perPersonQty":0.5},"Molho de tomate|||Mercearia":{"qty":0.5,"unit":"un","namePT":"Molho de tomate","nameEN":"Tomato sauce","shopCat":"Mercearia","totalQty":3,"perPersonQty":1},"Macarrão espaguete|||Mercearia":{"qty":0.5,"unit":"pct","namePT":"Macarrão espaguete","nameEN":"Spaghetti","shopCat":"Mercearia","totalQty":1.5,"perPersonQty":0.5},"Carne moída bovina|||Carnes":{"qty":1,"unit":"lb","namePT":"Carne moída bovina","nameEN":"Ground beef","shopCat":"Carnes","totalQty":3,"perPersonQty":1},"Cebola|||Hortifruti":{"qty":0.5,"unit":"un","namePT":"Cebola","nameEN":"Onion","shopCat":"Hortifruti","totalQty":3,"perPersonQty":1},"Costela bovina|||Carnes":{"qty":1,"unit":"LB","namePT":"Costela bovina","nameEN":"Short ribs","shopCat":"Carnes","totalQty":3,"perPersonQty":1},"Cenoura|||Hortifruti":{"qty":1,"unit":"un","namePT":"Cenoura","nameEN":"Carrot","shopCat":"Hortifruti","totalQty":6,"perPersonQty":2},"Salsão|||Hortifruti":{"qty":0.5,"unit":"un","namePT":"Salsão","nameEN":"Celery","shopCat":"Hortifruti","totalQty":1.5,"perPersonQty":0.5},"Tomilho|||Hortifruti":{"qty":1,"unit":"pct","namePT":"Tomilho","nameEN":"Thyme","shopCat":"Hortifruti","totalQty":3,"perPersonQty":1},"Peito de frango|||Carnes":{"qty":1,"unit":"lb","namePT":"Peito de frango","nameEN":"Skinless/boneless Chicken Breast","shopCat":"Carnes","totalQty":3,"perPersonQty":1},"Farinha sem gluten|||Mercearia":{"qty":0.5,"unit":"tbsp","namePT":"Farinha sem gluten","nameEN":"All porpose gluten free flour","shopCat":"Mercearia","totalQty":1.5,"perPersonQty":0.5},"Limão|||Hortifruti":{"qty":1,"unit":"un","namePT":"Limão","nameEN":"Lime","shopCat":"Hortifruti","totalQty":6,"perPersonQty":2},"Arroz branco|||Mercearia":{"qty":80,"unit":"g","namePT":"Arroz branco","nameEN":"White rice","shopCat":"Mercearia","totalQty":240,"perPersonQty":80},"Alho|||Hortifruti":{"qty":1,"unit":"dente","namePT":"Alho","nameEN":"Garlic","shopCat":"Hortifruti","totalQty":3,"perPersonQty":1},"Óleo vegetal|||Mercearia":{"qty":1,"unit":"col sopa","namePT":"Óleo vegetal","nameEN":"Vegetable oil","shopCat":"Mercearia","totalQty":3,"perPersonQty":1},"Ovo|||Laticínios":{"qty":1,"unit":"un","namePT":"Ovo","nameEN":"Eggs","shopCat":"Laticínios","totalQty":3,"perPersonQty":1},"Farinha panko|||Mercearia":{"qty":1,"unit":"cup","namePT":"Farinha panko","nameEN":"Panko","shopCat":"Mercearia","totalQty":3,"perPersonQty":1},"Quinoa|||Mercearia":{"qty":1,"unit":"cup","namePT":"Quinoa","nameEN":"Quinoa","shopCat":"Mercearia","totalQty":3,"perPersonQty":1},"Tomate cereja|||Hortifruti":{"qty":0.5,"unit":"pct","namePT":"Tomate cereja","nameEN":"Cherry tomato","shopCat":"Hortifruti","totalQty":1.5,"perPersonQty":0.5},"Pepino|||Hortifruti":{"qty":0.5,"unit":"un","namePT":"Pepino","nameEN":"Cucumber","shopCat":"Hortifruti","totalQty":1.5,"perPersonQty":0.5},"Cebolete|||Hortifruti":{"qty":0.5,"unit":"pct","namePT":"Cebolete","nameEN":"Chives","shopCat":"Hortifruti","totalQty":1.5,"perPersonQty":0.5},"Hortelã|||Hortifruti":{"qty":0.5,"unit":"pct","namePT":"Hortelã","nameEN":"Mint","shopCat":"Hortifruti","totalQty":1.5,"perPersonQty":0.5}}}]`);
+let history = JSON.parse(`[{"id":1781796338701,"date":"18/06/2026","dateISO":"2026-06-18T15:25:38.701Z","clientName":"Marina","clientCity":"Sao Francisco","people":2,"dishes":["Abobrinha com haloumi","Legumes Mediterrâneos","Brócolis no alho","Feijão de caldo","Salmão assado com páprica","Green Goddess chicken meatballs","Escondidinho de carne moida","Tempero"],"aggr":{"Sal|||Temperos":{"qty":0.5,"unit":"col chá","nameEN":"Salt","namePT":"Sal","shopCat":"Temperos","totalQty":4,"perPersonQty":2},"Alho|||Hortifruti":{"qty":3,"unit":"dentes","nameEN":"Garlic","namePT":"Alho","shopCat":"Hortifruti","totalQty":8,"perPersonQty":4},"Azeite|||Temperos":{"qty":1,"unit":"un","nameEN":"Olive oil","namePT":"Azeite","shopCat":"Temperos","totalQty":2,"perPersonQty":1},"Cebola|||Temperos":{"qty":0.5,"unit":"un","nameEN":"Onion","namePT":"Cebola","shopCat":"Temperos","totalQty":1,"perPersonQty":0.5},"Linguiça|||Carnes":{"qty":0.5,"unit":"un","nameEN":"smoked saussage","namePT":"Linguiça","shopCat":"Carnes","totalQty":1,"perPersonQty":0.5},"Paprica|||Temperos":{"qty":1,"unit":"un","nameEN":"Paprika","namePT":"Paprica","shopCat":"Temperos","totalQty":2,"perPersonQty":1},"Tomilho|||Temperos":{"qty":1,"unit":"pc","nameEN":"Thyme","namePT":"Tomilho","shopCat":"Temperos","totalQty":2,"perPersonQty":1},"Batata|||Hortifruti":{"qty":2,"unit":"un","nameEN":"Russet potato","namePT":"Batata","shopCat":"Hortifruti","totalQty":4,"perPersonQty":2},"Leite|||Laticínios":{"qty":0.5,"unit":"cup","nameEN":"Milk","namePT":"Leite","shopCat":"Laticínios","totalQty":1,"perPersonQty":0.5},"Limão|||Hortifruti":{"qty":1,"unit":"un","nameEN":"Lemon","namePT":"Limão","shopCat":"Hortifruti","totalQty":2,"perPersonQty":1},"Carne moida|||Carnes":{"qty":0.5,"unit":"lb","nameEN":"Ground beef 90%/10%","namePT":"Carne moida","shopCat":"Carnes","totalQty":1,"perPersonQty":0.5},"Cenoura|||Hortifruti":{"qty":1,"unit":"un","nameEN":"Carrot","namePT":"Cenoura","shopCat":"Hortifruti","totalQty":2,"perPersonQty":1},"Frango moido|||Carnes":{"qty":0,"unit":"un","nameEN":"Ground chicken","namePT":"Frango moido","shopCat":"Carnes","totalQty":0,"perPersonQty":0},"Abobrinha|||Hortifruti":{"qty":1,"unit":"un","nameEN":"Zuccini","namePT":"Abobrinha","shopCat":"Hortifruti","totalQty":4,"perPersonQty":2},"Brócolis|||Hortifruti":{"qty":150,"unit":"g","nameEN":"Broccoli","namePT":"Brócolis","shopCat":"Hortifruti","totalQty":300,"perPersonQty":150},"Horterlã|||Hortifruti":{"qty":1,"unit":"un","nameEN":"Mint","namePT":"Horterlã","shopCat":"Hortifruti","totalQty":2,"perPersonQty":1},"Manteiga|||Laticínios":{"qty":1,"unit":"tbsp","nameEN":"Butter","namePT":"Manteiga","shopCat":"Laticínios","totalQty":2,"perPersonQty":1},"Bacon em cubos|||Carnes":{"qty":0.5,"unit":"pct","nameEN":"Bacon cubes","namePT":"Bacon em cubos","shopCat":"Carnes","totalQty":1,"perPersonQty":0.5},"Cebola roxa|||Hortifruti":{"qty":1,"unit":"un","nameEN":"Red onion","namePT":"Cebola roxa","shopCat":"Hortifruti","totalQty":2,"perPersonQty":1},"Manjericão|||Hortifruti":{"qty":1,"unit":"un","nameEN":"Basil","namePT":"Manjericão","shopCat":"Hortifruti","totalQty":2,"perPersonQty":1},"Farinha panko|||Mercearia":{"qty":1,"unit":"un","nameEN":"Panko","namePT":"Farinha panko","shopCat":"Mercearia","totalQty":2,"perPersonQty":1},"Filé de salmão|||Carnes":{"qty":1,"unit":"lb","nameEN":"Salmon fillet","namePT":"Filé de salmão","shopCat":"Carnes","totalQty":2,"perPersonQty":1},"Alho descascado|||Temperos":{"qty":0.5,"unit":"pct","nameEN":"Peeled garlic","namePT":"Alho descascado","shopCat":"Temperos","totalQty":1,"perPersonQty":0.5},"Tomate cereja|||Hortifruti":{"qty":0.5,"unit":"cx","nameEN":"Cherry tomatoes","namePT":"Tomate cereja","shopCat":"Hortifruti","totalQty":1,"perPersonQty":0.5},"Azeite de oliva|||Mercearia":{"qty":3,"unit":"col sopa","nameEN":"Olive oil","namePT":"Azeite de oliva","shopCat":"Mercearia","totalQty":14,"perPersonQty":7},"Coentro/salsinha|||Temperos":{"qty":0.5,"unit":"pct","nameEN":"Cilantro/Parsley","namePT":"Coentro/salsinha","shopCat":"Temperos","totalQty":1,"perPersonQty":0.5},"Feijão carioca|||Mercearia":{"qty":0.25,"unit":"pct","nameEN":"Pinto beans","namePT":"Feijão carioca","shopCat":"Mercearia","totalQty":0.5,"perPersonQty":0.25},"Molho de tomate|||Mercearia":{"qty":0.5,"unit":"un","nameEN":"Tomato sauce","namePT":"Molho de tomate","shopCat":"Mercearia","totalQty":1,"perPersonQty":0.5},"Limao siciliano|||Hortifruti":{"qty":0.5,"unit":"un","nameEN":"Lemon","namePT":"Limao siciliano","shopCat":"Hortifruti","totalQty":1,"perPersonQty":0.5},"Páprica defumada|||Temperos":{"qty":1,"unit":"col chá","nameEN":"Smoked paprika","namePT":"Páprica defumada","shopCat":"Temperos","totalQty":2,"perPersonQty":1},"Vinagre de vinho|||Mercearia":{"qty":1,"unit":"tbsp","nameEN":"Wine vinager","namePT":"Vinagre de vinho","shopCat":"Mercearia","totalQty":2,"perPersonQty":1},"Queijo de cabra|||Laticínios":{"qty":1,"unit":"un","nameEN":"Halloumi","namePT":"Queijo de cabra","shopCat":"Laticínios","totalQty":2,"perPersonQty":1},"Abobrinha amarela|||Hortifruti":{"qty":0.5,"unit":"un","nameEN":"Yellow squash","namePT":"Abobrinha amarela","shopCat":"Hortifruti","totalQty":1,"perPersonQty":0.5},"Mussarela ralada|||Laticínios":{"qty":0.5,"unit":"pct","nameEN":"Shredded mozzarella","namePT":"Mussarela ralada","shopCat":"Laticínios","totalQty":1,"perPersonQty":0.5},"Pimentão vermelho|||Hortifruti":{"qty":0.5,"unit":"un","nameEN":"Red bell pepper","namePT":"Pimentão vermelho","shopCat":"Hortifruti","totalQty":1,"perPersonQty":0.5},"Green goddess dressin|||Mercearia":{"qty":1,"unit":"un","nameEN":"Green goddess dressin","namePT":"Green goddess dressin","shopCat":"Mercearia","totalQty":2,"perPersonQty":1}}},{"id":1780961980390,"date":"08/06/2026","dateISO":"2026-06-08T23:39:40.390Z","clientName":"Marina","clientCity":"Sao Francisco","people":1,"dishes":["Arroz de camarão","Salmão assado com páprica","Carne moida na cama de batatas","Mandioca com curmuma","Batata doce na manteiga de alho","Quinoa com cenoura ralada","Legumes Mediterrâneos","Cenoura baby refogada com laranja","Frango desfiado a caprese","Tempero"],"aggr":{"Arroz|||Mercearia":{"qty":1,"unit":"cup","namePT":"Arroz","nameEN":"Rice","shopCat":"Mercearia","totalQty":1,"perPersonQty":1},"Camarão|||Carnes":{"qty":1,"unit":"lb","namePT":"Camarão","nameEN":"Shrimp","shopCat":"Carnes","totalQty":1,"perPersonQty":1},"Tomate|||Hortifruti":{"qty":1,"unit":"un","namePT":"Tomate","nameEN":"Roma tomato","shopCat":"Hortifruti","totalQty":2,"perPersonQty":2},"Pimentão vermelho|||Hortifruti":{"qty":1,"unit":"un","namePT":"Pimentão vermelho","nameEN":"Red bell pepper","shopCat":"Hortifruti","totalQty":1.5,"perPersonQty":1.5},"Filé de salmão|||Carnes":{"qty":1,"unit":"lb","namePT":"Filé de salmão","nameEN":"Salmon fillet","shopCat":"Carnes","totalQty":1,"perPersonQty":1},"Páprica defumada|||Temperos":{"qty":1,"unit":"col chá","namePT":"Páprica defumada","nameEN":"Smoked paprika","shopCat":"Temperos","totalQty":1,"perPersonQty":1},"Alho|||Hortifruti":{"qty":1,"unit":"dentes","namePT":"Alho","nameEN":"Garlic","shopCat":"Hortifruti","totalQty":3,"perPersonQty":3},"Limão|||Hortifruti":{"qty":1,"unit":"un","namePT":"Limão","nameEN":"Lemon","shopCat":"Hortifruti","totalQty":1,"perPersonQty":1},"Azeite de oliva|||Mercearia":{"qty":2,"unit":"col sopa","namePT":"Azeite de oliva","nameEN":"Olive oil","shopCat":"Mercearia","totalQty":6,"perPersonQty":6},"Sal|||Temperos":{"qty":0.5,"unit":"col chá","namePT":"Sal","nameEN":"Salt","shopCat":"Temperos","totalQty":2.5,"perPersonQty":2.5},"Carne moida|||Carnes":{"qty":1,"unit":"lb","namePT":"Carne moida","nameEN":"Ground beef","shopCat":"Carnes","totalQty":1,"perPersonQty":1},"Batata|||Hortifruti":{"qty":3,"unit":"un","namePT":"Batata","nameEN":"Russet potato","shopCat":"Hortifruti","totalQty":3,"perPersonQty":3},"Extrato de tomate|||Mercearia":{"qty":1,"unit":"tbsp","namePT":"Extrato de tomate","nameEN":"Tomato paste","shopCat":"Mercearia","totalQty":1,"perPersonQty":1},"Mandioca|||Hortifruti":{"qty":1,"unit":"pct","namePT":"Mandioca","nameEN":"Yuka","shopCat":"Hortifruti","totalQty":1,"perPersonQty":1},"Curcuma|||Temperos":{"qty":1,"unit":"tbsp","namePT":"Curcuma","nameEN":"Tumeric","shopCat":"Temperos","totalQty":1,"perPersonQty":1},"Batata doce|||Hortifruti":{"qty":200,"unit":"g","namePT":"Batata doce","nameEN":"Sweet potato","shopCat":"Hortifruti","totalQty":200,"perPersonQty":200},"Manteiga|||Laticínios":{"qty":20,"unit":"g","namePT":"Manteiga","nameEN":"Butter","shopCat":"Laticínios","totalQty":20,"perPersonQty":20},"Quinoa|||Mercearia":{"qty":70,"unit":"g","namePT":"Quinoa","nameEN":"Quinoa","shopCat":"Mercearia","totalQty":70,"perPersonQty":70},"Cenoura |||Hortifruti":{"qty":1,"unit":"un","namePT":"Cenoura ","nameEN":"Carrot ","shopCat":"Hortifruti","totalQty":1,"perPersonQty":1},"Abobrinha|||Hortifruti":{"qty":1,"unit":"un","namePT":"Abobrinha","nameEN":"Zucchini","shopCat":"Hortifruti","totalQty":1,"perPersonQty":1},"Tomate cereja|||Hortifruti":{"qty":0.5,"unit":"cx","namePT":"Tomate cereja","nameEN":"Cherry tomatoes","shopCat":"Hortifruti","totalQty":1.5,"perPersonQty":1.5},"Tomilho|||Temperos":{"qty":1,"unit":"pc","namePT":"Tomilho","nameEN":"Thyme","shopCat":"Temperos","totalQty":1,"perPersonQty":1},"Abobrinha amarela|||Hortifruti":{"qty":0.5,"unit":"un","namePT":"Abobrinha amarela","nameEN":"Yellow squash","shopCat":"Hortifruti","totalQty":0.5,"perPersonQty":0.5},"Cenoura|||Hortifruti":{"qty":1,"unit":"un","namePT":"Cenoura","nameEN":"Carrot","shopCat":"Hortifruti","totalQty":1,"perPersonQty":1},"Cebola roxa|||Hortifruti":{"qty":1,"unit":"un","namePT":"Cebola roxa","nameEN":"Red onion","shopCat":"Hortifruti","totalQty":1,"perPersonQty":1},"Cenoura baby|||Hortifruti":{"qty":1,"unit":"pct","namePT":"Cenoura baby","nameEN":"Baby carrots","shopCat":"Hortifruti","totalQty":1,"perPersonQty":1},"Laranja|||Hortifruti":{"qty":1,"unit":"un","namePT":"Laranja","nameEN":"orange","shopCat":"Hortifruti","totalQty":1,"perPersonQty":1},"Peito de frango |||Carnes":{"qty":1,"unit":"lb","namePT":"Peito de frango ","nameEN":" chicken breast","shopCat":"Carnes","totalQty":1,"perPersonQty":1},"Manjericão fresco|||Hortifruti":{"qty":1,"unit":"pct","namePT":"Manjericão fresco","nameEN":"Fresh basil","shopCat":"Hortifruti","totalQty":1,"perPersonQty":1},"Cebola|||Temperos":{"qty":0.5,"unit":"un","namePT":"Cebola","nameEN":"Onion","shopCat":"Temperos","totalQty":0.5,"perPersonQty":0.5},"Alho descascado|||Temperos":{"qty":0.5,"unit":"pct","namePT":"Alho descascado","nameEN":"Peeled garlic","shopCat":"Temperos","totalQty":0.5,"perPersonQty":0.5},"Coentro/salsinha|||Temperos":{"qty":0.5,"unit":"pct","namePT":"Coentro/salsinha","nameEN":"Cilantro/Parsley","shopCat":"Temperos","totalQty":0.5,"perPersonQty":0.5},"Paprica|||Temperos":{"qty":1,"unit":"un","namePT":"Paprica","nameEN":"Paprika","shopCat":"Temperos","totalQty":1,"perPersonQty":1},"Azeite|||Temperos":{"qty":1,"unit":"un","namePT":"Azeite","nameEN":"Olive oil","shopCat":"Temperos","totalQty":1,"perPersonQty":1}}},{"id":1780548382538,"date":"03/06/2026","dateISO":"2026-06-04T04:46:22.538Z","clientName":"Marina","clientCity":"Sao Francisco","people":1,"dishes":["Tutu de feijão/tropeiro","Legumes Mediterrâneos","Brócolis no alho","Quibe assado Gluten free","Frango desfiado a caprese","Salmão ao molho de laranja","Abobrinha com haloumi","Cafta","Tempero"],"aggr":{"Feijão carioca cozido|||Mercearia":{"qty":80,"unit":"g","namePT":"Feijão carioca cozido","nameEN":"Cooked pinto beans","shopCat":"Mercearia","totalQty":80,"perPersonQty":80},"Farinha de mandioca|||Mercearia":{"qty":42,"unit":"g","namePT":"Farinha de mandioca","nameEN":"Italian Style Bread crumbs","shopCat":"Mercearia","totalQty":42,"perPersonQty":42},"Linguica|||Carnes":{"qty":0.5,"unit":"pct","namePT":"Linguica","nameEN":"Smoked sausage","shopCat":"Carnes","totalQty":0.5,"perPersonQty":0.5},"Abobrinha|||Hortifruti":{"qty":1,"unit":"un","namePT":"Abobrinha","nameEN":"Zucchini","shopCat":"Hortifruti","totalQty":2,"perPersonQty":2},"Pimentão vermelho|||Hortifruti":{"qty":0.5,"unit":"un","namePT":"Pimentão vermelho","nameEN":"Red bell pepper","shopCat":"Hortifruti","totalQty":0.5,"perPersonQty":0.5},"Tomate cereja|||Hortifruti":{"qty":0.5,"unit":"cx","namePT":"Tomate cereja","nameEN":"Cherry tomatoes","shopCat":"Hortifruti","totalQty":1.5,"perPersonQty":1.5},"Azeite de oliva|||Mercearia":{"qty":3,"unit":"col sopa","namePT":"Azeite de oliva","nameEN":"Olive oil","shopCat":"Mercearia","totalQty":5,"perPersonQty":5},"Tomilho|||Temperos":{"qty":1,"unit":"pc","namePT":"Tomilho","nameEN":"Thyme","shopCat":"Temperos","totalQty":1,"perPersonQty":1},"Abobrinha amarela|||Hortifruti":{"qty":0.5,"unit":"un","namePT":"Abobrinha amarela","nameEN":"Yellow squash","shopCat":"Hortifruti","totalQty":0.5,"perPersonQty":0.5},"Cenoura|||Hortifruti":{"qty":1,"unit":"un","namePT":"Cenoura","nameEN":"Carrot","shopCat":"Hortifruti","totalQty":1,"perPersonQty":1},"Cebola roxa|||Hortifruti":{"qty":1,"unit":"un","namePT":"Cebola roxa","nameEN":"Red onion","shopCat":"Hortifruti","totalQty":1,"perPersonQty":1},"Brócolis|||Hortifruti":{"qty":150,"unit":"g","namePT":"Brócolis","nameEN":"Broccoli","shopCat":"Hortifruti","totalQty":150,"perPersonQty":150},"Alho|||Hortifruti":{"qty":3,"unit":"dentes","namePT":"Alho","nameEN":"Garlic","shopCat":"Hortifruti","totalQty":3,"perPersonQty":3},"Sal|||Temperos":{"qty":0.5,"unit":"col chá","namePT":"Sal","nameEN":"Salt","shopCat":"Temperos","totalQty":2,"perPersonQty":2},"Carne moída bovina|||Carnes":{"qty":0.5,"unit":"lb","namePT":"Carne moída bovina","nameEN":"Ground beef","shopCat":"Carnes","totalQty":0.5,"perPersonQty":0.5},"Quinoa|||Mercearia":{"qty":1,"unit":"xc","namePT":"Quinoa","nameEN":"Quinoa","shopCat":"Mercearia","totalQty":1,"perPersonQty":1},"Cebola|||Hortifruti":{"qty":0.5,"unit":"un","namePT":"Cebola","nameEN":"Onion","shopCat":"Hortifruti","totalQty":0.5,"perPersonQty":0.5},"Hortelã fresca|||Hortifruti":{"qty":0.5,"unit":"pct","namePT":"Hortelã fresca","nameEN":"Fresh mint","shopCat":"Hortifruti","totalQty":0.5,"perPersonQty":0.5},"Mussarela|||Laticínios":{"qty":0.5,"unit":"pct","namePT":"Mussarela","nameEN":"Mozzarella","shopCat":"Laticínios","totalQty":1.5,"perPersonQty":1.5},"Azeite|||Temperos":{"qty":1,"unit":"cs","namePT":"Azeite","nameEN":"Olice oil","shopCat":"Temperos","totalQty":2,"perPersonQty":2},"Peito de frango |||Carnes":{"qty":1,"unit":"lb","namePT":"Peito de frango ","nameEN":" chicken breast","shopCat":"Carnes","totalQty":1,"perPersonQty":1},"Manjericão fresco|||Hortifruti":{"qty":1,"unit":"pct","namePT":"Manjericão fresco","nameEN":"Fresh basil","shopCat":"Hortifruti","totalQty":1,"perPersonQty":1},"Salmão|||Carnes":{"qty":1,"unit":"lb","namePT":"Salmão","nameEN":"Salmon","shopCat":"Carnes","totalQty":1,"perPersonQty":1},"Laranja|||Hortifruti":{"qty":1,"unit":"un","namePT":"Laranja","nameEN":"Orange","shopCat":"Hortifruti","totalQty":1,"perPersonQty":1},"Amido de milho|||Mercearia":{"qty":1,"unit":"cc","namePT":"Amido de milho","nameEN":"Corn Starch","shopCat":"Mercearia","totalQty":1,"perPersonQty":1},"Mel|||Mercearia":{"qty":1,"unit":"cs","namePT":"Mel","nameEN":"Honey","shopCat":"Mercearia","totalQty":1,"perPersonQty":1},"Shoyo|||Mercearia":{"qty":1,"unit":"cs","namePT":"Shoyo","nameEN":"Shoyo","shopCat":"Mercearia","totalQty":1,"perPersonQty":1},"Vinagre de vinho|||Mercearia":{"qty":1,"unit":"tbsp","namePT":"Vinagre de vinho","nameEN":"Wine vinager","shopCat":"Mercearia","totalQty":1,"perPersonQty":1},"Queijo de cabra|||Laticínios":{"qty":1,"unit":"un","namePT":"Queijo de cabra","nameEN":"Halloumi","shopCat":"Laticínios","totalQty":1,"perPersonQty":1},"Horterlã|||Hortifruti":{"qty":1,"unit":"un","namePT":"Horterlã","nameEN":"Mint","shopCat":"Hortifruti","totalQty":1,"perPersonQty":1},"Manjericão|||Hortifruti":{"qty":1,"unit":"un","namePT":"Manjericão","nameEN":"Basil","shopCat":"Hortifruti","totalQty":1,"perPersonQty":1},"Carne moída|||Carnes":{"qty":1,"unit":"lb","namePT":"Carne moída","nameEN":"Ground beef","shopCat":"Carnes","totalQty":1,"perPersonQty":1},"Hortela|||Hortifruti":{"qty":1,"unit":"un","namePT":"Hortela","nameEN":"MInt","shopCat":"Hortifruti","totalQty":1,"perPersonQty":1},"Parmesão|||Laticínios":{"qty":1,"unit":"un","namePT":"Parmesão","nameEN":"Reggiano parmeggiano","shopCat":"Laticínios","totalQty":1,"perPersonQty":1},"Limão|||Hortifruti":{"qty":1,"unit":"un","namePT":"Limão","nameEN":"Lime","shopCat":"Hortifruti","totalQty":1,"perPersonQty":1},"Cebola|||Temperos":{"qty":0.5,"unit":"un","namePT":"Cebola","nameEN":"Onion","shopCat":"Temperos","totalQty":0.5,"perPersonQty":0.5},"Alho descascado|||Temperos":{"qty":0.5,"unit":"pct","namePT":"Alho descascado","nameEN":"Peeled garlic","shopCat":"Temperos","totalQty":0.5,"perPersonQty":0.5},"Coentro/salsinha|||Temperos":{"qty":0.5,"unit":"pct","namePT":"Coentro/salsinha","nameEN":"Cilantro/Parsley","shopCat":"Temperos","totalQty":0.5,"perPersonQty":0.5},"Paprica|||Temperos":{"qty":1,"unit":"un","namePT":"Paprica","nameEN":"Paprika","shopCat":"Temperos","totalQty":1,"perPersonQty":1}}},{"id":1780548102577,"date":"03/06/2026","dateISO":"2026-06-04T04:41:42.577Z","clientName":"Marina","clientCity":"Sao Francisco","people":1,"dishes":["Tutu de feijão/tropeiro","Legumes Mediterrâneos","Brócolis no alho","Quibe assado Gluten free","Frango desfiado a caprese","Salmão ao molho de laranja","Abobrinha com haloumi","Cafta","Tempero"],"aggr":{"Feijão carioca cozido|||Mercearia":{"qty":80,"unit":"g","namePT":"Feijão carioca cozido","nameEN":"Cooked pinto beans","shopCat":"Mercearia","totalQty":80,"perPersonQty":80},"Farinha de mandioca|||Mercearia":{"qty":42,"unit":"g","namePT":"Farinha de mandioca","nameEN":"Italian Style Bread crumbs","shopCat":"Mercearia","totalQty":42,"perPersonQty":42},"Linguica|||Carnes":{"qty":0.5,"unit":"pct","namePT":"Linguica","nameEN":"Smoked sausage","shopCat":"Carnes","totalQty":0.5,"perPersonQty":0.5},"Abobrinha|||Hortifruti":{"qty":1,"unit":"un","namePT":"Abobrinha","nameEN":"Zucchini","shopCat":"Hortifruti","totalQty":2,"perPersonQty":2},"Pimentão vermelho|||Hortifruti":{"qty":0.5,"unit":"un","namePT":"Pimentão vermelho","nameEN":"Red bell pepper","shopCat":"Hortifruti","totalQty":0.5,"perPersonQty":0.5},"Tomate cereja|||Hortifruti":{"qty":0.5,"unit":"cx","namePT":"Tomate cereja","nameEN":"Cherry tomatoes","shopCat":"Hortifruti","totalQty":1.5,"perPersonQty":1.5},"Azeite de oliva|||Mercearia":{"qty":3,"unit":"col sopa","namePT":"Azeite de oliva","nameEN":"Olive oil","shopCat":"Mercearia","totalQty":5,"perPersonQty":5},"Tomilho|||Temperos":{"qty":1,"unit":"pc","namePT":"Tomilho","nameEN":"Thyme","shopCat":"Temperos","totalQty":1,"perPersonQty":1},"Abobrinha amarela|||Hortifruti":{"qty":0.5,"unit":"un","namePT":"Abobrinha amarela","nameEN":"Yellow squash","shopCat":"Hortifruti","totalQty":0.5,"perPersonQty":0.5},"Cenoura|||Hortifruti":{"qty":1,"unit":"un","namePT":"Cenoura","nameEN":"Carrot","shopCat":"Hortifruti","totalQty":1,"perPersonQty":1},"Cebola roxa|||Hortifruti":{"qty":1,"unit":"un","namePT":"Cebola roxa","nameEN":"Red onion","shopCat":"Hortifruti","totalQty":1,"perPersonQty":1},"Brócolis|||Hortifruti":{"qty":150,"unit":"g","namePT":"Brócolis","nameEN":"Broccoli","shopCat":"Hortifruti","totalQty":150,"perPersonQty":150},"Alho|||Hortifruti":{"qty":3,"unit":"dentes","namePT":"Alho","nameEN":"Garlic","shopCat":"Hortifruti","totalQty":3,"perPersonQty":3},"Sal|||Temperos":{"qty":0.5,"unit":"col chá","namePT":"Sal","nameEN":"Salt","shopCat":"Temperos","totalQty":2,"perPersonQty":2},"Carne moída bovina|||Carnes":{"qty":0.5,"unit":"lb","namePT":"Carne moída bovina","nameEN":"Ground beef","shopCat":"Carnes","totalQty":0.5,"perPersonQty":0.5},"Quinoa|||Mercearia":{"qty":1,"unit":"xc","namePT":"Quinoa","nameEN":"Quinoa","shopCat":"Mercearia","totalQty":1,"perPersonQty":1},"Cebola|||Hortifruti":{"qty":0.5,"unit":"un","namePT":"Cebola","nameEN":"Onion","shopCat":"Hortifruti","totalQty":0.5,"perPersonQty":0.5},"Hortelã fresca|||Hortifruti":{"qty":0.5,"unit":"pct","namePT":"Hortelã fresca","nameEN":"Fresh mint","shopCat":"Hortifruti","totalQty":0.5,"perPersonQty":0.5},"Mussarela|||Laticínios":{"qty":0.5,"unit":"pct","namePT":"Mussarela","nameEN":"Mozzarella","shopCat":"Laticínios","totalQty":1.5,"perPersonQty":1.5},"Azeite|||Temperos":{"qty":1,"unit":"cs","namePT":"Azeite","nameEN":"Olice oil","shopCat":"Temperos","totalQty":2,"perPersonQty":2},"Peito de frango |||Carnes":{"qty":1,"unit":"lb","namePT":"Peito de frango ","nameEN":" chicken breast","shopCat":"Carnes","totalQty":1,"perPersonQty":1},"Manjericão fresco|||Hortifruti":{"qty":1,"unit":"pct","namePT":"Manjericão fresco","nameEN":"Fresh basil","shopCat":"Hortifruti","totalQty":1,"perPersonQty":1},"Salmão|||Carnes":{"qty":1,"unit":"lb","namePT":"Salmão","nameEN":"Salmon","shopCat":"Carnes","totalQty":1,"perPersonQty":1},"Laranja|||Hortifruti":{"qty":1,"unit":"un","namePT":"Laranja","nameEN":"Orange","shopCat":"Hortifruti","totalQty":1,"perPersonQty":1},"Amido de milho|||Mercearia":{"qty":1,"unit":"cc","namePT":"Amido de milho","nameEN":"Corn Starch","shopCat":"Mercearia","totalQty":1,"perPersonQty":1},"Mel|||Mercearia":{"qty":1,"unit":"cs","namePT":"Mel","nameEN":"Honey","shopCat":"Mercearia","totalQty":1,"perPersonQty":1},"Shoyo|||Mercearia":{"qty":1,"unit":"cs","namePT":"Shoyo","nameEN":"Shoyo","shopCat":"Mercearia","totalQty":1,"perPersonQty":1},"Vinagre de vinho|||Mercearia":{"qty":1,"unit":"tbsp","namePT":"Vinagre de vinho","nameEN":"Wine vinager","shopCat":"Mercearia","totalQty":1,"perPersonQty":1},"Queijo de cabra|||Laticínios":{"qty":1,"unit":"un","namePT":"Queijo de cabra","nameEN":"Halloumi","shopCat":"Laticínios","totalQty":1,"perPersonQty":1},"Horterlã|||Hortifruti":{"qty":1,"unit":"un","namePT":"Horterlã","nameEN":"Mint","shopCat":"Hortifruti","totalQty":1,"perPersonQty":1},"Manjericão|||Hortifruti":{"qty":1,"unit":"un","namePT":"Manjericão","nameEN":"Basil","shopCat":"Hortifruti","totalQty":1,"perPersonQty":1},"Carne moída|||Carnes":{"qty":1,"unit":"lb","namePT":"Carne moída","nameEN":"Ground beef","shopCat":"Carnes","totalQty":1,"perPersonQty":1},"Hortela|||Hortifruti":{"qty":1,"unit":"un","namePT":"Hortela","nameEN":"MInt","shopCat":"Hortifruti","totalQty":1,"perPersonQty":1},"Parmesão|||Laticínios":{"qty":1,"unit":"un","namePT":"Parmesão","nameEN":"Reggiano parmeggiano","shopCat":"Laticínios","totalQty":1,"perPersonQty":1},"Limão|||Hortifruti":{"qty":1,"unit":"un","namePT":"Limão","nameEN":"Lime","shopCat":"Hortifruti","totalQty":1,"perPersonQty":1},"Cebola|||Temperos":{"qty":0.5,"unit":"un","namePT":"Cebola","nameEN":"Onion","shopCat":"Temperos","totalQty":0.5,"perPersonQty":0.5},"Alho descascado|||Temperos":{"qty":0.5,"unit":"pct","namePT":"Alho descascado","nameEN":"Peeled garlic","shopCat":"Temperos","totalQty":0.5,"perPersonQty":0.5},"Coentro/salsinha|||Temperos":{"qty":0.5,"unit":"pct","namePT":"Coentro/salsinha","nameEN":"Cilantro/Parsley","shopCat":"Temperos","totalQty":0.5,"perPersonQty":0.5},"Paprica|||Temperos":{"qty":1,"unit":"un","namePT":"Paprica","nameEN":"Paprika","shopCat":"Temperos","totalQty":1,"perPersonQty":1}}},{"id":1779895936152,"date":"27/05/2026","dateISO":"2026-05-27T15:32:16.152Z","clientName":"Amanda","clientCity":"San Jose","people":2,"dishes":["Hamburguer caseiro","Fricassê de frango","Tutu de feijão/tropeiro","Molho de almondegas","Tempero"],"aggr":{"Carne moida|||Carnes":{"qty":1,"unit":"lb","namePT":"Carne moida","nameEN":"Ground beef","shopCat":"Carnes","totalQty":2,"perPersonQty":1},"Panko|||Mercearia":{"qty":0.5,"unit":"cup","namePT":"Panko","nameEN":"Panko","shopCat":"Mercearia","totalQty":1,"perPersonQty":0.5},"Ovo|||Laticínios":{"qty":1,"unit":"un","namePT":"Ovo","nameEN":"Egg","shopCat":"Laticínios","totalQty":3,"perPersonQty":1.5},"Frango desfiado|||Carnes":{"qty":1,"unit":"lb","namePT":"Frango desfiado","nameEN":"Shredded chicken","shopCat":"Carnes","totalQty":2,"perPersonQty":1},"Leite|||Laticínios":{"qty":2,"unit":"cup","namePT":"Leite","nameEN":"Milk","shopCat":"Laticínios","totalQty":4,"perPersonQty":2},"Milho verde|||Mercearia":{"qty":2,"unit":"can","namePT":"Milho verde","nameEN":"Corn kernels","shopCat":"Mercearia","totalQty":4,"perPersonQty":2},"Farinha sem gluten|||Mercearia":{"qty":1,"unit":"tbsp","namePT":"Farinha sem gluten","nameEN":"Gluten free all porpose flour","shopCat":"Mercearia","totalQty":2,"perPersonQty":1},"Mussarela|||Laticínios":{"qty":1,"unit":"cup","namePT":"Mussarela","nameEN":"Mozzarella","shopCat":"Laticínios","totalQty":2,"perPersonQty":1},"Parmesão|||Laticínios":{"qty":0.5,"unit":"cup","namePT":"Parmesão","nameEN":"reggiano parmeggiano","shopCat":"Laticínios","totalQty":1,"perPersonQty":0.5},"Feijão carioca cozido|||Mercearia":{"qty":80,"unit":"g","namePT":"Feijão carioca cozido","nameEN":"Cooked pinto beans","shopCat":"Mercearia","totalQty":160,"perPersonQty":80},"Farinha de mandioca|||Mercearia":{"qty":42,"unit":"g","namePT":"Farinha de mandioca","nameEN":"Italian Style Bread crumbs","shopCat":"Mercearia","totalQty":84,"perPersonQty":42},"Linguica|||Carnes":{"qty":0.5,"unit":"pct","namePT":"Linguica","nameEN":"Smoked sausage","shopCat":"Carnes","totalQty":1,"perPersonQty":0.5},"Macarrão (sua escolha)|||Mercearia":{"qty":0.5,"unit":"pct","namePT":"Macarrão (sua escolha)","nameEN":"Pasta (your choice)","shopCat":"Mercearia","totalQty":1,"perPersonQty":0.5},"Carne moída bovina|||Carnes":{"qty":1,"unit":"lb","namePT":"Carne moída bovina","nameEN":"Ground beef","shopCat":"Carnes","totalQty":2,"perPersonQty":1},"Molho de tomate|||Mercearia":{"qty":0.5,"unit":"vidro","namePT":"Molho de tomate","nameEN":"Tomato sauce","shopCat":"Mercearia","totalQty":1,"perPersonQty":0.5},"Farinha de rosca|||Mercearia":{"qty":30,"unit":"g","namePT":"Farinha de rosca","nameEN":"Breadcrumbs","shopCat":"Mercearia","totalQty":60,"perPersonQty":30},"Cebola|||Temperos":{"qty":0.5,"unit":"un","namePT":"Cebola","nameEN":"Onion","shopCat":"Temperos","totalQty":1,"perPersonQty":0.5},"Alho descascado|||Temperos":{"qty":0.5,"unit":"pct","namePT":"Alho descascado","nameEN":"Peeled garlic","shopCat":"Temperos","totalQty":1,"perPersonQty":0.5},"Coentro/salsinha|||Temperos":{"qty":0.5,"unit":"pct","namePT":"Coentro/salsinha","nameEN":"Cilantro/Parsley","shopCat":"Temperos","totalQty":1,"perPersonQty":0.5},"Paprica|||Temperos":{"qty":1,"unit":"un","namePT":"Paprica","nameEN":"Paprika","shopCat":"Temperos","totalQty":2,"perPersonQty":1},"Azeite|||Temperos":{"qty":1,"unit":"un","namePT":"Azeite","nameEN":"Olive oil","shopCat":"Temperos","totalQty":2,"perPersonQty":1},"Sal|||Temperos":{"qty":1,"unit":"un","namePT":"Sal","nameEN":"Salt","shopCat":"Temperos","totalQty":2,"perPersonQty":1}}},{"id":1779234394465,"date":"19/05/2026","dateISO":"2026-05-19T23:46:34.465Z","clientName":"Iza","clientCity":"Montain View","people":3,"dishes":["Pernil suino desfiado","Picadinho suino agridoce","Frango com mel","Parmegiana de frango","Torta pizza","Batata gratinada","Arroz branco","Legumes Mediterrâneos","Tempero"],"aggr":{"Pernil suino|||Carnes":{"qty":1,"unit":"lb","namePT":"Pernil suino","nameEN":"Pork leg or Shoulder","shopCat":"Carnes","totalQty":3,"perPersonQty":1},"Pimentao vermelho|||Hortifruti":{"qty":0.5,"unit":"un","namePT":"Pimentao vermelho","nameEN":"Red bell pepper","shopCat":"Hortifruti","totalQty":1.5,"perPersonQty":0.5},"Cebola|||Hortifruti":{"qty":0.5,"unit":"un","namePT":"Cebola","nameEN":"Yellow onion","shopCat":"Hortifruti","totalQty":1.5,"perPersonQty":0.5},"Paleta suina|||Carnes":{"qty":1,"unit":"lb","namePT":"Paleta suina","nameEN":"Pork sholder","shopCat":"Carnes","totalQty":3,"perPersonQty":1},"Laranja|||Hortifruti":{"qty":1,"unit":"un","namePT":"Laranja","nameEN":"Orange","shopCat":"Hortifruti","totalQty":3,"perPersonQty":1},"Shoyo|||Mercearia":{"qty":1,"unit":"tbsp","namePT":"Shoyo","nameEN":"Shoyo","shopCat":"Mercearia","totalQty":4.5,"perPersonQty":1.5},"Mel|||Mercearia":{"qty":1,"unit":"tbsp","namePT":"Mel","nameEN":"Honey","shopCat":"Mercearia","totalQty":6,"perPersonQty":2},"Coxa de frango|||Carnes":{"qty":1,"unit":"lb","namePT":"Coxa de frango","nameEN":"Chicken thigh","shopCat":"Carnes","totalQty":3,"perPersonQty":1},"Peito de frango|||Carnes":{"qty":1,"unit":"lb","namePT":"Peito de frango","nameEN":"Chicken breast boneless","shopCat":"Carnes","totalQty":3,"perPersonQty":1},"panko|||Mercearia":{"qty":1,"unit":"cup","namePT":"panko","nameEN":"Panko","shopCat":"Mercearia","totalQty":3,"perPersonQty":1},"Molho tomate|||Mercearia":{"qty":1,"unit":"un","namePT":"Molho tomate","nameEN":"Tomato sauce","shopCat":"Mercearia","totalQty":3,"perPersonQty":1},"Ovo|||Laticínios":{"qty":1,"unit":"un","namePT":"Ovo","nameEN":"Egg","shopCat":"Laticínios","totalQty":9,"perPersonQty":3},"Mussarela|||Laticínios":{"qty":1,"unit":"cup","namePT":"Mussarela","nameEN":"Mozzarella","shopCat":"Laticínios","totalQty":9,"perPersonQty":3},"Presunto|||Carnes":{"qty":1,"unit":"cup","namePT":"Presunto","nameEN":"ham","shopCat":"Carnes","totalQty":3,"perPersonQty":1},"Farinha|||Mercearia":{"qty":2,"unit":"cup","namePT":"Farinha","nameEN":"Farinha","shopCat":"Mercearia","totalQty":6,"perPersonQty":2},"Milho|||Mercearia":{"qty":0.5,"unit":"can","namePT":"Milho","nameEN":"Milho","shopCat":"Mercearia","totalQty":1.5,"perPersonQty":0.5},"Batata|||Hortifruti":{"qty":2,"unit":"un","namePT":"Batata","nameEN":"Russet potato","shopCat":"Hortifruti","totalQty":6,"perPersonQty":2},"Leite|||Laticínios":{"qty":1,"unit":"cup","namePT":"Leite","nameEN":"Milk","shopCat":"Laticínios","totalQty":3,"perPersonQty":1},"Arroz branco|||Mercearia":{"qty":80,"unit":"g","namePT":"Arroz branco","nameEN":"White rice","shopCat":"Mercearia","totalQty":240,"perPersonQty":80},"Alho|||Hortifruti":{"qty":1,"unit":"dente","namePT":"Alho","nameEN":"Garlic","shopCat":"Hortifruti","totalQty":3,"perPersonQty":1},"Óleo vegetal|||Mercearia":{"qty":1,"unit":"col sopa","namePT":"Óleo vegetal","nameEN":"Vegetable oil","shopCat":"Mercearia","totalQty":3,"perPersonQty":1},"Sal|||Temperos":{"qty":0.5,"unit":"col chá","namePT":"Sal","nameEN":"Salt","shopCat":"Temperos","totalQty":4.5,"perPersonQty":1.5},"Abobrinha|||Hortifruti":{"qty":1,"unit":"un","namePT":"Abobrinha","nameEN":"Zucchini","shopCat":"Hortifruti","totalQty":3,"perPersonQty":1},"Pimentão vermelho|||Hortifruti":{"qty":0.5,"unit":"un","namePT":"Pimentão vermelho","nameEN":"Red bell pepper","shopCat":"Hortifruti","totalQty":1.5,"perPersonQty":0.5},"Tomate cereja|||Hortifruti":{"qty":0.5,"unit":"cx","namePT":"Tomate cereja","nameEN":"Cherry tomatoes","shopCat":"Hortifruti","totalQty":1.5,"perPersonQty":0.5},"Azeite de oliva|||Mercearia":{"qty":3,"unit":"col sopa","namePT":"Azeite de oliva","nameEN":"Olive oil","shopCat":"Mercearia","totalQty":9,"perPersonQty":3},"Tomilho|||Temperos":{"qty":1,"unit":"pc","namePT":"Tomilho","nameEN":"Thyme","shopCat":"Temperos","totalQty":3,"perPersonQty":1},"Abobrinha amarela|||Hortifruti":{"qty":0.5,"unit":"un","namePT":"Abobrinha amarela","nameEN":"Yellow squash","shopCat":"Hortifruti","totalQty":1.5,"perPersonQty":0.5},"Cenoura|||Hortifruti":{"qty":1,"unit":"un","namePT":"Cenoura","nameEN":"Carrot","shopCat":"Hortifruti","totalQty":3,"perPersonQty":1},"Cebola roxa|||Hortifruti":{"qty":1,"unit":"un","namePT":"Cebola roxa","nameEN":"Red onion","shopCat":"Hortifruti","totalQty":3,"perPersonQty":1},"Cebola|||Temperos":{"qty":0.5,"unit":"un","namePT":"Cebola","nameEN":"Onion","shopCat":"Temperos","totalQty":1.5,"perPersonQty":0.5},"Alho descascado|||Temperos":{"qty":0.5,"unit":"pct","namePT":"Alho descascado","nameEN":"Peeled garlic","shopCat":"Temperos","totalQty":1.5,"perPersonQty":0.5},"Coentro/salsinha|||Temperos":{"qty":0.5,"unit":"pct","namePT":"Coentro/salsinha","nameEN":"Cilantro/Parsley","shopCat":"Temperos","totalQty":1.5,"perPersonQty":0.5},"Paprica|||Temperos":{"qty":1,"unit":"un","namePT":"Paprica","nameEN":"Paprika","shopCat":"Temperos","totalQty":3,"perPersonQty":1},"Azeite|||Temperos":{"qty":1,"unit":"un","namePT":"Azeite","nameEN":"Olive oil","shopCat":"Temperos","totalQty":3,"perPersonQty":1}}},{"id":1778734037577,"date":"13/05/2026","dateISO":"2026-05-14T04:47:17.577Z","clientName":"Iza","clientCity":"Montain View","people":3,"dishes":["Tempero","Frango com mel","Escondidinho de carne moida","Molho bolonhesa","Short ribs","Frango cremoso de limao","Arroz branco","Farofa de cenoura e ovo","Tabule"],"aggr":{"Cebola|||Temperos":{"qty":0.5,"unit":"un","namePT":"Cebola","nameEN":"Onion","shopCat":"Temperos","totalQty":1.5,"perPersonQty":0.5},"Alho descascado|||Temperos":{"qty":0.5,"unit":"pct","namePT":"Alho descascado","nameEN":"Peeled garlic","shopCat":"Temperos","totalQty":1.5,"perPersonQty":0.5},"Coentro/salsinha|||Temperos":{"qty":0.5,"unit":"pct","namePT":"Coentro/salsinha","nameEN":"Cilantro/Parsley","shopCat":"Temperos","totalQty":1.5,"perPersonQty":0.5},"Paprica|||Temperos":{"qty":1,"unit":"un","namePT":"Paprica","nameEN":"Paprika","shopCat":"Temperos","totalQty":3,"perPersonQty":1},"Azeite|||Temperos":{"qty":1,"unit":"un","namePT":"Azeite","nameEN":"Olive oil","shopCat":"Temperos","totalQty":3,"perPersonQty":1},"Sal|||Temperos":{"qty":1,"unit":"un","namePT":"Sal","nameEN":"Salt","shopCat":"Temperos","totalQty":4.5,"perPersonQty":1.5},"Coxa de frango|||Carnes":{"qty":1,"unit":"lb","namePT":"Coxa de frango","nameEN":"Chicken thigh","shopCat":"Carnes","totalQty":3,"perPersonQty":1},"Mel|||Mercearia":{"qty":1,"unit":"tbsp","namePT":"Mel","nameEN":"Honey","shopCat":"Mercearia","totalQty":3,"perPersonQty":1},"Shoyo|||Mercearia":{"qty":0.5,"unit":"tbsp","namePT":"Shoyo","nameEN":"Shoyo","shopCat":"Mercearia","totalQty":1.5,"perPersonQty":0.5},"Carne moida|||Carnes":{"qty":0.5,"unit":"lb","namePT":"Carne moida","nameEN":"Ground beef 90%/10%","shopCat":"Carnes","totalQty":1.5,"perPersonQty":0.5},"Batata|||Hortifruti":{"qty":2,"unit":"un","namePT":"Batata","nameEN":"Russet potato","shopCat":"Hortifruti","totalQty":6,"perPersonQty":2},"Leite|||Laticínios":{"qty":0.5,"unit":"cup","namePT":"Leite","nameEN":"Milk","shopCat":"Laticínios","totalQty":4.5,"perPersonQty":1.5},"Manteiga|||Laticínios":{"qty":1,"unit":"tbsp","namePT":"Manteiga","nameEN":"Butter","shopCat":"Laticínios","totalQty":6,"perPersonQty":2},"Mussarela ralada|||Laticínios":{"qty":0.5,"unit":"pct","namePT":"Mussarela ralada","nameEN":"Shredded mozzarella","shopCat":"Laticínios","totalQty":1.5,"perPersonQty":0.5},"Molho de tomate|||Mercearia":{"qty":0.5,"unit":"un","namePT":"Molho de tomate","nameEN":"Tomato sauce","shopCat":"Mercearia","totalQty":3,"perPersonQty":1},"Macarrão espaguete|||Mercearia":{"qty":0.5,"unit":"pct","namePT":"Macarrão espaguete","nameEN":"Spaghetti","shopCat":"Mercearia","totalQty":1.5,"perPersonQty":0.5},"Carne moída bovina|||Carnes":{"qty":1,"unit":"lb","namePT":"Carne moída bovina","nameEN":"Ground beef","shopCat":"Carnes","totalQty":3,"perPersonQty":1},"Cebola|||Hortifruti":{"qty":0.5,"unit":"un","namePT":"Cebola","nameEN":"Onion","shopCat":"Hortifruti","totalQty":3,"perPersonQty":1},"Costela bovina|||Carnes":{"qty":1,"unit":"LB","namePT":"Costela bovina","nameEN":"Short ribs","shopCat":"Carnes","totalQty":3,"perPersonQty":1},"Cenoura|||Hortifruti":{"qty":1,"unit":"un","namePT":"Cenoura","nameEN":"Carrot","shopCat":"Hortifruti","totalQty":6,"perPersonQty":2},"Salsão|||Hortifruti":{"qty":0.5,"unit":"un","namePT":"Salsão","nameEN":"Celery","shopCat":"Hortifruti","totalQty":1.5,"perPersonQty":0.5},"Tomilho|||Hortifruti":{"qty":1,"unit":"pct","namePT":"Tomilho","nameEN":"Thyme","shopCat":"Hortifruti","totalQty":3,"perPersonQty":1},"Peito de frango|||Carnes":{"qty":1,"unit":"lb","namePT":"Peito de frango","nameEN":"Skinless/boneless Chicken Breast","shopCat":"Carnes","totalQty":3,"perPersonQty":1},"Farinha sem gluten|||Mercearia":{"qty":0.5,"unit":"tbsp","namePT":"Farinha sem gluten","nameEN":"All porpose gluten free flour","shopCat":"Mercearia","totalQty":1.5,"perPersonQty":0.5},"Limão|||Hortifruti":{"qty":1,"unit":"un","namePT":"Limão","nameEN":"Lime","shopCat":"Hortifruti","totalQty":6,"perPersonQty":2},"Arroz branco|||Mercearia":{"qty":80,"unit":"g","namePT":"Arroz branco","nameEN":"White rice","shopCat":"Mercearia","totalQty":240,"perPersonQty":80},"Alho|||Hortifruti":{"qty":1,"unit":"dente","namePT":"Alho","nameEN":"Garlic","shopCat":"Hortifruti","totalQty":3,"perPersonQty":1},"Óleo vegetal|||Mercearia":{"qty":1,"unit":"col sopa","namePT":"Óleo vegetal","nameEN":"Vegetable oil","shopCat":"Mercearia","totalQty":3,"perPersonQty":1},"Ovo|||Laticínios":{"qty":1,"unit":"un","namePT":"Ovo","nameEN":"Eggs","shopCat":"Laticínios","totalQty":3,"perPersonQty":1},"Farinha panko|||Mercearia":{"qty":1,"unit":"cup","namePT":"Farinha panko","nameEN":"Panko","shopCat":"Mercearia","totalQty":3,"perPersonQty":1},"Quinoa|||Mercearia":{"qty":1,"unit":"cup","namePT":"Quinoa","nameEN":"Quinoa","shopCat":"Mercearia","totalQty":3,"perPersonQty":1},"Tomate cereja|||Hortifruti":{"qty":0.5,"unit":"pct","namePT":"Tomate cereja","nameEN":"Cherry tomato","shopCat":"Hortifruti","totalQty":1.5,"perPersonQty":0.5},"Pepino|||Hortifruti":{"qty":0.5,"unit":"un","namePT":"Pepino","nameEN":"Cucumber","shopCat":"Hortifruti","totalQty":1.5,"perPersonQty":0.5},"Cebolete|||Hortifruti":{"qty":0.5,"unit":"pct","namePT":"Cebolete","nameEN":"Chives","shopCat":"Hortifruti","totalQty":1.5,"perPersonQty":0.5},"Hortelã|||Hortifruti":{"qty":0.5,"unit":"pct","namePT":"Hortelã","nameEN":"Mint","shopCat":"Hortifruti","totalQty":1.5,"perPersonQty":0.5}}}]`);
+
+// ============================================================
+// V20 — NEW STATE (clients, schedule, invoices, settings)
+// ============================================================
+let clients = [];     // [{id, name, phone, email, address, city, birthday, notes, createdAt}]
+let schedule = [];    // [{id, clientName, type, time, date, dayOfWeek, startDate, endDate, notes}]
+let invoices = [];    // [{id, clientName, clientCity, date, people, personalShopping, items, status, paymentMethod, notes, createdAt}]
+let settings = {
+  chefName: "Chef Silmara",
+  chefSubtitle: "Personal Chef",
+  chefLocation: "Bay Area",
+  currency: "USD",
+  payZelle: "",
+  payVenmo: "",
+  payOther: ""
+};
+let scheduleViewMonth = new Date().getMonth();
+let scheduleViewYear = new Date().getFullYear();
+let mobileSchedView = 'week';
+let editingClientId = null;
+let editingScheduleId = null;
+let editingInvoiceId = null;
+let currentInvoiceData = null; // dados do invoice sendo visualizado
+
 
 
 // ============================================================
@@ -485,7 +726,8 @@ function buildSnapshot() {
     people, lang,
     clientName, clientCity,
     history,
-    _v: 19,
+    clients, schedule, invoices, settings,
+    _v: 20,
     _ts: Date.now()
   };
 }
@@ -1064,6 +1306,7 @@ function saveToLocalStorage() {
       people, lang,
       clientName, clientCity,
       history,
+      clients, schedule, invoices, settings,
       _ts: Date.now()
     }));
   } catch(e) { console.warn('localStorage save failed', e); }
@@ -1081,6 +1324,10 @@ function loadFromLocalStorage() {
     clientName = d.clientName || '';
     clientCity = d.clientCity || '';
     history = Array.isArray(d.history) ? d.history : [];
+    clients = Array.isArray(d.clients) ? d.clients : [];
+    schedule = Array.isArray(d.schedule) ? d.schedule : [];
+    invoices = Array.isArray(d.invoices) ? d.invoices : [];
+    if (d.settings && typeof d.settings === 'object') settings = Object.assign(settings, d.settings);
     return true;
   } catch(e) { return false; }
 }
@@ -1154,19 +1401,33 @@ function restoreBackup(){
 // TABS & LANGUAGE
 // ============================================================
 function showTab(tab){
-  ['cardapio','lista','historico','receitas'].forEach(t=>{
-    document.getElementById('tab-'+t).style.display=t===tab?'block':'none';
-    document.getElementById('btn-'+t).classList.toggle('active',t===tab);
+  const allTabs = ['cardapio','lista','historico','receitas','clientes','schedule','invoice'];
+  allTabs.forEach(t=>{
+    const tabEl = document.getElementById('tab-'+t);
+    if (tabEl) tabEl.style.display = t===tab?'block':'none';
+    const btnEl = document.getElementById('btn-'+t);
+    if (btnEl) btnEl.classList.toggle('active', t===tab);
+  });
+  // Drawer items
+  document.querySelectorAll('.drawer-item').forEach(el => {
+    el.classList.toggle('active', el.dataset.tab === tab);
   });
   if(tab==='receitas'){renderRecipeList();renderRecipeDetail();}
   if(tab==='historico'){renderHistory();}
-  document.getElementById('summary-bar').style.display=(tab==='cardapio'&&selectedDishes.size>0)?'flex':'none';
+  if(tab==='clientes'){renderClients();}
+  if(tab==='schedule'){renderSchedule();}
+  if(tab==='invoice'){renderInvoicesList();}
+  const sbar = document.getElementById('summary-bar');
+  if (sbar) sbar.style.display = (tab==='cardapio' && selectedDishes.size>0) ? 'flex' : 'none';
   if(tab==='cardapio')updateSummaryBar();
+  // Fechar drawer no mobile
+  closeDrawer();
   window.scrollTo(0,0);
 }
 function applyLang() {
   document.querySelectorAll('[data-pt]').forEach(el=>{
-    el.textContent = lang==='pt' ? el.getAttribute('data-pt') : el.getAttribute('data-en');
+    const txt = lang==='pt' ? el.getAttribute('data-pt') : el.getAttribute('data-en');
+    if (txt !== null && txt !== undefined) el.textContent = txt;
   });
   const si=document.getElementById('recipe-search');
   if(si){si.placeholder=lang==='pt'?'🔍 Buscar receita...':'🔍 Search recipe...';}
@@ -1179,6 +1440,842 @@ function _origToggleLang(){
   if(document.getElementById('tab-receitas').style.display==='block'){renderRecipeList();renderRecipeDetail();}
   if(document.getElementById('tab-historico').style.display==='block'){renderHistory();}
 }
+
+
+// ============================================================
+// V20 — DRAWER (Hamburger Menu)
+// ============================================================
+function toggleDrawer() {
+  document.getElementById('side-drawer').classList.toggle('open');
+  document.getElementById('drawer-backdrop').classList.toggle('open');
+}
+function closeDrawer() {
+  document.getElementById('side-drawer').classList.remove('open');
+  document.getElementById('drawer-backdrop').classList.remove('open');
+}
+
+// ============================================================
+// V20 — UTILITIES
+// ============================================================
+function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 8); }
+function currencySymbol(code) {
+  const map = { USD: '$', BRL: 'R$', CAD: 'C$', EUR: '€', GBP: '£' };
+  return map[code || settings.currency] || '$';
+}
+function formatMoney(value) {
+  const num = Number(value) || 0;
+  return currencySymbol() + num.toFixed(2);
+}
+function formatDateBR(iso) {
+  if (!iso) return '';
+  const d = new Date(iso + 'T00:00:00');
+  if (isNaN(d)) return iso;
+  return d.toLocaleDateString(lang === 'pt' ? 'pt-BR' : 'en-US');
+}
+function todayISO() {
+  const d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+}
+
+// ============================================================
+// V20 — BRANDING (apply customized header)
+// ============================================================
+function applyBranding() {
+  const name = settings.chefName || 'Chef Silmara';
+  const subtitle = (settings.chefSubtitle || 'Personal Chef') + (settings.chefLocation ? ' · ' + settings.chefLocation : '');
+  const el1 = document.getElementById('brand-name'); if (el1) el1.textContent = name;
+  const el2 = document.getElementById('brand-subtitle'); if (el2) el2.textContent = subtitle;
+  const el3 = document.getElementById('drawer-brand-name'); if (el3) el3.textContent = name;
+  const el4 = document.getElementById('drawer-brand-subtitle'); if (el4) el4.textContent = settings.chefSubtitle || 'Personal Chef';
+  document.title = name + ' — ' + (settings.chefSubtitle || 'Personal Chef');
+}
+
+// ============================================================
+// V20 — SETTINGS MODAL
+// ============================================================
+function openSettingsModal() {
+  document.getElementById('set-chef-name').value = settings.chefName || '';
+  document.getElementById('set-chef-subtitle').value = settings.chefSubtitle || '';
+  document.getElementById('set-chef-location').value = settings.chefLocation || '';
+  document.getElementById('set-currency').value = settings.currency || 'USD';
+  document.getElementById('set-pay-zelle').value = settings.payZelle || '';
+  document.getElementById('set-pay-venmo').value = settings.payVenmo || '';
+  document.getElementById('set-pay-other').value = settings.payOther || '';
+  document.getElementById('settings-modal').classList.add('open');
+}
+function closeSettingsModal() { document.getElementById('settings-modal').classList.remove('open'); }
+function saveSettings() {
+  settings.chefName = document.getElementById('set-chef-name').value.trim() || 'Chef Silmara';
+  settings.chefSubtitle = document.getElementById('set-chef-subtitle').value.trim() || 'Personal Chef';
+  settings.chefLocation = document.getElementById('set-chef-location').value.trim();
+  settings.currency = document.getElementById('set-currency').value;
+  settings.payZelle = document.getElementById('set-pay-zelle').value.trim();
+  settings.payVenmo = document.getElementById('set-pay-venmo').value.trim();
+  settings.payOther = document.getElementById('set-pay-other').value.trim();
+  applyBranding();
+  saveToLocalStorage();
+  closeSettingsModal();
+  showToast(lang === 'pt' ? '✅ Ajustes salvos' : '✅ Settings saved');
+}
+
+// ============================================================
+// V20 — CLIENTS
+// ============================================================
+function renderClients() {
+  const q = (document.getElementById('client-search') || {}).value || '';
+  const ql = q.toLowerCase().trim();
+  const list = document.getElementById('clients-list');
+  if (!list) return;
+  
+  // Birthday banner (current month)
+  const now = new Date();
+  const thisMonth = now.getMonth() + 1; // 1-12
+  const bdayBanner = document.getElementById('client-bday-banner');
+  const bdaysThisMonth = clients.filter(c => {
+    if (!c.birthday) return false;
+    const m = parseInt(c.birthday.split('-')[1], 10);
+    return m === thisMonth;
+  });
+  if (bdaysThisMonth.length && bdayBanner) {
+    const monthNames = lang === 'pt'
+      ? ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro']
+      : ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    const list = bdaysThisMonth.map(c => {
+      const day = parseInt(c.birthday.split('-')[2], 10);
+      return `🎂 ${c.name} — ${day}`;
+    }).join(' &nbsp; · &nbsp; ');
+    bdayBanner.innerHTML = `<div class="note-box" style="background:#fff5e6;border-color:#f0c060;color:#8a5500;">${lang==='pt'?'Aniversariantes de':'Birthdays in'} ${monthNames[thisMonth-1]}: ${list}</div>`;
+    bdayBanner.style.display = 'block';
+  } else if (bdayBanner) {
+    bdayBanner.style.display = 'none';
+  }
+  
+  const filtered = clients.filter(c => 
+    !ql || c.name.toLowerCase().includes(ql) || (c.city||'').toLowerCase().includes(ql) || (c.email||'').toLowerCase().includes(ql)
+  );
+  filtered.sort((a,b) => a.name.localeCompare(b.name));
+
+  if (!filtered.length) {
+    list.innerHTML = `<div class="empty-state" style="grid-column:1/-1;"><div class="icon">👥</div><p>${lang==='pt'?'Nenhum cliente cadastrado ainda. Clique em "Novo cliente" para começar.':'No clients yet. Click "New client" to start.'}</p></div>`;
+    return;
+  }
+
+  list.innerHTML = filtered.map(c => {
+    // Histórico do cliente (match por nome, case-insensitive)
+    const ch = history.filter(h => (h.clientName||'').toLowerCase() === c.name.toLowerCase()).slice(0, 4);
+    const histHtml = ch.length ? `
+      <div class="client-history-list">
+        <h4>${lang==='pt'?'Histórico':'History'}</h4>
+        ${ch.map(h => `<div class="client-history-item"><span class="date">${h.date}</span> ${h.dishes.length} ${lang==='pt'?'pratos':'dishes'}, ${h.people} ${lang==='pt'?'pessoa(s)':'person/people'}</div>`).join('')}
+      </div>` : '';
+    
+    // Birthday badge
+    let bdayBadge = '';
+    if (c.birthday) {
+      const m = parseInt(c.birthday.split('-')[1], 10);
+      const d = parseInt(c.birthday.split('-')[2], 10);
+      const monthsShort = lang==='pt'?['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez']:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      bdayBadge = `<span class="client-bday-badge">🎂 ${d} ${monthsShort[m-1]}</span>`;
+    }
+    
+    return `<div class="client-card" onclick="openClientModal('${c.id}')">
+      <h3>${escapeHTML(c.name)}</h3>
+      <div class="meta">
+        ${c.phone ? `📱 ${escapeHTML(c.phone)}<br>` : ''}
+        ${c.email ? `✉️ ${escapeHTML(c.email)}<br>` : ''}
+        ${c.city ? `📍 ${escapeHTML(c.city)}` : ''}
+      </div>
+      ${bdayBadge}
+      ${histHtml}
+    </div>`;
+  }).join('');
+}
+
+function escapeHTML(s) {
+  if (!s) return '';
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function openClientModal(id) {
+  editingClientId = id || null;
+  const modal = document.getElementById('client-modal');
+  const titleEl = document.getElementById('client-modal-title');
+  const delBtn = document.getElementById('cli-delete-btn');
+  if (id) {
+    const c = clients.find(x => x.id === id);
+    if (!c) return;
+    titleEl.textContent = lang==='pt' ? 'Editar cliente' : 'Edit client';
+    document.getElementById('cli-name').value = c.name || '';
+    document.getElementById('cli-phone').value = c.phone || '';
+    document.getElementById('cli-email').value = c.email || '';
+    document.getElementById('cli-address').value = c.address || '';
+    document.getElementById('cli-city').value = c.city || '';
+    document.getElementById('cli-birthday').value = c.birthday || '';
+    document.getElementById('cli-notes').value = c.notes || '';
+    delBtn.style.display = 'inline-block';
+  } else {
+    titleEl.textContent = lang==='pt' ? 'Novo cliente' : 'New client';
+    document.getElementById('cli-name').value = '';
+    document.getElementById('cli-phone').value = '';
+    document.getElementById('cli-email').value = '';
+    document.getElementById('cli-address').value = '';
+    document.getElementById('cli-city').value = '';
+    document.getElementById('cli-birthday').value = '';
+    document.getElementById('cli-notes').value = '';
+    delBtn.style.display = 'none';
+  }
+  modal.classList.add('open');
+}
+function closeClientModal() { document.getElementById('client-modal').classList.remove('open'); editingClientId = null; }
+function saveClient() {
+  const name = document.getElementById('cli-name').value.trim();
+  if (!name) {
+    showToast(lang==='pt' ? '❌ Nome é obrigatório' : '❌ Name is required', true);
+    return;
+  }
+  const data = {
+    name,
+    phone: document.getElementById('cli-phone').value.trim(),
+    email: document.getElementById('cli-email').value.trim(),
+    address: document.getElementById('cli-address').value.trim(),
+    city: document.getElementById('cli-city').value.trim(),
+    birthday: document.getElementById('cli-birthday').value,
+    notes: document.getElementById('cli-notes').value.trim(),
+  };
+  if (editingClientId) {
+    const c = clients.find(x => x.id === editingClientId);
+    if (c) Object.assign(c, data);
+  } else {
+    clients.push(Object.assign({ id: uid(), createdAt: Date.now() }, data));
+  }
+  saveToLocalStorage();
+  renderClients();
+  closeClientModal();
+  showToast(lang==='pt' ? '✅ Cliente salvo' : '✅ Client saved');
+}
+function deleteCurrentClient() {
+  if (!editingClientId) return;
+  if (!confirm(lang==='pt' ? 'Excluir este cliente?' : 'Delete this client?')) return;
+  clients = clients.filter(c => c.id !== editingClientId);
+  saveToLocalStorage();
+  renderClients();
+  closeClientModal();
+  showToast(lang==='pt' ? '🗑️ Cliente excluído' : '🗑️ Client deleted');
+}
+
+// ============================================================
+// V20 — SCHEDULE
+// ============================================================
+function renderSchedule() {
+  const isMobile = window.innerWidth <= 720;
+  const desktopView = document.getElementById('schedule-desktop-view');
+  const mobileView = document.getElementById('schedule-mobile-view');
+  const mobileTabs = document.getElementById('sched-mobile-tabs');
+  if (isMobile) {
+    if (desktopView) desktopView.style.display = 'none';
+    if (mobileView) mobileView.style.display = 'block';
+    if (mobileTabs) mobileTabs.style.display = 'flex';
+    renderScheduleMobile();
+  } else {
+    if (desktopView) desktopView.style.display = 'block';
+    if (mobileView) mobileView.style.display = 'none';
+    if (mobileTabs) mobileTabs.style.display = 'none';
+    renderScheduleDesktop();
+  }
+}
+
+function renderScheduleDesktop() {
+  const monthNames = lang==='pt' 
+    ? ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro']
+    : ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const weekdays = lang==='pt' ? ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'] : ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  
+  document.getElementById('schedule-month-label').textContent = `${monthNames[scheduleViewMonth]} ${scheduleViewYear}`;
+  
+  const wkHtml = weekdays.map(d => `<div>${d}</div>`).join('');
+  document.getElementById('cal-weekdays').innerHTML = wkHtml;
+  
+  // Build days grid
+  const firstDay = new Date(scheduleViewYear, scheduleViewMonth, 1);
+  const daysInMonth = new Date(scheduleViewYear, scheduleViewMonth + 1, 0).getDate();
+  const startDayOfWeek = firstDay.getDay();
+  const today = new Date();
+  const isThisMonth = today.getMonth() === scheduleViewMonth && today.getFullYear() === scheduleViewYear;
+  
+  let html = '';
+  // Empty cells before day 1
+  for (let i = 0; i < startDayOfWeek; i++) {
+    const prevMonthDays = new Date(scheduleViewYear, scheduleViewMonth, 0).getDate();
+    const dayNum = prevMonthDays - startDayOfWeek + i + 1;
+    html += `<div class="cal-day other-month"><span class="day-num">${dayNum}</span></div>`;
+  }
+  // Days of the month
+  for (let d = 1; d <= daysInMonth; d++) {
+    const dateISO = `${scheduleViewYear}-${String(scheduleViewMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const events = getEventsForDate(dateISO);
+    const isToday = isThisMonth && d === today.getDate();
+    const eventsHtml = events.map((e, idx) => {
+      const colorClass = ['', 'alt', 'alt2', 'alt3'][hashStr(e.clientName) % 4];
+      return `<div class="cal-event ${colorClass}" onclick="event.stopPropagation();openScheduleEventModal('${e.id}')" title="${escapeHTML(e.clientName)} ${e.time}">${e.time} ${escapeHTML(e.clientName.split(' ')[0])}</div>`;
+    }).join('');
+    html += `<div class="cal-day ${isToday?'today':''}" onclick="openScheduleEventModalForDate('${dateISO}')">
+      <span class="day-num">${d}</span>
+      ${eventsHtml}
+    </div>`;
+  }
+  // Empty cells after to complete the grid
+  const totalCells = startDayOfWeek + daysInMonth;
+  const remaining = (7 - (totalCells % 7)) % 7;
+  for (let i = 1; i <= remaining; i++) {
+    html += `<div class="cal-day other-month"><span class="day-num">${i}</span></div>`;
+  }
+  document.getElementById('cal-days').innerHTML = html;
+}
+
+function hashStr(s) {
+  let h = 0;
+  for (let i = 0; i < (s||'').length; i++) h = ((h<<5)-h) + s.charCodeAt(i);
+  return Math.abs(h);
+}
+
+function getEventsForDate(dateISO) {
+  const target = new Date(dateISO + 'T00:00:00');
+  const targetDayOfWeek = target.getDay();
+  const events = [];
+  schedule.forEach(s => {
+    if (s.type === 'once') {
+      if (s.date === dateISO) events.push(s);
+    } else if (s.type === 'weekly') {
+      if (parseInt(s.dayOfWeek, 10) !== targetDayOfWeek) return;
+      if (s.startDate && new Date(s.startDate + 'T00:00:00') > target) return;
+      if (s.endDate && new Date(s.endDate + 'T00:00:00') < target) return;
+      events.push(s);
+    } else if (s.type === 'biweekly') {
+      if (parseInt(s.dayOfWeek, 10) !== targetDayOfWeek) return;
+      if (!s.startDate) return;
+      const start = new Date(s.startDate + 'T00:00:00');
+      if (start > target) return;
+      if (s.endDate && new Date(s.endDate + 'T00:00:00') < target) return;
+      const diffWeeks = Math.floor((target - start) / (7 * 24 * 60 * 60 * 1000));
+      if (diffWeeks % 2 === 0) events.push(s);
+    } else if (s.type === 'monthly') {
+      if (!s.startDate) return;
+      const start = new Date(s.startDate + 'T00:00:00');
+      if (start > target) return;
+      if (s.endDate && new Date(s.endDate + 'T00:00:00') < target) return;
+      if (start.getDate() === target.getDate()) events.push(s);
+    }
+  });
+  return events.sort((a,b) => (a.time||'').localeCompare(b.time||''));
+}
+
+function schedulePrevMonth() {
+  scheduleViewMonth--;
+  if (scheduleViewMonth < 0) { scheduleViewMonth = 11; scheduleViewYear--; }
+  renderSchedule();
+}
+function scheduleNextMonth() {
+  scheduleViewMonth++;
+  if (scheduleViewMonth > 11) { scheduleViewMonth = 0; scheduleViewYear++; }
+  renderSchedule();
+}
+
+function setMobileSchedView(v) {
+  mobileSchedView = v;
+  document.querySelectorAll('#sched-mobile-tabs button').forEach((b, i) => {
+    b.classList.toggle('active', ['week','next','recurring'][i] === v);
+  });
+  renderScheduleMobile();
+}
+
+function renderScheduleMobile() {
+  const container = document.getElementById('schedule-mobile-view');
+  if (!container) return;
+  const now = new Date();
+  const startOfWeek = new Date(now);
+  startOfWeek.setDate(now.getDate() - now.getDay());
+  startOfWeek.setHours(0,0,0,0);
+  
+  if (mobileSchedView === 'recurring') {
+    const recurring = schedule.filter(s => s.type !== 'once');
+    if (!recurring.length) {
+      container.innerHTML = `<div class="empty-state"><div class="icon">📅</div><p>${lang==='pt'?'Sem compromissos recorrentes':'No recurring appointments'}</p></div>`;
+      return;
+    }
+    const weekdayNames = lang==='pt'?['Dom','Seg','Ter','Qua','Qui','Sex','Sáb']:['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    const typeNames = lang==='pt'?{weekly:'Semanal',biweekly:'Quinzenal',monthly:'Mensal'}:{weekly:'Weekly',biweekly:'Biweekly',monthly:'Monthly'};
+    container.innerHTML = recurring.map(s => `
+      <div class="sched-day-group">
+        <div class="sched-event-row" onclick="openScheduleEventModal('${s.id}')">
+          <div class="sched-event-time">${s.time||''}</div>
+          <div class="sched-event-name">
+            ${escapeHTML(s.clientName)}
+            <div class="sched-event-meta">${typeNames[s.type]||s.type} · ${weekdayNames[s.dayOfWeek||0]}</div>
+          </div>
+        </div>
+      </div>
+    `).join('');
+    return;
+  }
+  
+  // 'week' or 'next'
+  const weekOffset = mobileSchedView === 'next' ? 7 : 0;
+  const days = [];
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(startOfWeek);
+    d.setDate(startOfWeek.getDate() + i + weekOffset);
+    const iso = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+    days.push({ d, iso, events: getEventsForDate(iso) });
+  }
+  const hasAny = days.some(x => x.events.length > 0);
+  if (!hasAny) {
+    container.innerHTML = `<div class="empty-state"><div class="icon">📅</div><p>${lang==='pt'?'Sem compromissos':'No appointments'}</p></div>`;
+    return;
+  }
+  const weekdayNames = lang==='pt'?['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado']:['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  container.innerHTML = days.filter(x => x.events.length).map(x => `
+    <div class="sched-day-group">
+      <h4>${weekdayNames[x.d.getDay()]}, ${x.d.getDate()}/${x.d.getMonth()+1}</h4>
+      ${x.events.map(e => `
+        <div class="sched-event-row" onclick="openScheduleEventModal('${e.id}')">
+          <div class="sched-event-time">${e.time||''}</div>
+          <div class="sched-event-name">${escapeHTML(e.clientName)}</div>
+        </div>
+      `).join('')}
+    </div>
+  `).join('');
+}
+
+function openScheduleEventModalForDate(dateISO) {
+  openScheduleEventModal(null, dateISO);
+}
+
+function openScheduleEventModal(id, presetDate) {
+  editingScheduleId = id || null;
+  const modal = document.getElementById('schedule-event-modal');
+  const delBtn = document.getElementById('sched-delete-btn');
+  const titleEl = document.getElementById('sched-modal-title');
+  
+  // Populate client suggestions
+  const dl = document.getElementById('sched-client-options');
+  dl.innerHTML = clients.map(c => `<option value="${escapeHTML(c.name)}">`).join('');
+  
+  if (id) {
+    const s = schedule.find(x => x.id === id);
+    if (!s) return;
+    titleEl.textContent = lang==='pt'?'Editar compromisso':'Edit appointment';
+    document.getElementById('sched-client-name').value = s.clientName || '';
+    document.getElementById('sched-type').value = s.type || 'once';
+    document.getElementById('sched-time').value = s.time || '14:00';
+    document.getElementById('sched-date').value = s.date || '';
+    document.getElementById('sched-day-of-week').value = s.dayOfWeek != null ? s.dayOfWeek : '3';
+    document.getElementById('sched-start-date').value = s.startDate || '';
+    document.getElementById('sched-end-date').value = s.endDate || '';
+    document.getElementById('sched-notes').value = s.notes || '';
+    delBtn.style.display = 'inline-block';
+  } else {
+    titleEl.textContent = lang==='pt'?'Novo compromisso':'New appointment';
+    document.getElementById('sched-client-name').value = '';
+    document.getElementById('sched-type').value = 'once';
+    document.getElementById('sched-time').value = '14:00';
+    document.getElementById('sched-date').value = presetDate || todayISO();
+    document.getElementById('sched-day-of-week').value = '3';
+    document.getElementById('sched-start-date').value = todayISO();
+    document.getElementById('sched-end-date').value = '';
+    document.getElementById('sched-notes').value = '';
+    delBtn.style.display = 'none';
+  }
+  updateScheduleFormVisibility();
+  modal.classList.add('open');
+}
+function closeScheduleEventModal() { document.getElementById('schedule-event-modal').classList.remove('open'); editingScheduleId = null; }
+function updateScheduleFormVisibility() {
+  const type = document.getElementById('sched-type').value;
+  document.getElementById('sched-once-row').style.display = type === 'once' ? '' : 'none';
+  document.getElementById('sched-recurring-row').style.display = type === 'once' ? 'none' : '';
+  document.getElementById('sched-end-row').style.display = type === 'once' ? 'none' : '';
+}
+function saveScheduleEvent() {
+  const clientName = document.getElementById('sched-client-name').value.trim();
+  const type = document.getElementById('sched-type').value;
+  if (!clientName) {
+    showToast(lang==='pt'?'❌ Cliente é obrigatório':'❌ Client is required', true);
+    return;
+  }
+  const data = {
+    clientName,
+    type,
+    time: document.getElementById('sched-time').value,
+    notes: document.getElementById('sched-notes').value.trim()
+  };
+  if (type === 'once') {
+    data.date = document.getElementById('sched-date').value;
+    if (!data.date) { showToast(lang==='pt'?'❌ Data é obrigatória':'❌ Date is required', true); return; }
+  } else {
+    data.dayOfWeek = parseInt(document.getElementById('sched-day-of-week').value, 10);
+    data.startDate = document.getElementById('sched-start-date').value;
+    data.endDate = document.getElementById('sched-end-date').value || null;
+  }
+  if (editingScheduleId) {
+    const s = schedule.find(x => x.id === editingScheduleId);
+    if (s) Object.assign(s, data);
+  } else {
+    schedule.push(Object.assign({ id: uid(), createdAt: Date.now() }, data));
+  }
+  saveToLocalStorage();
+  renderSchedule();
+  closeScheduleEventModal();
+  showToast(lang==='pt'?'✅ Compromisso salvo':'✅ Appointment saved');
+}
+function deleteCurrentScheduleEvent() {
+  if (!editingScheduleId) return;
+  if (!confirm(lang==='pt'?'Excluir este compromisso?':'Delete this appointment?')) return;
+  schedule = schedule.filter(s => s.id !== editingScheduleId);
+  saveToLocalStorage();
+  renderSchedule();
+  closeScheduleEventModal();
+  showToast(lang==='pt'?'🗑️ Compromisso excluído':'🗑️ Appointment deleted');
+}
+
+// ============================================================
+// V20 — INVOICES
+// ============================================================
+function renderInvoicesList() {
+  document.getElementById('invoice-list-view').style.display = 'block';
+  document.getElementById('invoice-form-view').style.display = 'none';
+  document.getElementById('invoice-output-view').style.display = 'none';
+  const list = document.getElementById('invoices-list');
+  if (!invoices.length) {
+    list.innerHTML = `<div class="empty-state"><div class="icon">🧾</div><p>${lang==='pt'?'Nenhuma fatura ainda. Clique em "Nova fatura" para começar.':'No invoices yet. Click "New invoice" to start.'}</p></div>`;
+    return;
+  }
+  const sorted = [...invoices].sort((a,b) => (b.date||'').localeCompare(a.date||''));
+  list.innerHTML = sorted.map(inv => {
+    const total = (inv.items||[]).reduce((s, it) => s + (Number(it.value)||0), 0);
+    const statusKey = (inv.status||'pendente').toLowerCase();
+    const statusLabel = lang==='pt' 
+      ? (statusKey === 'pago' ? 'Pago' : 'Pendente')
+      : (statusKey === 'pago' || statusKey === 'paid' ? 'Paid' : 'Pending');
+    const statusClass = (statusKey === 'pago' || statusKey === 'paid') ? 'pago' : 'pendente';
+    return `<div class="invoice-list-card" onclick="viewInvoice('${inv.id}')">
+      <div class="inv-card-info">
+        <h4>${escapeHTML(inv.clientName || '—')}</h4>
+        <div class="inv-meta">${formatDateBR(inv.date)} · ${inv.people||1} ${lang==='pt'?'pessoa(s)':'person/people'}${inv.clientCity?' · '+escapeHTML(inv.clientCity):''}</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+        <span class="inv-card-status ${statusClass}">${statusLabel}</span>
+        <div class="inv-card-total">${formatMoney(total)}</div>
+        <button class="btn" style="font-size:0.75rem;padding:5px 10px;" onclick="event.stopPropagation();toggleInvoiceStatus('${inv.id}')">${statusClass==='pago'?(lang==='pt'?'↺ Marcar Pendente':'↺ Mark Pending'):(lang==='pt'?'✓ Marcar Pago':'✓ Mark Paid')}</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleInvoiceStatus(id) {
+  const inv = invoices.find(x => x.id === id);
+  if (!inv) return;
+  const cur = (inv.status||'pendente').toLowerCase();
+  inv.status = (cur === 'pago' || cur === 'paid') ? 'pendente' : 'pago';
+  saveToLocalStorage();
+  renderInvoicesList();
+}
+
+function openInvoiceForm(id) {
+  editingInvoiceId = id || null;
+  document.getElementById('invoice-list-view').style.display = 'none';
+  document.getElementById('invoice-output-view').style.display = 'none';
+  const view = document.getElementById('invoice-form-view');
+  view.style.display = 'block';
+
+  let inv;
+  if (id) {
+    inv = invoices.find(x => x.id === id);
+    if (!inv) return;
+  } else {
+    inv = {
+      clientName: '',
+      clientCity: '',
+      date: todayISO(),
+      people: 1,
+      personalShopping: false,
+      items: [{ name: lang==='pt'?'Personal Chef':'Personal Chef', value: '' }],
+      status: 'pendente',
+      paymentMethod: 'Zelle',
+      notes: ''
+    };
+  }
+  
+  const clientOptions = clients.map(c => `<option value="${escapeHTML(c.name)}" data-city="${escapeHTML(c.city||'')}">`).join('');
+  
+  view.innerHTML = `
+    <h2 class="section-title">${id ? (lang==='pt'?'Editar fatura':'Edit invoice') : (lang==='pt'?'Nova fatura':'New invoice')}</h2>
+    <button class="btn" onclick="renderInvoicesList()">← ${lang==='pt'?'Voltar':'Back'}</button>
+    
+    <div style="background:white;border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-top:14px;box-shadow:var(--shadow);">
+      <div class="form-row">
+        <div class="form-group">
+          <label>${lang==='pt'?'Cliente':'Client'}</label>
+          <input type="text" id="inv-client-name" list="inv-client-options" value="${escapeHTML(inv.clientName||'')}" oninput="onInvoiceClientChange()">
+          <datalist id="inv-client-options">${clientOptions}</datalist>
+        </div>
+        <div class="form-group">
+          <label>${lang==='pt'?'Cidade':'City'}</label>
+          <input type="text" id="inv-client-city" value="${escapeHTML(inv.clientCity||'')}">
+        </div>
+      </div>
+      <div class="form-row-3">
+        <div class="form-group">
+          <label>${lang==='pt'?'Data':'Date'}</label>
+          <input type="date" id="inv-date" value="${inv.date||todayISO()}">
+        </div>
+        <div class="form-group">
+          <label>${lang==='pt'?'Pessoas':'People'}</label>
+          <input type="number" id="inv-people" min="1" value="${inv.people||1}">
+        </div>
+        <div class="form-group">
+          <label>${lang==='pt'?'Personal Shopping':'Personal Shopping'}</label>
+          <select id="inv-ps">
+            <option value="no" ${!inv.personalShopping?'selected':''}>${lang==='pt'?'Não':'No'}</option>
+            <option value="yes" ${inv.personalShopping?'selected':''}>${lang==='pt'?'Sim':'Yes'}</option>
+          </select>
+        </div>
+      </div>
+      
+      <h4 style="font-family:'Playfair Display',serif;color:var(--green-dark);margin-top:18px;margin-bottom:10px;">${lang==='pt'?'Itens cobrados':'Items'}</h4>
+      <div id="inv-items-container"></div>
+      <button class="btn" style="margin-top:6px;" onclick="addInvoiceItem()">➕ ${lang==='pt'?'Adicionar item':'Add item'}</button>
+      
+      <div class="inv-total-display" id="inv-total-display">${formatMoney(0)}</div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label>${lang==='pt'?'Status':'Status'}</label>
+          <select id="inv-status">
+            <option value="pendente" ${inv.status==='pendente'?'selected':''}>${lang==='pt'?'Pendente':'Pending'}</option>
+            <option value="pago" ${inv.status==='pago'?'selected':''}>${lang==='pt'?'Pago':'Paid'}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>${lang==='pt'?'Forma de pagamento':'Payment method'}</label>
+          <select id="inv-payment">
+            <option value="Zelle">Zelle</option>
+            <option value="Venmo">Venmo</option>
+            <option value="Cash">${lang==='pt'?'Dinheiro':'Cash'}</option>
+            <option value="Pix">Pix</option>
+            <option value="Other">${lang==='pt'?'Outro':'Other'}</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>${lang==='pt'?'Observações':'Notes'}</label>
+        <textarea id="inv-notes">${escapeHTML(inv.notes||'')}</textarea>
+      </div>
+      
+      <div class="modal-actions" style="margin-top:18px;">
+        ${id ? `<button class="btn" style="color:var(--red-accent);" onclick="deleteInvoice('${id}')">${lang==='pt'?'Excluir':'Delete'}</button>` : ''}
+        <div style="flex:1;"></div>
+        <button class="btn" onclick="renderInvoicesList()">${lang==='pt'?'Cancelar':'Cancel'}</button>
+        <button class="btn primary" onclick="saveInvoice()">${lang==='pt'?'Salvar':'Save'}</button>
+      </div>
+    </div>
+  `;
+  
+  // Set selected values
+  document.getElementById('inv-payment').value = inv.paymentMethod || 'Zelle';
+  
+  // Initialize items
+  if (!inv.items || !inv.items.length) {
+    inv.items = [{ name: lang==='pt'?'Personal Chef':'Personal Chef', value: '' }];
+  }
+  inv.items.forEach((it, i) => addInvoiceItem(it.name, it.value));
+  updateInvoiceTotal();
+}
+
+function onInvoiceClientChange() {
+  const name = document.getElementById('inv-client-name').value;
+  const found = clients.find(c => c.name === name);
+  if (found && found.city) {
+    document.getElementById('inv-client-city').value = found.city;
+  }
+}
+
+let invItemCounter = 0;
+function addInvoiceItem(name, value) {
+  const container = document.getElementById('inv-items-container');
+  if (!container) return;
+  // se chamado pela primeira vez sem args, garante 1 item já existir
+  if (typeof name === 'undefined' && container.children.length === 0) {
+    name = lang==='pt'?'Personal Chef':'Personal Chef';
+    value = '';
+  }
+  const idx = ++invItemCounter;
+  const row = document.createElement('div');
+  row.className = 'inv-item-row';
+  row.innerHTML = `
+    <input type="text" placeholder="${lang==='pt'?'Item':'Item'}" value="${escapeHTML(name||'')}" data-inv-name>
+    <input type="number" step="0.01" placeholder="0.00" value="${value||''}" data-inv-value oninput="updateInvoiceTotal()">
+    <button class="del-row" onclick="this.parentElement.remove();updateInvoiceTotal();" title="${lang==='pt'?'Remover':'Remove'}">×</button>
+  `;
+  container.appendChild(row);
+}
+
+function updateInvoiceTotal() {
+  const rows = document.querySelectorAll('#inv-items-container .inv-item-row');
+  let total = 0;
+  rows.forEach(r => {
+    const v = r.querySelector('[data-inv-value]');
+    total += Number(v.value) || 0;
+  });
+  const tot = document.getElementById('inv-total-display');
+  if (tot) tot.textContent = formatMoney(total);
+}
+
+function saveInvoice() {
+  const clientName = document.getElementById('inv-client-name').value.trim();
+  if (!clientName) { showToast(lang==='pt'?'❌ Cliente é obrigatório':'❌ Client is required', true); return; }
+  const items = [];
+  document.querySelectorAll('#inv-items-container .inv-item-row').forEach(r => {
+    const name = r.querySelector('[data-inv-name]').value.trim();
+    const value = parseFloat(r.querySelector('[data-inv-value]').value) || 0;
+    if (name) items.push({ name, value });
+  });
+  const data = {
+    clientName,
+    clientCity: document.getElementById('inv-client-city').value.trim(),
+    date: document.getElementById('inv-date').value || todayISO(),
+    people: parseInt(document.getElementById('inv-people').value, 10) || 1,
+    personalShopping: document.getElementById('inv-ps').value === 'yes',
+    items,
+    status: document.getElementById('inv-status').value,
+    paymentMethod: document.getElementById('inv-payment').value,
+    notes: document.getElementById('inv-notes').value.trim()
+  };
+  if (editingInvoiceId) {
+    const inv = invoices.find(x => x.id === editingInvoiceId);
+    if (inv) Object.assign(inv, data);
+  } else {
+    invoices.push(Object.assign({ id: uid(), createdAt: Date.now() }, data));
+  }
+  saveToLocalStorage();
+  viewInvoice(editingInvoiceId || invoices[invoices.length-1].id);
+  showToast(lang==='pt'?'✅ Fatura salva':'✅ Invoice saved');
+}
+
+function deleteInvoice(id) {
+  if (!confirm(lang==='pt'?'Excluir esta fatura?':'Delete this invoice?')) return;
+  invoices = invoices.filter(x => x.id !== id);
+  saveToLocalStorage();
+  renderInvoicesList();
+  showToast(lang==='pt'?'🗑️ Fatura excluída':'🗑️ Invoice deleted');
+}
+
+function viewInvoice(id) {
+  const inv = invoices.find(x => x.id === id);
+  if (!inv) return renderInvoicesList();
+  editingInvoiceId = id;
+  document.getElementById('invoice-list-view').style.display = 'none';
+  document.getElementById('invoice-form-view').style.display = 'none';
+  const view = document.getElementById('invoice-output-view');
+  view.style.display = 'block';
+  
+  const total = (inv.items||[]).reduce((s, it) => s + (Number(it.value)||0), 0);
+  const psLabel = inv.personalShopping ? (lang==='pt'?'Sim':'Yes') : (lang==='pt'?'Não':'No');
+  const statusKey = (inv.status||'pendente').toLowerCase();
+  const isPaid = statusKey === 'pago' || statusKey === 'paid';
+  const statusLabel = isPaid 
+    ? (lang==='pt'?'Pago':'Paid')
+    : (lang==='pt'?'Aguardando pagamento':'Awaiting payment');
+  const statusIcon = isPaid ? '✓' : '⏳';
+  
+  // Pay details
+  let payDetails = '';
+  if (inv.paymentMethod === 'Zelle' && settings.payZelle) payDetails = settings.payZelle;
+  else if (inv.paymentMethod === 'Venmo' && settings.payVenmo) payDetails = settings.payVenmo;
+  else if (settings.payOther) payDetails = settings.payOther;
+  
+  view.innerHTML = `
+    <div class="no-print" style="display:flex;gap:10px;justify-content:flex-end;margin-bottom:14px;flex-wrap:wrap;">
+      <button class="btn" onclick="renderInvoicesList()">← ${lang==='pt'?'Voltar':'Back'}</button>
+      <button class="btn" onclick="openInvoiceForm('${id}')">✏️ ${lang==='pt'?'Editar':'Edit'}</button>
+      <button class="btn" onclick="shareInvoice('${id}')">📤 ${lang==='pt'?'Compartilhar':'Share'}</button>
+      <button class="btn primary" onclick="window.print()">🖨️ ${lang==='pt'?'Imprimir':'Print'}</button>
+    </div>
+    <div id="invoice-output">
+      <div class="invoice-card-output">
+        <div class="inv-brand">
+          <h1>${escapeHTML(settings.chefName || 'Chef Silmara')}</h1>
+          <p>${escapeHTML(settings.chefSubtitle || 'Personal Chef')}</p>
+        </div>
+        <div class="inv-client-box">
+          <div class="lbl">${lang==='pt'?'Cliente':'Client'}</div>
+          <div class="val">${escapeHTML(inv.clientName)}${inv.clientCity?' · '+escapeHTML(inv.clientCity):''}</div>
+        </div>
+        <div class="inv-stats">
+          <div><div class="lbl">${lang==='pt'?'Data do serviço':'Service date'}</div><div class="val">${formatDateBR(inv.date)}</div></div>
+          <div><div class="lbl">${lang==='pt'?'Qtd. de pessoas':'People'}</div><div class="val">${inv.people} ${lang==='pt'?(inv.people>1?'pessoas':'pessoa'):(inv.people>1?'people':'person')}</div></div>
+          <div><div class="lbl">${lang==='pt'?'Personal Shopping':'Personal Shopping'}</div><div class="val">${psLabel}</div></div>
+        </div>
+        <div class="inv-items-list">
+          <div class="inv-items-header"><span>${lang==='pt'?'Serviço / Item':'Service / Item'}</span><span>${lang==='pt'?'Valor':'Value'}</span></div>
+          ${(inv.items||[]).map(it => `<div class="inv-item-line"><span>${escapeHTML(it.name)}</span><span>${formatMoney(it.value)}</span></div>`).join('')}
+        </div>
+        <div class="inv-total-line">
+          <span class="lbl">${lang==='pt'?'Total':'Total'}</span>
+          <span class="val">${formatMoney(total)}</span>
+        </div>
+        <div class="inv-footer">
+          <div>
+            <div class="inv-pay-method">${escapeHTML(inv.paymentMethod || '')}</div>
+            ${payDetails ? `<div class="inv-pay-details">${escapeHTML(payDetails)}</div>` : ''}
+          </div>
+          <div class="inv-pay-right">
+            <div>${escapeHTML(settings.chefName || '')}</div>
+            <div class="inv-status-marker">${statusIcon} ${statusLabel}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+async function shareInvoice(id) {
+  const inv = invoices.find(x => x.id === id);
+  if (!inv) return;
+  const total = (inv.items||[]).reduce((s, it) => s + (Number(it.value)||0), 0);
+  const sym = currencySymbol();
+  const itemsTxt = (inv.items||[]).map(it => `• ${it.name}: ${sym}${(Number(it.value)||0).toFixed(2)}`).join('\n');
+  
+  let payInfo = '';
+  if (inv.paymentMethod === 'Zelle' && settings.payZelle) payInfo = `Zelle: ${settings.payZelle}`;
+  else if (inv.paymentMethod === 'Venmo' && settings.payVenmo) payInfo = `Venmo: ${settings.payVenmo}`;
+  else if (settings.payOther) payInfo = settings.payOther;
+  
+  const text = lang==='pt'
+    ? `*${settings.chefName || 'Chef Silmara'}*\n${settings.chefSubtitle || 'Personal Chef'}\n\nOlá ${inv.clientName}! Segue a fatura:\n\n📅 Data: ${formatDateBR(inv.date)}\n👥 Pessoas: ${inv.people}\n\n${itemsTxt}\n\n*Total: ${formatMoney(total)}*\n\n💳 ${payInfo}\n\nObrigada!`
+    : `*${settings.chefName || 'Chef Silmara'}*\n${settings.chefSubtitle || 'Personal Chef'}\n\nHi ${inv.clientName}! Here is your invoice:\n\n📅 Date: ${formatDateBR(inv.date)}\n👥 People: ${inv.people}\n\n${itemsTxt}\n\n*Total: ${formatMoney(total)}*\n\n💳 ${payInfo}\n\nThank you!`;
+  
+  if (navigator.share) {
+    try {
+      await navigator.share({ title: `Invoice - ${inv.clientName}`, text });
+    } catch (e) { /* user cancelled */ }
+  } else {
+    // Fallback: copy to clipboard
+    try {
+      await navigator.clipboard.writeText(text);
+      showToast(lang==='pt'?'✅ Copiado para área de transferência':'✅ Copied to clipboard');
+    } catch (e) {
+      showToast(lang==='pt'?'❌ Não foi possível compartilhar':'❌ Could not share', true);
+    }
+  }
+}
+
+// Re-render on window resize (calendar mobile vs desktop)
+window.addEventListener('resize', () => {
+  if (document.getElementById('tab-schedule') && document.getElementById('tab-schedule').style.display === 'block') {
+    renderSchedule();
+  }
+});
+
 
 // ============================================================
 // INIT
@@ -1207,17 +2304,22 @@ function _origToggleLang(){
         clientName = cloudData.clientName || '';
         clientCity = cloudData.clientCity || '';
         history = Array.isArray(cloudData.history) ? cloudData.history : [];
+        clients = Array.isArray(cloudData.clients) ? cloudData.clients : [];
+        schedule = Array.isArray(cloudData.schedule) ? cloudData.schedule : [];
+        invoices = Array.isArray(cloudData.invoices) ? cloudData.invoices : [];
+        if (cloudData.settings && typeof cloudData.settings === 'object') settings = Object.assign(settings, cloudData.settings);
         // Re-renderizar UI
         document.getElementById('people-count').textContent = people;
         document.getElementById('lang-label').textContent = lang==='pt'?'English':'Português';
         const cn = document.getElementById('client-name'); if (cn) cn.value = clientName;
         const cc = document.getElementById('client-city'); if (cc) cc.value = clientCity;
+        applyBranding();
         applyLang();
         renderMenu();
         renderRecipeEditor();
         renderHistory();
         // Persistir versão da nuvem no localStorage (sem disparar novo upload)
-        try { localStorage.setItem(LS_KEY, JSON.stringify({recipes,selectedDishes:[...selectedDishes],people,lang,clientName,clientCity,history,_ts:cloudTs})); } catch(e){}
+        try { localStorage.setItem(LS_KEY, JSON.stringify({recipes,selectedDishes:[...selectedDishes],people,lang,clientName,clientCity,history,clients,schedule,invoices,settings,_ts:cloudTs})); } catch(e){}
         setSyncStatus('synced', 'Dados da nuvem carregados');
       } else {
         // Local mais recente -> enviar pra nuvem
@@ -1232,6 +2334,7 @@ function _origToggleLang(){
   document.getElementById('lang-label').textContent = lang==='pt' ? 'English' : 'Português';
   document.getElementById('client-name').value = clientName;
   document.getElementById('client-city').value = clientCity;
+  applyBranding();
   applyLang();
   renderMenu();
   if (loaded) {
@@ -1239,5 +2342,182 @@ function _origToggleLang(){
   }
 })();
 </script>
+
+<!-- ===== MODAL: SETTINGS ===== -->
+<div class="modal-overlay" id="settings-modal">
+  <div class="modal" style="max-width: 540px;">
+    <button class="modal-close" onclick="closeSettingsModal()">×</button>
+    <h3 data-pt="⚙️ Ajustes" data-en="⚙️ Settings">⚙️ Ajustes</h3>
+    <p data-pt="Personalize a identidade e os dados de pagamento que aparecem nas faturas." data-en="Customize the identity and payment details shown on invoices.">Personalize a identidade e os dados de pagamento que aparecem nas faturas.</p>
+
+    <h4 style="font-family:'Playfair Display',serif;color:var(--green-dark);margin-top:16px;margin-bottom:10px;font-size:1rem;" data-pt="Identidade" data-en="Identity">Identidade</h4>
+
+    <div class="form-group">
+      <label data-pt="Nome do chef / negócio" data-en="Chef / business name">Nome do chef / negócio</label>
+      <input type="text" id="set-chef-name" placeholder="Silmara Cavalcanti">
+    </div>
+    <div class="form-group">
+      <label data-pt="Subtítulo (ex: Personal Chef)" data-en="Subtitle (e.g.: Personal Chef)">Subtítulo</label>
+      <input type="text" id="set-chef-subtitle" placeholder="Personal Chef">
+    </div>
+    <div class="form-group">
+      <label data-pt="Localização (ex: Bay Area)" data-en="Location (e.g.: Bay Area)">Localização</label>
+      <input type="text" id="set-chef-location" placeholder="Bay Area">
+    </div>
+
+    <h4 style="font-family:'Playfair Display',serif;color:var(--green-dark);margin-top:20px;margin-bottom:10px;font-size:1rem;" data-pt="Pagamento" data-en="Payment">Pagamento</h4>
+
+    <div class="form-group">
+      <label data-pt="Moeda" data-en="Currency">Moeda</label>
+      <select id="set-currency">
+        <option value="USD">USD ($)</option>
+        <option value="BRL">BRL (R$)</option>
+        <option value="CAD">CAD (C$)</option>
+        <option value="EUR">EUR (€)</option>
+        <option value="GBP">GBP (£)</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Zelle</label>
+      <input type="text" id="set-pay-zelle" placeholder="650 555-1234 / email@..">
+    </div>
+    <div class="form-group">
+      <label>Venmo</label>
+      <input type="text" id="set-pay-venmo" placeholder="@username">
+    </div>
+    <div class="form-group">
+      <label data-pt="Outros (Pix, conta, etc)" data-en="Other (Pix, account, etc)">Outros</label>
+      <textarea id="set-pay-other" placeholder="Pix: ... / Cash / Outros"></textarea>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn" onclick="closeSettingsModal()" data-pt="Cancelar" data-en="Cancel">Cancelar</button>
+      <button class="btn primary" onclick="saveSettings()" data-pt="Salvar" data-en="Save">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL: CLIENT ===== -->
+<div class="modal-overlay" id="client-modal">
+  <div class="modal" style="max-width: 540px;">
+    <button class="modal-close" onclick="closeClientModal()">×</button>
+    <h3 id="client-modal-title" data-pt="Novo cliente" data-en="New client">Novo cliente</h3>
+    <input type="hidden" id="client-edit-id">
+    <div class="form-group">
+      <label data-pt="Nome*" data-en="Name*">Nome*</label>
+      <input type="text" id="cli-name" required>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label data-pt="Telefone" data-en="Phone">Telefone</label>
+        <input type="tel" id="cli-phone" placeholder="(415) 555-1234">
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="cli-email" placeholder="email@exemplo.com">
+      </div>
+    </div>
+    <div class="form-group">
+      <label data-pt="Endereço" data-en="Address">Endereço</label>
+      <textarea id="cli-address"></textarea>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label data-pt="Cidade" data-en="City">Cidade</label>
+        <input type="text" id="cli-city">
+      </div>
+      <div class="form-group">
+        <label data-pt="Aniversário" data-en="Birthday">Aniversário</label>
+        <input type="date" id="cli-birthday">
+      </div>
+    </div>
+    <div class="form-group">
+      <label data-pt="Observações" data-en="Notes">Observações</label>
+      <textarea id="cli-notes" placeholder="alergias, preferências, etc."></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn" style="color:var(--red-accent);" id="cli-delete-btn" onclick="deleteCurrentClient()" data-pt="Excluir" data-en="Delete">Excluir</button>
+      <div style="flex:1;"></div>
+      <button class="btn" onclick="closeClientModal()" data-pt="Cancelar" data-en="Cancel">Cancelar</button>
+      <button class="btn primary" onclick="saveClient()" data-pt="Salvar" data-en="Save">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL: SCHEDULE EVENT ===== -->
+<div class="modal-overlay" id="schedule-event-modal">
+  <div class="modal" style="max-width: 540px;">
+    <button class="modal-close" onclick="closeScheduleEventModal()">×</button>
+    <h3 id="sched-modal-title" data-pt="Novo compromisso" data-en="New appointment">Novo compromisso</h3>
+    <input type="hidden" id="sched-edit-id">
+
+    <div class="form-group">
+      <label data-pt="Cliente" data-en="Client">Cliente</label>
+      <input type="text" id="sched-client-name" list="sched-client-options" placeholder="Nome do cliente">
+      <datalist id="sched-client-options"></datalist>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label data-pt="Tipo" data-en="Type">Tipo</label>
+        <select id="sched-type" onchange="updateScheduleFormVisibility()">
+          <option value="once" data-pt="Pontual" data-en="One-off">Pontual</option>
+          <option value="weekly" data-pt="Semanal" data-en="Weekly">Semanal</option>
+          <option value="biweekly" data-pt="Quinzenal" data-en="Biweekly">Quinzenal</option>
+          <option value="monthly" data-pt="Mensal" data-en="Monthly">Mensal</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label data-pt="Horário" data-en="Time">Horário</label>
+        <input type="time" id="sched-time" value="14:00">
+      </div>
+    </div>
+
+    <div class="form-row" id="sched-once-row">
+      <div class="form-group">
+        <label data-pt="Data" data-en="Date">Data</label>
+        <input type="date" id="sched-date">
+      </div>
+    </div>
+
+    <div class="form-row" id="sched-recurring-row" style="display:none;">
+      <div class="form-group">
+        <label data-pt="Dia da semana" data-en="Day of week">Dia da semana</label>
+        <select id="sched-day-of-week">
+          <option value="0" data-pt="Domingo" data-en="Sunday">Domingo</option>
+          <option value="1" data-pt="Segunda" data-en="Monday">Segunda</option>
+          <option value="2" data-pt="Terça" data-en="Tuesday">Terça</option>
+          <option value="3" data-pt="Quarta" data-en="Wednesday">Quarta</option>
+          <option value="4" data-pt="Quinta" data-en="Thursday">Quinta</option>
+          <option value="5" data-pt="Sexta" data-en="Friday">Sexta</option>
+          <option value="6" data-pt="Sábado" data-en="Saturday">Sábado</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label data-pt="Começa em" data-en="Start date">Começa em</label>
+        <input type="date" id="sched-start-date">
+      </div>
+    </div>
+
+    <div class="form-group" id="sched-end-row" style="display:none;">
+      <label data-pt="Repetir até (opcional)" data-en="Repeat until (optional)">Repetir até (opcional)</label>
+      <input type="date" id="sched-end-date">
+    </div>
+
+    <div class="form-group">
+      <label data-pt="Observações" data-en="Notes">Observações</label>
+      <textarea id="sched-notes"></textarea>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn" style="color:var(--red-accent);" id="sched-delete-btn" onclick="deleteCurrentScheduleEvent()" data-pt="Excluir" data-en="Delete">Excluir</button>
+      <div style="flex:1;"></div>
+      <button class="btn" onclick="closeScheduleEventModal()" data-pt="Cancelar" data-en="Cancel">Cancelar</button>
+      <button class="btn primary" onclick="saveScheduleEvent()" data-pt="Salvar" data-en="Save">Salvar</button>
+    </div>
+  </div>
+</div>
+
+
 </body>
 </html>
