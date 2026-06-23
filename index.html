@@ -731,7 +731,7 @@ let history = JSON.parse(`[{"id":1782148037963,"date":"22/06/2026","dateISO":"20
 // ============================================================
 // V20 — NEW STATE (clients, schedule, invoices, settings)
 // ============================================================
-let clients = [{"id": "mqpftcwo8j0se3", "city": "Mountain View", "name": "Izabela", "email": "", "notes": "Não usar cebola, alho, açarão e numeg.", "phone": "6503849586", "address": "314 Lavender Dr", "birthday": "", "createdAt": 1782146169240}, {"id": "mqpfvkvknm5q1v", "city": "East Palo Alto", "name": "Fanny", "email": "", "notes": "Não usar cebola. Tratamento SIBO", "phone": "4088410182", "address": "891 Tea Ct", "birthday": "", "createdAt": 1782146272880}, {"id": "mqpfzwfz8hr73e", "city": "San Jose", "name": "Fernanda", "email": "", "notes": "Não gosta de cilantro", "phone": "4083340272", "address": "816 Tina Speciale Place", "birthday": "1979-02-23", "createdAt": 1782146474495}, {"id": "mqpg1q71dli9h2", "city": "San Francisco", "name": "Marina", "email": "", "notes": "Usar pouco sal na comida", "phone": "4157209057", "address": "534 Joost Ave", "birthday": "", "createdAt": 1782146559709}];     // [{id, name, phone, email, address, city, birthday, notes, createdAt}]
+let clients = [{"id": "mqpftcwo8j0se3", "city": "Mountain View", "name": "Izabela", "email": "", "notes": "Não usar cebola, alho, açarão e numeg.", "phone": "6503849586", "address": "314 Lavender Dr", "birthday": "", "createdAt": 1782146169240}, {"id": "mqpfvkvknm5q1v", "city": "East Palo Alto", "name": "Fanny", "email": "", "notes": "Não usar cebola. Tratamento SIBO", "phone": "4088410182", "address": "891 Tea Ct", "birthday": "", "createdAt": 1782146272880}, {"id": "mqpfzwfz8hr73e", "city": "San Jose", "name": "Fernanda", "email": "", "notes": "Não gosta de cilantro", "phone": "4083340272", "address": "816 Tina Speciale Place", "birthday": "1979-02-23", "createdAt": 1782146474495}, {"id": "mqpg1q71dli9h2", "city": "San Francisco", "name": "Marina", "email": "", "notes": "Usar pouco sal na comida", "phone": "4157209057", "address": "534 Joost Ave", "birthday": "", "createdAt": 1782146559709}, {"id": "leandro_personal_001", "city": "San Bruno", "name": "Leandro Dias Cavalcanti", "email": "ldiascavalcanti@gmail.com", "notes": "", "phone": "6505346775", "address": "", "birthday": "2000-12-06", "createdAt": 1782200000000}];     // [{id, name, phone, email, address, city, birthday, notes, createdAt}]
 let schedule = [];    // [{id, clientName, type, time, date, dayOfWeek, startDate, endDate, notes}]
 let invoices = [];    // [{id, clientName, clientCity, date, people, personalShopping, items, status, paymentMethod, notes, createdAt}]
 let ingredientsCatalog = [];  // [{id, namePT, nameEN, shopCat, defaultUnit}] — catálogo único de ingredientes
@@ -795,7 +795,7 @@ function buildSnapshot() {
     history,
     clients, schedule, invoices, settings,
     ingredientsCatalog,
-    _v: 20,
+    _v: 21,
     _ts: Date.now()
   };
 }
@@ -2861,6 +2861,151 @@ window.addEventListener('resize', () => {
 
 
 // ============================================================
+// V20.4 — MERGE INTELIGENTE DE SYNC
+// ============================================================
+// Em vez de "last-write-wins" (que apaga dados de outro device),
+// fazemos merge por ID/chave preservando trabalho de ambos os lados.
+
+function mergeArraysByKey(localArr, cloudArr, keyFn, cloudIsNewer) {
+  // União por chave. Se mesma chave em ambos:
+  //   - se cloud é mais recente, prefere cloud
+  //   - senão, prefere local
+  // Se chave em só um lado, INCLUI (não perde adições do outro device).
+  const out = [];
+  const seen = new Set();
+  const localMap = new Map();
+  const cloudMap = new Map();
+  (localArr || []).forEach(it => { const k = keyFn(it); if (k != null) localMap.set(k, it); });
+  (cloudArr || []).forEach(it => { const k = keyFn(it); if (k != null) cloudMap.set(k, it); });
+  
+  // Primeiro, itera o lado mais recente — mantém ordem dele
+  const primary = cloudIsNewer ? cloudArr : localArr;
+  const secondary = cloudIsNewer ? localArr : cloudArr;
+  const primaryMap = cloudIsNewer ? cloudMap : localMap;
+  const secondaryMap = cloudIsNewer ? localMap : cloudMap;
+  
+  (primary || []).forEach(it => {
+    const k = keyFn(it);
+    if (k == null || seen.has(k)) return;
+    seen.add(k);
+    // Se a chave também existe no secondary com versão DIFERENTE, prefere o primary (mais recente)
+    out.push(it);
+  });
+  // Adiciona items do secondary que não estão no primary
+  (secondary || []).forEach(it => {
+    const k = keyFn(it);
+    if (k == null || seen.has(k)) return;
+    seen.add(k);
+    out.push(it);
+  });
+  return out;
+}
+
+function mergeRecipes(localRecipes, cloudRecipes, cloudIsNewer) {
+  // Receitas: merge por nome. Mesmo nome dos dois lados → prefere a versão mais recente.
+  // Nome em só um lado → inclui (não perde).
+  const out = {};
+  const local = localRecipes || {};
+  const cloud = cloudRecipes || {};
+  const primary = cloudIsNewer ? cloud : local;
+  const secondary = cloudIsNewer ? local : cloud;
+  Object.keys(primary).forEach(name => { out[name] = primary[name]; });
+  Object.keys(secondary).forEach(name => { if (!(name in out)) out[name] = secondary[name]; });
+  return out;
+}
+
+function mergeSnapshots(localSnap, cloudSnap) {
+  // Recebe dois snapshots completos (local e cloud) e retorna um merged.
+  // Estratégia:
+  //  - Arrays com id (clients, schedule, invoices, ingredientsCatalog): merge por id
+  //  - history: merge por id
+  //  - recipes: merge por nome
+  //  - Escalares (people, lang, clientName, clientCity, settings, selectedDishes): last-write-wins
+  const localTs = localSnap?._ts || 0;
+  const cloudTs = cloudSnap?._ts || 0;
+  const cloudIsNewer = cloudTs >= localTs;
+  
+  const merged = {};
+  
+  // === Arrays com id ===
+  merged.clients = mergeArraysByKey(
+    localSnap?.clients, cloudSnap?.clients,
+    it => it && it.id, cloudIsNewer
+  );
+  merged.schedule = mergeArraysByKey(
+    localSnap?.schedule, cloudSnap?.schedule,
+    it => it && it.id, cloudIsNewer
+  );
+  merged.invoices = mergeArraysByKey(
+    localSnap?.invoices, cloudSnap?.invoices,
+    it => it && it.id, cloudIsNewer
+  );
+  merged.ingredientsCatalog = mergeArraysByKey(
+    localSnap?.ingredientsCatalog, cloudSnap?.ingredientsCatalog,
+    it => it && it.id, cloudIsNewer
+  );
+  merged.history = mergeArraysByKey(
+    localSnap?.history, cloudSnap?.history,
+    it => it && it.id, cloudIsNewer
+  );
+  
+  // === Recipes (merge por nome) ===
+  merged.recipes = mergeRecipes(localSnap?.recipes, cloudSnap?.recipes, cloudIsNewer);
+  
+  // === Escalares — last-write-wins ===
+  const winner = cloudIsNewer ? cloudSnap : localSnap;
+  merged.people = winner?.people || 2;
+  merged.lang = winner?.lang || 'pt';
+  merged.clientName = winner?.clientName || '';
+  merged.clientCity = winner?.clientCity || '';
+  merged.selectedDishes = Array.isArray(winner?.selectedDishes) ? winner.selectedDishes : [];
+  merged.settings = winner?.settings || {};
+  
+  // Estatísticas pra log
+  const stats = {
+    clientsLocal: (localSnap?.clients||[]).length,
+    clientsCloud: (cloudSnap?.clients||[]).length,
+    clientsMerged: merged.clients.length,
+    scheduleLocal: (localSnap?.schedule||[]).length,
+    scheduleCloud: (cloudSnap?.schedule||[]).length,
+    scheduleMerged: merged.schedule.length,
+    invoicesLocal: (localSnap?.invoices||[]).length,
+    invoicesCloud: (cloudSnap?.invoices||[]).length,
+    invoicesMerged: merged.invoices.length,
+    catalogLocal: (localSnap?.ingredientsCatalog||[]).length,
+    catalogCloud: (cloudSnap?.ingredientsCatalog||[]).length,
+    catalogMerged: merged.ingredientsCatalog.length,
+    historyLocal: (localSnap?.history||[]).length,
+    historyCloud: (cloudSnap?.history||[]).length,
+    historyMerged: merged.history.length,
+    recipesLocal: Object.keys(localSnap?.recipes||{}).length,
+    recipesCloud: Object.keys(cloudSnap?.recipes||{}).length,
+    recipesMerged: Object.keys(merged.recipes).length,
+    cloudIsNewer
+  };
+  console.log('[merge] estatísticas:', stats);
+  return { merged, stats };
+}
+
+// Aplica um snapshot mesclado no estado da aplicação
+function applyMergedSnapshot(merged) {
+  if (merged.recipes) recipes = merged.recipes;
+  selectedDishes = new Set(merged.selectedDishes || []);
+  if (typeof merged.people === 'number' && merged.people > 0) people = merged.people;
+  if (merged.lang) lang = merged.lang;
+  clientName = merged.clientName || '';
+  clientCity = merged.clientCity || '';
+  history = Array.isArray(merged.history) ? merged.history : [];
+  clients = Array.isArray(merged.clients) ? merged.clients : [];
+  schedule = Array.isArray(merged.schedule) ? merged.schedule : [];
+  invoices = Array.isArray(merged.invoices) ? merged.invoices : [];
+  if (merged.settings && typeof merged.settings === 'object') {
+    settings = Object.assign(settings, merged.settings);
+  }
+  ingredientsCatalog = Array.isArray(merged.ingredientsCatalog) ? merged.ingredientsCatalog : [];
+}
+
+// ============================================================
 // INIT
 // ============================================================
 (function init() {
@@ -2872,44 +3017,61 @@ window.addEventListener('resize', () => {
     setSyncStatus('syncing', 'Verificando nuvem...');
     const cloudData = await loadFromCloud();
     if (cloudData) {
-      // Nuvem tem dados - usar como fonte autoritativa
-      const cloudTs = cloudData._ts || 0;
-      const localTs = (function() {
-        try { const raw = localStorage.getItem(LS_KEY); if (raw) { const p = JSON.parse(raw); return p._ts || 0; } } catch(e){}
-        return 0;
-      })();
-      if (cloudTs >= localTs) {
-        // Nuvem mais recente (ou igual) -> aplicar
-        if (cloudData.recipes) recipes = cloudData.recipes;
-        if (Array.isArray(cloudData.selectedDishes)) selectedDishes = new Set(cloudData.selectedDishes);
-        if (cloudData.people) people = cloudData.people;
-        if (cloudData.lang) lang = cloudData.lang;
-        clientName = cloudData.clientName || '';
-        clientCity = cloudData.clientCity || '';
-        history = Array.isArray(cloudData.history) ? cloudData.history : [];
-        clients = Array.isArray(cloudData.clients) ? cloudData.clients : [];
-        schedule = Array.isArray(cloudData.schedule) ? cloudData.schedule : [];
-        invoices = Array.isArray(cloudData.invoices) ? cloudData.invoices : [];
-        if (cloudData.settings && typeof cloudData.settings === 'object') settings = Object.assign(settings, cloudData.settings);
-        ingredientsCatalog = Array.isArray(cloudData.ingredientsCatalog) ? cloudData.ingredientsCatalog : [];
-        migrateInvoices();
-        // Re-renderizar UI
-        document.getElementById('people-count').textContent = people;
-        document.getElementById('lang-label').textContent = lang==='pt'?'English':'Português';
-        const cn = document.getElementById('client-name'); if (cn) cn.value = clientName;
-        const cc = document.getElementById('client-city'); if (cc) cc.value = clientCity;
-        applyBranding();
-        applyLang();
-        renderMenu();
-        renderRecipeEditor();
-        renderHistory();
-        // Persistir versão da nuvem no localStorage (sem disparar novo upload)
-        try { localStorage.setItem(LS_KEY, JSON.stringify({recipes,selectedDishes:[...selectedDishes],people,lang,clientName,clientCity,history,clients,schedule,invoices,settings,_ts:cloudTs})); } catch(e){}
-        setSyncStatus('synced', 'Dados da nuvem carregados');
+      // === MERGE INTELIGENTE ===
+      // Constrói snapshot do estado LOCAL (memória atual)
+      const localSnap = {
+        recipes, selectedDishes: [...selectedDishes],
+        people, lang, clientName, clientCity,
+        history, clients, schedule, invoices, settings,
+        ingredientsCatalog,
+        _ts: (function(){
+          try { const raw = localStorage.getItem(LS_KEY); if (raw) { const p = JSON.parse(raw); return p._ts || 0; } } catch(e){}
+          return 0;
+        })()
+      };
+      const { merged, stats } = mergeSnapshots(localSnap, cloudData);
+      applyMergedSnapshot(merged);
+      migrateInvoices();
+      
+      // Re-renderizar UI
+      document.getElementById('people-count').textContent = people;
+      document.getElementById('lang-label').textContent = lang==='pt'?'English':'Português';
+      const cn = document.getElementById('client-name'); if (cn) cn.value = clientName;
+      const cc = document.getElementById('client-city'); if (cc) cc.value = clientCity;
+      applyBranding();
+      applyLang();
+      renderMenu();
+      renderRecipeEditor();
+      renderHistory();
+      
+      // Persistir o snapshot mesclado no localStorage com timestamp ATUAL
+      // (porque agora a memória contém TANTO local quanto cloud)
+      const mergedTs = Date.now();
+      try {
+        localStorage.setItem(LS_KEY, JSON.stringify({
+          recipes, selectedDishes: [...selectedDishes],
+          people, lang, clientName, clientCity,
+          history, clients, schedule, invoices, settings,
+          ingredientsCatalog,
+          _v: 21, _ts: mergedTs
+        }));
+      } catch(e){}
+      
+      // Mensagem de status — informa se houve merge real
+      const localOnlyCount = (stats.clientsLocal - Math.min(stats.clientsLocal, stats.clientsCloud)) +
+                             (stats.scheduleLocal - Math.min(stats.scheduleLocal, stats.scheduleCloud)) +
+                             (stats.invoicesLocal - Math.min(stats.invoicesLocal, stats.invoicesCloud));
+      const cloudOnlyCount = (stats.clientsCloud - Math.min(stats.clientsLocal, stats.clientsCloud)) +
+                             (stats.scheduleCloud - Math.min(stats.scheduleLocal, stats.scheduleCloud)) +
+                             (stats.invoicesCloud - Math.min(stats.invoicesLocal, stats.invoicesCloud));
+      if (localOnlyCount > 0 && cloudOnlyCount > 0) {
+        setSyncStatus('synced', lang==='pt' ? 'Dados mesclados (local + nuvem)' : 'Data merged (local + cloud)');
       } else {
-        // Local mais recente -> enviar pra nuvem
-        saveToCloudNow();
+        setSyncStatus('synced', lang==='pt' ? 'Sincronizado' : 'Synced');
       }
+      
+      // Salvar o snapshot mesclado de volta na nuvem (pra propagar pros outros devices)
+      saveToCloudNow();
     } else if (cloudReady) {
       // Nuvem vazia - primeiro uso, fazer upload do estado atual
       saveToCloudNow();
