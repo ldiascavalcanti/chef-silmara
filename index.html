@@ -731,19 +731,11 @@ let history = JSON.parse(`[{"id":1782148037963,"date":"22/06/2026","dateISO":"20
 // ============================================================
 // V20 — NEW STATE (clients, schedule, invoices, settings)
 // ============================================================
-let clients = [];     // [{id, name, phone, email, address, city, birthday, notes, createdAt}]
+let clients = [{"id": "mqpftcwo8j0se3", "city": "Mountain View", "name": "Izabela", "email": "", "notes": "Não usar cebola, alho, açarão e numeg.", "phone": "6503849586", "address": "314 Lavender Dr", "birthday": "", "createdAt": 1782146169240}, {"id": "mqpfvkvknm5q1v", "city": "East Palo Alto", "name": "Fanny", "email": "", "notes": "Não usar cebola. Tratamento SIBO", "phone": "4088410182", "address": "891 Tea Ct", "birthday": "", "createdAt": 1782146272880}, {"id": "mqpfzwfz8hr73e", "city": "San Jose", "name": "Fernanda", "email": "", "notes": "Não gosta de cilantro", "phone": "4083340272", "address": "816 Tina Speciale Place", "birthday": "1979-02-23", "createdAt": 1782146474495}, {"id": "mqpg1q71dli9h2", "city": "San Francisco", "name": "Marina", "email": "", "notes": "Usar pouco sal na comida", "phone": "4157209057", "address": "534 Joost Ave", "birthday": "", "createdAt": 1782146559709}];     // [{id, name, phone, email, address, city, birthday, notes, createdAt}]
 let schedule = [];    // [{id, clientName, type, time, date, dayOfWeek, startDate, endDate, notes}]
 let invoices = [];    // [{id, clientName, clientCity, date, people, personalShopping, items, status, paymentMethod, notes, createdAt}]
 let ingredientsCatalog = [];  // [{id, namePT, nameEN, shopCat, defaultUnit}] — catálogo único de ingredientes
-let settings = {
-  chefName: "Chef Silmara",
-  chefSubtitle: "Personal Chef",
-  chefLocation: "Bay Area",
-  currency: "USD",
-  payZelle: "",
-  payVenmo: "",
-  payOther: ""
-};
+let settings = {"chefName": "Silmara Cavalcanti", "chefSubtitle": "Personal Chef", "chefLocation": "Bay Area", "currency": "USD", "payZelle": "", "payVenmo": "", "payOther": ""};
 let scheduleViewMonth = new Date().getMonth();
 let scheduleViewYear = new Date().getFullYear();
 let mobileSchedView = 'week';
@@ -1537,7 +1529,12 @@ function openBackupModal(){
     selectedDishes:[...selectedDishes],
     people, lang,
     clientName, clientCity,
-    history
+    history,
+    clients,
+    schedule,
+    invoices,
+    settings,
+    ingredientsCatalog
   },null,2);
   document.getElementById('backup-modal').classList.add('open');
 }
@@ -1553,6 +1550,17 @@ function restoreBackup(){
   try{
     const d=JSON.parse(document.getElementById('backup-textarea').value);
     if(!d.recipes)throw 0;
+    // Confirmar antes de sobrescrever — proteção contra restaurar sem querer
+    const counts = [];
+    if (Array.isArray(d.clients)) counts.push(d.clients.length + ' clientes');
+    if (Array.isArray(d.schedule)) counts.push(d.schedule.length + ' compromissos');
+    if (Array.isArray(d.invoices)) counts.push(d.invoices.length + ' faturas');
+    counts.push(Object.keys(d.recipes||{}).length + ' receitas');
+    counts.push((d.history||[]).length + ' atendimentos');
+    const msg = (lang==='pt'?'Restaurar backup com: ':'Restore backup with: ') + counts.join(', ') + '?\n\n' + (lang==='pt'?'Isso vai SUBSTITUIR os dados atuais.':'This will REPLACE current data.');
+    if (!confirm(msg)) return;
+    
+    // Aplicar
     recipes=d.recipes;
     selectedDishes=new Set(d.selectedDishes||[]);
     if(d.people)people=d.people;
@@ -1560,16 +1568,37 @@ function restoreBackup(){
     clientName = d.clientName || '';
     clientCity = d.clientCity || '';
     history = Array.isArray(d.history) ? d.history : [];
+    // Campos novos v20+
+    if (Array.isArray(d.clients)) clients = d.clients;
+    if (Array.isArray(d.schedule)) schedule = d.schedule;
+    if (Array.isArray(d.invoices)) invoices = d.invoices;
+    if (d.settings && typeof d.settings === 'object') settings = Object.assign(settings, d.settings);
+    if (Array.isArray(d.ingredientsCatalog)) ingredientsCatalog = d.ingredientsCatalog;
+    // Migrar invoices antigos se necessário
+    if (typeof migrateInvoices === 'function') migrateInvoices();
+    
+    // Atualizar UI
     document.getElementById('people-count').textContent=people;
     document.getElementById('lang-label').textContent=lang==='pt'?'English':'Português';
-    document.getElementById('client-name').value = clientName;
-    document.getElementById('client-city').value = clientCity;
+    const cn = document.getElementById('client-name'); if (cn) cn.value = clientName;
+    const cc = document.getElementById('client-city'); if (cc) cc.value = clientCity;
+    
     saveToLocalStorage();
+    if (typeof applyBranding === 'function') applyBranding();
     applyLang();
     renderMenu();
+    // Re-renderizar abas se a função existir
+    if (typeof renderClients === 'function') renderClients();
+    if (typeof renderSchedule === 'function') renderSchedule();
+    if (typeof renderInvoicesList === 'function') renderInvoicesList();
+    if (typeof renderIngredientsCatalog === 'function') renderIngredientsCatalog();
+    if (typeof renderHistory === 'function') renderHistory();
+    
     closeBackupModal();
-    showToast(lang==='pt'?'✅ Backup restaurado!':'✅ Backup restored!');
+    const summary = counts.join(', ');
+    showToast((lang==='pt'?'✅ Restaurado: ':'✅ Restored: ') + summary);
   }catch(e){
+    console.error('[restoreBackup] erro:', e);
     showToast(lang==='pt'?'❌ Backup inválido.':'❌ Invalid backup.', true);
   }
 }
