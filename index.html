@@ -409,6 +409,329 @@
   .ing-actions { order: 2; }
 }
 
+/* ============================================================
+   V20.5 — PORTAL DO CLIENTE
+============================================================ */
+#client-portal {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f0e6 0%, #ede4d3 100%);
+  padding: 0;
+}
+.cp-header {
+  background: var(--olive);
+  color: white;
+  padding: 18px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+.cp-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.cp-logo {
+  width: 46px;
+  height: 46px;
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+}
+.cp-brand-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1;
+}
+.cp-brand-subtitle {
+  font-size: 0.72rem;
+  opacity: 0.9;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+.cp-lang-btn {
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.3);
+  color: white;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-family: inherit;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.cp-lang-btn:hover { background: rgba(255,255,255,0.25); }
+.cp-screen {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 24px 18px 60px;
+}
+.cp-card {
+  background: white;
+  border-radius: 18px;
+  padding: 32px 24px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  text-align: center;
+  margin-top: 24px;
+}
+.cp-card.cp-success { border-top: 4px solid var(--olive); }
+.cp-icon-big {
+  font-size: 3.5rem;
+  margin-bottom: 12px;
+}
+.cp-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.7rem;
+  color: var(--brown);
+  margin: 0 0 10px;
+  font-weight: 700;
+}
+.cp-sub {
+  color: var(--text-light);
+  font-size: 0.95rem;
+  margin: 0 0 22px;
+  line-height: 1.5;
+}
+.cp-form-group {
+  margin: 18px 0;
+  text-align: left;
+}
+.cp-form-group label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--brown);
+  margin-bottom: 6px;
+}
+.cp-form-group input,
+.cp-form-group textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 1rem;
+  color: var(--text);
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+.cp-form-group input:focus,
+.cp-form-group textarea:focus {
+  outline: none;
+  border-color: var(--olive);
+}
+.cp-form-group textarea { resize: vertical; min-height: 60px; }
+.cp-hint {
+  font-size: 0.75rem;
+  color: var(--text-light);
+  margin: 6px 0 0;
+  font-style: italic;
+}
+.cp-btn-primary {
+  background: var(--olive);
+  color: white;
+  border: none;
+  padding: 14px 24px;
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 12px;
+  transition: transform 0.1s, box-shadow 0.2s;
+  box-shadow: 0 2px 6px rgba(107,124,54,0.3);
+}
+.cp-btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 10px rgba(107,124,54,0.4); }
+.cp-btn-primary:active { transform: translateY(0); }
+.cp-btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+.cp-btn-secondary {
+  background: white;
+  color: var(--brown);
+  border: 1.5px solid var(--border);
+  padding: 12px 20px;
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  transition: background 0.2s;
+}
+.cp-btn-secondary:hover { background: var(--cream); }
+.cp-btn-send { margin-top: 20px; padding: 16px; font-size: 1.05rem; }
+.cp-welcome {
+  background: white;
+  border-radius: 14px;
+  padding: 18px 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  font-family: 'Playfair Display', serif;
+  color: var(--brown);
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+.cp-welcome .cp-welcome-sub {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 0.82rem;
+  color: var(--text-light);
+  margin-top: 4px;
+}
+#cp-repeat-last { margin-bottom: 14px; }
+.cp-people-section {
+  background: white;
+  border-radius: 14px;
+  padding: 16px 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.cp-people-label {
+  font-size: 0.95rem;
+  color: var(--brown);
+  font-weight: 600;
+}
+.cp-people-counter {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.cp-people-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1.5px solid var(--olive);
+  background: white;
+  color: var(--olive);
+  font-size: 1.3rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+.cp-people-btn:hover { background: var(--olive); color: white; }
+.cp-people-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--brown);
+  min-width: 32px;
+  text-align: center;
+}
+.cp-menu-section {
+  background: white;
+  border-radius: 14px;
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+.cp-menu-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem;
+  color: var(--brown);
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.cp-selected-count {
+  font-size: 0.82rem;
+  color: var(--text-light);
+  margin-bottom: 14px;
+  font-style: italic;
+}
+.cp-cat-group { margin-bottom: 18px; }
+.cp-cat-header {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--olive);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 8px 0;
+  border-bottom: 2px solid var(--cream);
+  margin-bottom: 10px;
+}
+.cp-dish-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s;
+  user-select: none;
+}
+.cp-dish-item:hover { background: var(--cream); }
+.cp-dish-item.selected { background: rgba(107,124,54,0.08); }
+.cp-dish-check {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  border: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 0.85rem;
+  font-weight: 700;
+  flex-shrink: 0;
+  transition: all 0.15s;
+}
+.cp-dish-item.selected .cp-dish-check {
+  background: var(--olive);
+  border-color: var(--olive);
+}
+.cp-dish-name {
+  flex: 1;
+  font-size: 0.95rem;
+  color: var(--text);
+}
+.cp-dish-item.selected .cp-dish-name { color: var(--brown); font-weight: 600; }
+.cp-summary {
+  background: var(--cream);
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin: 20px 0;
+  text-align: left;
+  font-size: 0.9rem;
+  color: var(--brown);
+}
+.cp-summary strong { color: var(--brown); font-weight: 700; }
+.cp-thanks {
+  font-size: 1.05rem;
+  color: var(--brown);
+  font-weight: 600;
+  margin: 18px 0;
+}
+
+/* ===== V20.5 — PEDIDOS ===== */
+.req-badge { display: inline-block; background: #d32f2f; color: white; border-radius: 10px; padding: 1px 7px; font-size: 0.7rem; font-weight: 700; margin-left: 6px; min-width: 18px; text-align: center; }
+.requests-toolbar { margin: 8px 0 14px; }
+.request-card { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+.request-card.processed { opacity: 0.65; background: #fafafa; }
+.request-card-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; }
+.request-card-title { font-size: 1rem; font-weight: 700; color: var(--brown); }
+.request-card-meta { font-size: 0.78rem; color: var(--text-light); margin-top: 2px; }
+.request-card-time { font-size: 0.75rem; color: var(--text-light); font-style: italic; }
+.request-card-status { display: inline-block; font-size: 0.7rem; padding: 3px 10px; border-radius: 12px; font-weight: 600; }
+.request-card-status.pending { background: #fff4e0; color: #b06d00; }
+.request-card-status.processed { background: #e8f5e9; color: #2e7d32; }
+.request-card-summary { font-size: 0.85rem; color: var(--text); margin: 6px 0; }
+.request-card-notes { background: #fff9ec; border-left: 3px solid #d4af37; padding: 8px 10px; border-radius: 4px; font-size: 0.82rem; color: #6b5b00; margin: 8px 0; font-style: italic; }
+.request-card-dishes { font-size: 0.82rem; color: var(--text-light); line-height: 1.6; margin: 6px 0 10px; }
+.request-card-dishes strong { color: var(--brown); font-weight: 600; }
+.request-card-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; padding-top: 10px; border-top: 1px solid #f0ece0; }
+.request-card-actions .btn { font-size: 0.85rem; }
+
 /* Mobile - mostra hamburger, esconde tabs horizontais */
 @media (max-width: 720px) {
   .hamburger { display: inline-flex; }
@@ -419,6 +742,95 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
+
+<!-- ============================================================
+     V20.5 — PORTAL DO CLIENTE (ativado via ?cardapio na URL)
+     Fica escondido por padrão. app-router() detecta a URL e mostra.
+============================================================ -->
+<div id="client-portal" style="display:none;">
+  <!-- Header simples do portal -->
+  <div class="cp-header">
+    <div class="cp-brand">
+      <div class="cp-logo">👩🏻‍🍳</div>
+      <div>
+        <div class="cp-brand-title" id="cp-chef-name">Chef Silmara</div>
+        <div class="cp-brand-subtitle" id="cp-chef-subtitle">Personal Chef · Bay Area</div>
+      </div>
+    </div>
+    <button class="cp-lang-btn" onclick="cpToggleLang()" id="cp-lang-btn">🌐 EN</button>
+  </div>
+
+  <!-- === TELA 1: identificação === -->
+  <div class="cp-screen" id="cp-screen-1">
+    <div class="cp-card">
+      <div class="cp-icon-big">🍽️</div>
+      <h1 class="cp-title" data-cp-pt="Cardápio da Semana" data-cp-en="Weekly Menu">Cardápio da Semana</h1>
+      <p class="cp-sub" data-cp-pt="Escolha seus pratos preferidos e envie para a chef." data-cp-en="Pick your favorite dishes and send them to the chef.">Escolha seus pratos preferidos e envie para a chef.</p>
+      
+      <div class="cp-form-group">
+        <label data-cp-pt="Seu telefone" data-cp-en="Your phone">Seu telefone</label>
+        <input type="tel" id="cp-phone" placeholder="Ex: 6501234567" autocomplete="tel" inputmode="numeric">
+        <p class="cp-hint" data-cp-pt="Usamos só para identificar você" data-cp-en="We use this only to identify you">Usamos só para identificar você</p>
+      </div>
+      
+      <button class="cp-btn-primary" onclick="cpIdentify()" data-cp-pt="Continuar" data-cp-en="Continue">Continuar</button>
+    </div>
+  </div>
+
+  <!-- === TELA 2: cardápio === -->
+  <div class="cp-screen" id="cp-screen-2" style="display:none;">
+    <div class="cp-welcome" id="cp-welcome"></div>
+    
+    <!-- Botão "Repetir semana passada" (aparece se cliente tem pedido anterior) -->
+    <div id="cp-repeat-last" style="display:none;">
+      <button class="cp-btn-secondary" onclick="cpRepeatLast()" id="cp-btn-repeat">
+        🔁 <span data-cp-pt="Repetir semana passada" data-cp-en="Repeat last week">Repetir semana passada</span> <span id="cp-repeat-count"></span>
+      </button>
+    </div>
+
+    <!-- Contador de pessoas -->
+    <div class="cp-people-section">
+      <div class="cp-people-label" data-cp-pt="Para quantas pessoas?" data-cp-en="For how many people?">Para quantas pessoas?</div>
+      <div class="cp-people-counter">
+        <button class="cp-people-btn" onclick="cpChangePeople(-1)">−</button>
+        <span class="cp-people-value" id="cp-people">2</span>
+        <button class="cp-people-btn" onclick="cpChangePeople(1)">+</button>
+      </div>
+    </div>
+
+    <!-- Cardápio -->
+    <div class="cp-menu-section">
+      <div class="cp-menu-title" data-cp-pt="Escolha seus pratos" data-cp-en="Pick your dishes">Escolha seus pratos</div>
+      <div class="cp-selected-count" id="cp-selected-count"></div>
+      <div id="cp-menu-list"></div>
+    </div>
+
+    <!-- Observações -->
+    <div class="cp-form-group">
+      <label data-cp-pt="Observações para a chef (opcional)" data-cp-en="Notes for the chef (optional)">Observações para a chef (opcional)</label>
+      <textarea id="cp-notes" rows="3" placeholder=""></textarea>
+    </div>
+
+    <button class="cp-btn-primary cp-btn-send" onclick="cpSubmit()" id="cp-btn-submit">
+      📤 <span data-cp-pt="Enviar cardápio" data-cp-en="Send menu">Enviar cardápio</span>
+    </button>
+  </div>
+
+  <!-- === TELA 3: confirmação === -->
+  <div class="cp-screen" id="cp-screen-3" style="display:none;">
+    <div class="cp-card cp-success">
+      <div class="cp-icon-big">✅</div>
+      <h1 class="cp-title" data-cp-pt="Cardápio recebido!" data-cp-en="Menu received!">Cardápio recebido!</h1>
+      <p class="cp-sub cp-success-msg" id="cp-success-msg" data-cp-pt="A Chef Silmara vai gerar a lista de compras e enviará em breve." data-cp-en="Chef Silmara will prepare the shopping list and send it soon.">A Chef Silmara vai gerar a lista de compras e enviará em breve.</p>
+      
+      <div class="cp-summary" id="cp-summary"></div>
+      
+      <p class="cp-thanks" data-cp-pt="Muito obrigado! 💚" data-cp-en="Thank you! 💚">Muito obrigado! 💚</p>
+      
+      <button class="cp-btn-secondary" onclick="cpStartOver()" data-cp-pt="Enviar outro pedido" data-cp-en="Send another request">Enviar outro pedido</button>
+    </div>
+  </div>
+</div>
 
 <header>
   <div class="header-brand">
@@ -449,6 +861,7 @@
     <div class="drawer-item" data-tab="lista" onclick="showTab('lista')"><span class="icon">🛒</span><span data-pt="Lista" data-en="List">Lista</span></div>
     <div class="drawer-item" data-tab="historico" onclick="showTab('historico')"><span class="icon">📋</span><span data-pt="Histórico" data-en="History">Histórico</span></div>
     <div class="drawer-item" data-tab="clientes" onclick="showTab('clientes')"><span class="icon">👥</span><span data-pt="Clientes" data-en="Clients">Clientes</span></div>
+    <div class="drawer-item" data-tab="requests" onclick="showTab('requests')"><span class="icon">📥</span><span data-pt="Pedidos" data-en="Requests">Pedidos</span><span class="req-badge" id="req-badge-drawer" style="display:none;"></span></div>
     <div class="drawer-item" data-tab="ingredients" onclick="showTab('ingredients')"><span class="icon">🥕</span><span data-pt="Ingredientes" data-en="Ingredients">Ingredientes</span></div>
     <div class="drawer-item" data-tab="schedule" onclick="showTab('schedule')"><span class="icon">📅</span><span data-pt="Agenda" data-en="Schedule">Agenda</span></div>
     <div class="drawer-item" data-tab="invoice" onclick="showTab('invoice')"><span class="icon">🧾</span><span data-pt="Invoice" data-en="Invoice">Invoice</span></div>
@@ -464,6 +877,7 @@
   <button class="tab-btn" onclick="showTab('lista')" id="btn-lista">🛒 <span data-pt="Lista" data-en="List">Lista</span></button>
   <button class="tab-btn" onclick="showTab('historico')" id="btn-historico">📋 <span data-pt="Histórico" data-en="History">Histórico</span></button>
   <button class="tab-btn" onclick="showTab('clientes')" id="btn-clientes">👥 <span data-pt="Clientes" data-en="Clients">Clientes</span></button>
+  <button class="tab-btn" onclick="showTab('requests')" id="btn-requests">📥 <span data-pt="Pedidos" data-en="Requests">Pedidos</span><span class="req-badge" id="req-badge-nav" style="display:none;"></span></button>
   <button class="tab-btn" onclick="showTab('ingredients')" id="btn-ingredients">🥕 <span data-pt="Ingredientes" data-en="Ingredients">Ingredientes</span></button>
   <button class="tab-btn" onclick="showTab('schedule')" id="btn-schedule">📅 <span data-pt="Agenda" data-en="Schedule">Agenda</span></button>
   <button class="tab-btn" onclick="showTab('invoice')" id="btn-invoice">🧾 <span data-pt="Invoice" data-en="Invoice">Invoice</span></button>
@@ -594,9 +1008,25 @@
     <div class="clients-toolbar">
       <input type="search" id="client-search" placeholder="🔍 Buscar cliente..." oninput="renderClients()">
       <button class="btn primary" onclick="openClientModal()">➕ <span data-pt="Novo cliente" data-en="New client">Novo cliente</span></button>
+      <button class="btn" onclick="copyClientPortalLink()" title="Copiar link do portal do cliente">🔗 <span data-pt="Copiar link do cardápio" data-en="Copy menu link">Copiar link do cardápio</span></button>
     </div>
 
     <div id="clients-list" class="clients-grid"></div>
+  </div>
+
+  <!-- ===== REQUESTS / PEDIDOS ===== -->
+  <div id="tab-requests" style="display:none;">
+    <h2 class="section-title" data-pt="Pedidos Recebidos" data-en="Received Requests">Pedidos Recebidos</h2>
+    <p class="section-sub" data-pt="Cardápios que seus clientes enviaram pelo link do portal. Carregue no cardápio da semana pra revisar antes de gerar a lista." data-en="Menus your clients sent via the portal link. Load into weekly menu to review before generating the shopping list.">Cardápios que seus clientes enviaram pelo link do portal. Carregue no cardápio da semana pra revisar antes de gerar a lista.</p>
+
+    <div class="requests-toolbar">
+      <label style="display:flex;align-items:center;gap:6px;font-size:0.85rem;color:var(--text-light);cursor:pointer;">
+        <input type="checkbox" id="req-show-processed" onchange="renderMenuRequests()">
+        <span data-pt="Mostrar processados" data-en="Show processed">Mostrar processados</span>
+      </label>
+    </div>
+
+    <div id="requests-list"></div>
   </div>
 
   <!-- ===== INGREDIENTS ===== -->
@@ -735,6 +1165,7 @@ let clients = [{"id": "mqpftcwo8j0se3", "city": "Mountain View", "name": "Izabel
 let schedule = [];    // [{id, clientName, type, time, date, dayOfWeek, startDate, endDate, notes}]
 let invoices = [];    // [{id, clientName, clientCity, date, people, personalShopping, items, status, paymentMethod, notes, createdAt}]
 let ingredientsCatalog = [];  // [{id, namePT, nameEN, shopCat, defaultUnit}] — catálogo único de ingredientes
+let menuRequests = [];  // [{id, clientPhone, clientName, clientCity, people, selectedDishes, notes, receivedAt, processed, processedAt}] — pedidos vindos do portal do cliente
 let settings = {"chefName": "Silmara Cavalcanti", "chefSubtitle": "Personal Chef", "chefLocation": "Bay Area", "currency": "USD", "payZelle": "", "payVenmo": "", "payOther": ""};
 let scheduleViewMonth = new Date().getMonth();
 let scheduleViewYear = new Date().getFullYear();
@@ -795,6 +1226,7 @@ function buildSnapshot() {
     history,
     clients, schedule, invoices, settings,
     ingredientsCatalog,
+    menuRequests,
     _v: 21,
     _ts: Date.now()
   };
@@ -1474,6 +1906,7 @@ function saveToLocalStorage() {
       history,
       clients, schedule, invoices, settings,
       ingredientsCatalog,
+      menuRequests,
       _ts: Date.now()
     }));
   } catch(e) { console.warn('localStorage save failed', e); }
@@ -1496,6 +1929,7 @@ function loadFromLocalStorage() {
     invoices = Array.isArray(d.invoices) ? d.invoices : [];
     if (d.settings && typeof d.settings === 'object') settings = Object.assign(settings, d.settings);
     ingredientsCatalog = Array.isArray(d.ingredientsCatalog) ? d.ingredientsCatalog : [];
+    menuRequests = Array.isArray(d.menuRequests) ? d.menuRequests : [];
     migrateInvoices();
     return true;
   } catch(e) { return false; }
@@ -1534,7 +1968,8 @@ function openBackupModal(){
     schedule,
     invoices,
     settings,
-    ingredientsCatalog
+    ingredientsCatalog,
+    menuRequests
   },null,2);
   document.getElementById('backup-modal').classList.add('open');
 }
@@ -1574,6 +2009,7 @@ function restoreBackup(){
     if (Array.isArray(d.invoices)) invoices = d.invoices;
     if (d.settings && typeof d.settings === 'object') settings = Object.assign(settings, d.settings);
     if (Array.isArray(d.ingredientsCatalog)) ingredientsCatalog = d.ingredientsCatalog;
+    if (Array.isArray(d.menuRequests)) menuRequests = d.menuRequests;
     // Migrar invoices antigos se necessário
     if (typeof migrateInvoices === 'function') migrateInvoices();
     
@@ -1607,7 +2043,7 @@ function restoreBackup(){
 // TABS & LANGUAGE
 // ============================================================
 function showTab(tab){
-  const allTabs = ['cardapio','lista','historico','receitas','clientes','ingredients','schedule','invoice'];
+  const allTabs = ['cardapio','lista','historico','receitas','clientes','requests','ingredients','schedule','invoice'];
   allTabs.forEach(t=>{
     const tabEl = document.getElementById('tab-'+t);
     if (tabEl) tabEl.style.display = t===tab?'block':'none';
@@ -1621,6 +2057,7 @@ function showTab(tab){
   if(tab==='receitas'){renderRecipeList();renderRecipeDetail();}
   if(tab==='historico'){renderHistory();}
   if(tab==='clientes'){renderClients();}
+  if(tab==='requests'){renderMenuRequests();}
   if(tab==='ingredients'){renderIngredientsCatalog();}
   if(tab==='schedule'){renderSchedule();}
   if(tab==='invoice'){renderInvoicesList();}
@@ -1663,6 +2100,143 @@ function migrateInvoices() {
     }
   });
   if (migrated > 0) console.log('[migrate] ' + migrated + ' invoice(s) migrated city -> address');
+}
+
+// ============================================================
+// V20.5 — PEDIDOS DO PORTAL DO CLIENTE
+// ============================================================
+
+function updateRequestsBadge() {
+  const pending = (menuRequests || []).filter(r => !r.processed).length;
+  ['req-badge-nav', 'req-badge-drawer'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (pending > 0) {
+      el.textContent = pending;
+      el.style.display = 'inline-block';
+    } else {
+      el.style.display = 'none';
+    }
+  });
+}
+
+function renderMenuRequests() {
+  const wrap = document.getElementById('requests-list');
+  if (!wrap) return;
+  const showProcessed = document.getElementById('req-show-processed')?.checked || false;
+  
+  const filtered = (menuRequests || [])
+    .filter(r => showProcessed || !r.processed)
+    .sort((a, b) => (b.receivedAt || 0) - (a.receivedAt || 0));
+  
+  if (!filtered.length) {
+    wrap.innerHTML = `<div class="empty-state"><div class="icon">📭</div><p>${lang==='pt' ? (showProcessed ? 'Nenhum pedido recebido ainda.' : 'Nenhum pedido pendente. Todos foram processados! 🎉') : (showProcessed ? 'No requests received yet.' : 'No pending requests. All processed! 🎉')}</p></div>`;
+    updateRequestsBadge();
+    return;
+  }
+  
+  let html = '';
+  filtered.forEach(req => {
+    const dishCount = (req.selectedDishes || []).length;
+    const dt = req.receivedAt ? new Date(req.receivedAt) : null;
+    const dateStr = dt ? formatDateBR(dt.toISOString().split('T')[0]) + ' ' + dt.toTimeString().substring(0,5) : '';
+    const statusLabel = req.processed 
+      ? (lang==='pt' ? '✓ Processado' : '✓ Processed')
+      : (lang==='pt' ? 'Pendente' : 'Pending');
+    const statusClass = req.processed ? 'processed' : 'pending';
+    const notesHtml = req.notes ? `<div class="request-card-notes">💬 "${escapeHtml(req.notes)}"</div>` : '';
+    const dishesList = (req.selectedDishes || []).map(d => escapeHtml(d)).join(', ');
+    
+    html += `<div class="request-card ${req.processed ? 'processed' : ''}">
+      <div class="request-card-header">
+        <div>
+          <div class="request-card-title">${escapeHtml(req.clientName || (lang==='pt'?'Cliente sem nome':'Unnamed client'))}</div>
+          <div class="request-card-meta">${req.clientPhone ? '📱 '+escapeHtml(req.clientPhone) : ''}${req.clientCity ? ' · 📍 '+escapeHtml(req.clientCity) : ''}</div>
+          <div class="request-card-time">${dateStr}</div>
+        </div>
+        <span class="request-card-status ${statusClass}">${statusLabel}</span>
+      </div>
+      <div class="request-card-summary">🍽️ ${dishCount} ${lang==='pt'?(dishCount===1?'prato':'pratos'):(dishCount===1?'dish':'dishes')} · 👥 ${req.people || 1} ${lang==='pt'?(req.people===1?'pessoa':'pessoas'):(req.people===1?'person':'people')}</div>
+      <div class="request-card-dishes"><strong>${lang==='pt'?'Escolhas:':'Choices:'}</strong> ${dishesList}</div>
+      ${notesHtml}
+      <div class="request-card-actions">
+        ${!req.processed ? `<button class="btn primary" onclick="loadRequestToMenu('${req.id}')">📋 ${lang==='pt'?'Carregar no Cardápio':'Load into Menu'}</button>` : ''}
+        ${!req.processed ? `<button class="btn" onclick="markRequestProcessed('${req.id}')">✓ ${lang==='pt'?'Marcar como processado':'Mark as processed'}</button>` : `<button class="btn" onclick="unmarkRequestProcessed('${req.id}')">↩️ ${lang==='pt'?'Reabrir':'Reopen'}</button>`}
+        <button class="btn small danger" onclick="discardRequest('${req.id}')">🗑️ ${lang==='pt'?'Descartar':'Discard'}</button>
+      </div>
+    </div>`;
+  });
+  wrap.innerHTML = html;
+  updateRequestsBadge();
+}
+
+function loadRequestToMenu(id) {
+  const req = (menuRequests || []).find(r => r.id === id);
+  if (!req) return;
+  
+  // Confirmar substituição do cardápio atual (se houver seleção)
+  if (selectedDishes.size > 0) {
+    const msg = lang==='pt' 
+      ? `Isso vai substituir o cardápio atual (${selectedDishes.size} prato(s) selecionado(s)) pelo pedido de ${req.clientName || 'cliente'}. Continuar?`
+      : `This will replace the current menu (${selectedDishes.size} dish(es) selected) with the request from ${req.clientName || 'client'}. Continue?`;
+    if (!confirm(msg)) return;
+  }
+  
+  // Aplicar dados do pedido no cardápio principal
+  selectedDishes = new Set(req.selectedDishes || []);
+  if (req.people && req.people > 0) people = req.people;
+  clientName = req.clientName || '';
+  clientCity = req.clientCity || '';
+  
+  // Marcar como processado
+  req.processed = true;
+  req.processedAt = Date.now();
+  
+  // Salvar e re-renderizar UI
+  saveToLocalStorage();
+  document.getElementById('people-count').textContent = people;
+  const cn = document.getElementById('client-name'); if (cn) cn.value = clientName;
+  const cc = document.getElementById('client-city'); if (cc) cc.value = clientCity;
+  renderMenu();
+  updateRequestsBadge();
+  
+  // Ir pra aba Cardápio
+  showTab('cardapio');
+  
+  const notesMsg = req.notes ? '\n\n📝 ' + (lang==='pt'?'Observações do cliente:':'Client notes:') + '\n"' + req.notes + '"' : '';
+  showToast((lang==='pt' ? '✅ Pedido carregado no cardápio!' : '✅ Request loaded into menu!') + notesMsg);
+}
+
+function markRequestProcessed(id) {
+  const req = (menuRequests || []).find(r => r.id === id);
+  if (!req) return;
+  req.processed = true;
+  req.processedAt = Date.now();
+  saveToLocalStorage();
+  renderMenuRequests();
+}
+
+function unmarkRequestProcessed(id) {
+  const req = (menuRequests || []).find(r => r.id === id);
+  if (!req) return;
+  req.processed = false;
+  req.processedAt = null;
+  saveToLocalStorage();
+  renderMenuRequests();
+}
+
+function discardRequest(id) {
+  const req = (menuRequests || []).find(r => r.id === id);
+  if (!req) return;
+  const msg = lang==='pt'
+    ? `Descartar pedido de ${req.clientName || 'cliente'}? Isso não pode ser desfeito.`
+    : `Discard request from ${req.clientName || 'client'}? This cannot be undone.`;
+  if (!confirm(msg)) return;
+  const idx = menuRequests.findIndex(r => r.id === id);
+  if (idx >= 0) menuRequests.splice(idx, 1);
+  saveToLocalStorage();
+  renderMenuRequests();
+  showToast(lang==='pt' ? '🗑️ Pedido descartado' : '🗑️ Request discarded');
 }
 
 // ============================================================
@@ -2948,6 +3522,10 @@ function mergeSnapshots(localSnap, cloudSnap) {
     localSnap?.history, cloudSnap?.history,
     it => it && it.id, cloudIsNewer
   );
+  merged.menuRequests = mergeArraysByKey(
+    localSnap?.menuRequests, cloudSnap?.menuRequests,
+    it => it && it.id, cloudIsNewer
+  );
   
   // === Recipes (merge por nome) ===
   merged.recipes = mergeRecipes(localSnap?.recipes, cloudSnap?.recipes, cloudIsNewer);
@@ -3003,6 +3581,315 @@ function applyMergedSnapshot(merged) {
     settings = Object.assign(settings, merged.settings);
   }
   ingredientsCatalog = Array.isArray(merged.ingredientsCatalog) ? merged.ingredientsCatalog : [];
+  menuRequests = Array.isArray(merged.menuRequests) ? merged.menuRequests : [];
+}
+
+// ============================================================
+// V20.5 — PORTAL DO CLIENTE (client-side)
+// ============================================================
+
+let cpLang = 'pt';         // idioma do portal
+let cpClient = null;       // cliente identificado (ou null se novo)
+let cpPhone = '';          // telefone digitado
+let cpPeople = 2;
+let cpSelected = new Set();
+let cpLastRequest = null;  // último pedido do cliente (pra "repetir semana passada")
+
+function cpIsPortalRoute() {
+  // Detecta se estamos no portal (via ?cardapio ou /cardapio)
+  const q = window.location.search || '';
+  const p = window.location.pathname || '';
+  return q.includes('cardapio') || /\/cardapio\/?(\?|$)/.test(p);
+}
+
+function cpInit() {
+  // Prepara o portal: esconde app operacional, mostra portal
+  document.getElementById('client-portal').style.display = 'block';
+  // Esconde tudo do app operacional
+  const opElements = ['drawer-scrim','drawer','#tab-cardapio'];
+  // Melhor: esconder o header + tabs + main + modais
+  const opSelectors = ['header','.tabs','.main','.summary-bar','.modal-overlay','.toast-container','#toast','#backup-modal','#ingredient-modal','#settings-modal'];
+  opSelectors.forEach(sel => {
+    document.querySelectorAll(sel).forEach(el => { el.style.display = 'none'; });
+  });
+  const drawer = document.getElementById('drawer');
+  if (drawer) drawer.style.display = 'none';
+  const scrim = document.getElementById('drawer-scrim');
+  if (scrim) scrim.style.display = 'none';
+  
+  // Aplicar idioma default
+  cpApplyLang();
+  cpUpdateBranding();
+  cpShowScreen(1);
+}
+
+function cpUpdateBranding() {
+  // Puxa branding do settings (se disponível) ou usa default
+  const s = (typeof settings !== 'undefined' && settings) ? settings : {};
+  const chefEl = document.getElementById('cp-chef-name');
+  const subEl = document.getElementById('cp-chef-subtitle');
+  if (chefEl) chefEl.textContent = s.chefName || 'Chef Silmara';
+  if (subEl) {
+    const sub = s.chefSubtitle || 'Personal Chef';
+    const loc = s.chefLocation || 'Bay Area';
+    subEl.textContent = sub + ' · ' + loc;
+  }
+}
+
+function cpApplyLang() {
+  document.querySelectorAll('[data-cp-pt]').forEach(el => {
+    el.textContent = el.getAttribute('data-cp-' + cpLang);
+  });
+  const langBtn = document.getElementById('cp-lang-btn');
+  if (langBtn) langBtn.textContent = cpLang === 'pt' ? '🌐 EN' : '🌐 PT';
+}
+
+function cpToggleLang() {
+  cpLang = cpLang === 'pt' ? 'en' : 'pt';
+  cpApplyLang();
+  // Re-render menu se estiver na tela 2
+  if (document.getElementById('cp-screen-2').style.display !== 'none') {
+    cpRenderMenu();
+  }
+  // Re-render welcome/summary
+  if (cpClient) cpShowWelcome();
+}
+
+function cpShowScreen(n) {
+  [1,2,3].forEach(i => {
+    const el = document.getElementById('cp-screen-'+i);
+    if (el) el.style.display = i === n ? 'block' : 'none';
+  });
+  window.scrollTo(0, 0);
+}
+
+function cpNormalizePhone(p) {
+  return String(p || '').replace(/\D/g, '');
+}
+
+function cpIdentify() {
+  const raw = document.getElementById('cp-phone').value;
+  const phone = cpNormalizePhone(raw);
+  if (phone.length < 7) {
+    alert(cpLang === 'pt' 
+      ? '⚠️ Digite um telefone válido (só números).' 
+      : '⚠️ Please enter a valid phone number (digits only).');
+    return;
+  }
+  cpPhone = phone;
+  
+  // Busca no cadastro de clientes
+  const found = (clients || []).find(c => cpNormalizePhone(c.phone) === phone);
+  cpClient = found || null;
+  
+  // Se cliente conhecido, busca último pedido pra opção "Repetir"
+  if (cpClient) {
+    const myRequests = (menuRequests || [])
+      .filter(r => cpNormalizePhone(r.clientPhone) === phone)
+      .sort((a,b) => (b.receivedAt||0) - (a.receivedAt||0));
+    cpLastRequest = myRequests[0] || null;
+    // Também pode buscar no history (atendimentos passados)
+    if (!cpLastRequest) {
+      const myHistory = (history || [])
+        .filter(h => h.clientName === cpClient.name)
+        .sort((a,b) => (b.id||0) - (a.id||0));
+      if (myHistory[0]) {
+        cpLastRequest = { selectedDishes: myHistory[0].dishes || [], people: myHistory[0].people || 2 };
+      }
+    }
+    // Pré-encher people com o do último pedido
+    if (cpLastRequest && cpLastRequest.people) cpPeople = cpLastRequest.people;
+  } else {
+    cpLastRequest = null;
+  }
+  
+  cpShowWelcome();
+  cpRenderMenu();
+  cpShowScreen(2);
+}
+
+function cpShowWelcome() {
+  const el = document.getElementById('cp-welcome');
+  if (!el) return;
+  const name = cpClient?.name || '';
+  if (cpClient) {
+    el.innerHTML = (cpLang === 'pt' ? 'Olá, ' : 'Hello, ') + '<strong>' + escapeHtml(name.split(' ')[0]) + '</strong>! 👋'
+      + '<div class="cp-welcome-sub">' + (cpLang === 'pt' ? 'Escolha o cardápio da sua semana abaixo.' : 'Pick your weekly menu below.') + '</div>';
+  } else {
+    el.innerHTML = (cpLang === 'pt' ? 'Bem-vindo(a)! 👋' : 'Welcome! 👋')
+      + '<div class="cp-welcome-sub">' + (cpLang === 'pt' ? 'Escolha o cardápio da sua semana abaixo. A chef entrará em contato.' : 'Pick your weekly menu below. The chef will reach out to you.') + '</div>';
+  }
+  
+  // Botão "Repetir semana passada"
+  const repeatBox = document.getElementById('cp-repeat-last');
+  const repeatCount = document.getElementById('cp-repeat-count');
+  if (cpLastRequest && (cpLastRequest.selectedDishes || []).length > 0) {
+    if (repeatBox) repeatBox.style.display = 'block';
+    if (repeatCount) repeatCount.textContent = '(' + cpLastRequest.selectedDishes.length + ')';
+  } else {
+    if (repeatBox) repeatBox.style.display = 'none';
+  }
+  
+  document.getElementById('cp-people').textContent = cpPeople;
+}
+
+function cpRepeatLast() {
+  if (!cpLastRequest || !cpLastRequest.selectedDishes) return;
+  cpSelected = new Set(cpLastRequest.selectedDishes);
+  cpRenderMenu();
+  // Feedback
+  const btn = document.getElementById('cp-btn-repeat');
+  if (btn) {
+    const originalHtml = btn.innerHTML;
+    btn.innerHTML = '✓ ' + (cpLang === 'pt' ? 'Marcado!' : 'Selected!');
+    setTimeout(() => { btn.innerHTML = originalHtml; }, 1200);
+  }
+}
+
+function cpChangePeople(delta) {
+  cpPeople = Math.max(1, Math.min(20, cpPeople + delta));
+  document.getElementById('cp-people').textContent = cpPeople;
+}
+
+function cpRenderMenu() {
+  const wrap = document.getElementById('cp-menu-list');
+  if (!wrap) return;
+  
+  // Agrupar receitas por categoria (usando ordem padrão)
+  const catOrder = ["Bovino","Frango","Suíno","Peixe","Camarão","Carboidratos","Legumes","Massas","Sopas","Diversos"];
+  const byCat = {};
+  Object.entries(recipes || {}).forEach(([name, r]) => {
+    const cat = r.cat || 'Diversos';
+    if (!byCat[cat]) byCat[cat] = [];
+    byCat[cat].push(name);
+  });
+  
+  let html = '';
+  catOrder.forEach(cat => {
+    const dishes = byCat[cat];
+    if (!dishes || !dishes.length) return;
+    const catLabel = cpLang === 'pt' ? cat : (catEN_map[cat] || cat);
+    const emoji = catEmoji[cat] || '';
+    html += '<div class="cp-cat-group">';
+    html += '<div class="cp-cat-header">' + emoji + ' ' + catLabel + '</div>';
+    dishes.sort((a,b) => a.localeCompare(b, cpLang === 'pt' ? 'pt-BR' : 'en'));
+    dishes.forEach(dish => {
+      const isSelected = cpSelected.has(dish);
+      html += '<div class="cp-dish-item ' + (isSelected ? 'selected' : '') + '" onclick="cpToggleDish(\'' + dish.replace(/'/g, "\\'") + '\')">';
+      html += '<div class="cp-dish-check">' + (isSelected ? '✓' : '') + '</div>';
+      html += '<div class="cp-dish-name">' + escapeHtml(dish) + '</div>';
+      html += '</div>';
+    });
+    html += '</div>';
+  });
+  
+  wrap.innerHTML = html;
+  cpUpdateSelectedCount();
+}
+
+function cpUpdateSelectedCount() {
+  const el = document.getElementById('cp-selected-count');
+  if (!el) return;
+  const n = cpSelected.size;
+  if (n === 0) {
+    el.textContent = cpLang === 'pt' ? 'Toque nos pratos para selecionar' : 'Tap dishes to select';
+  } else {
+    el.textContent = n + ' ' + (cpLang === 'pt' 
+      ? (n === 1 ? 'prato selecionado' : 'pratos selecionados')
+      : (n === 1 ? 'dish selected' : 'dishes selected'));
+  }
+  // Habilita/desabilita botão de enviar
+  const btn = document.getElementById('cp-btn-submit');
+  if (btn) btn.disabled = n === 0;
+}
+
+function cpToggleDish(dish) {
+  if (cpSelected.has(dish)) cpSelected.delete(dish);
+  else cpSelected.add(dish);
+  cpRenderMenu();
+}
+
+async function cpSubmit() {
+  const n = cpSelected.size;
+  if (n === 0) {
+    alert(cpLang === 'pt' ? '⚠️ Selecione ao menos 1 prato.' : '⚠️ Please select at least 1 dish.');
+    return;
+  }
+  
+  const notes = document.getElementById('cp-notes').value.trim();
+  const clientName = cpClient ? cpClient.name : '';
+  const clientCity = cpClient ? cpClient.city : '';
+  
+  const req = {
+    id: 'req_' + Date.now() + '_' + Math.random().toString(36).slice(2,8),
+    clientPhone: cpPhone,
+    clientName: clientName,
+    clientCity: clientCity,
+    people: cpPeople,
+    selectedDishes: [...cpSelected],
+    notes: notes,
+    receivedAt: Date.now(),
+    processed: false,
+    processedAt: null
+  };
+  
+  if (!Array.isArray(menuRequests)) menuRequests = [];
+  menuRequests.push(req);
+  
+  // Salvar no LocalStorage
+  try {
+    if (typeof saveToLocalStorage === 'function') saveToLocalStorage();
+  } catch(e) { console.warn('save local falhou:', e); }
+  
+  // Enviar pra nuvem (sem esperar — não bloquear a UI)
+  try {
+    if (typeof saveToCloudNow === 'function') saveToCloudNow();
+  } catch(e) { console.warn('save cloud falhou:', e); }
+  
+  // Mostrar tela de confirmação
+  cpShowSummary(req);
+  cpShowScreen(3);
+}
+
+function cpShowSummary(req) {
+  const el = document.getElementById('cp-summary');
+  if (!el) return;
+  const n = (req.selectedDishes || []).length;
+  const dishList = (req.selectedDishes || []).map(d => '• ' + escapeHtml(d)).join('<br>');
+  el.innerHTML = 
+    '<div style="margin-bottom:10px;"><strong>' + (cpLang === 'pt' ? 'Você escolheu' : 'You chose') + ':</strong></div>' +
+    '<div style="margin-bottom:12px;">' + dishList + '</div>' +
+    '<div><strong>' + n + '</strong> ' + (cpLang === 'pt' ? (n === 1 ? 'prato' : 'pratos') : (n === 1 ? 'dish' : 'dishes')) + ' · <strong>' + req.people + '</strong> ' + (cpLang === 'pt' ? (req.people === 1 ? 'pessoa' : 'pessoas') : (req.people === 1 ? 'person' : 'people')) + '</div>';
+}
+
+function copyClientPortalLink() {
+  // Gera o link do portal com base na URL atual
+  const base = window.location.origin + window.location.pathname.replace(/index\.html$/, '');
+  // Preferir URL amigável (/cardapio) — o arquivo cardapio/index.html redireciona
+  const link = base + 'cardapio';
+  
+  // Tenta copiar via Clipboard API
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(link).then(() => {
+      showToast(lang==='pt' ? '📋 Link copiado! Cole no WhatsApp do cliente.' : '📋 Link copied! Paste in the client\'s WhatsApp.');
+    }).catch(() => {
+      _copyFallback(link);
+    });
+  } else {
+    _copyFallback(link);
+  }
+}
+
+function _copyFallback(text) {
+  // Fallback: mostra prompt pra copiar manualmente
+  prompt(lang==='pt' ? 'Copie o link abaixo (Ctrl+C / Cmd+C):' : 'Copy the link below (Ctrl+C / Cmd+C):', text);
+}
+
+function cpStartOver() {
+  cpSelected = new Set();
+  document.getElementById('cp-notes').value = '';
+  document.getElementById('cp-phone').value = cpPhone;  // pré-preenche
+  cpShowScreen(1);
 }
 
 // ============================================================
@@ -3011,6 +3898,13 @@ function applyMergedSnapshot(merged) {
 (function init() {
   // Bootstrap: localStorage primeiro (rápido, offline-friendly), depois tenta nuvem
   const loaded = loadFromLocalStorage();
+  
+  // === V20.5 — Se URL indica portal do cliente, inicia o portal em vez do app operacional
+  const isClientPortal = cpIsPortalRoute();
+  if (isClientPortal) {
+    // Aguarda DOM e recipes estarem prontos, aí inicia o portal
+    setTimeout(() => { cpInit(); }, 50);
+  }
   // Inicializar nuvem em paralelo, sem bloquear
   setTimeout(async () => {
     if (!initSupabase()) return;
@@ -3023,7 +3917,7 @@ function applyMergedSnapshot(merged) {
         recipes, selectedDishes: [...selectedDishes],
         people, lang, clientName, clientCity,
         history, clients, schedule, invoices, settings,
-        ingredientsCatalog,
+        ingredientsCatalog, menuRequests,
         _ts: (function(){
           try { const raw = localStorage.getItem(LS_KEY); if (raw) { const p = JSON.parse(raw); return p._ts || 0; } } catch(e){}
           return 0;
@@ -3052,7 +3946,7 @@ function applyMergedSnapshot(merged) {
           recipes, selectedDishes: [...selectedDishes],
           people, lang, clientName, clientCity,
           history, clients, schedule, invoices, settings,
-          ingredientsCatalog,
+          ingredientsCatalog, menuRequests,
           _v: 21, _ts: mergedTs
         }));
       } catch(e){}
@@ -3076,6 +3970,13 @@ function applyMergedSnapshot(merged) {
       // Nuvem vazia - primeiro uso, fazer upload do estado atual
       saveToCloudNow();
     }
+    // Se estamos no portal, re-render menu (recipes podem ter chegado da nuvem)
+    if (isClientPortal && document.getElementById('cp-screen-2').style.display !== 'none') {
+      cpUpdateBranding();
+      cpRenderMenu();
+    } else if (isClientPortal) {
+      cpUpdateBranding();
+    }
   }, 100);
   document.getElementById('people-count').textContent = people;
   document.getElementById('lang-label').textContent = lang==='pt' ? 'English' : 'Português';
@@ -3085,6 +3986,7 @@ function applyMergedSnapshot(merged) {
   seedIngredientsCatalog();
   applyLang();
   renderMenu();
+  updateRequestsBadge();
   if (loaded) {
     setTimeout(()=> showToast(lang==='pt'?'✅ Dados carregados':'✅ Data loaded'), 200);
   }
