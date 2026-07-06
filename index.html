@@ -412,13 +412,31 @@
 /* ============================================================
    V20.5 — PORTAL DO CLIENTE
 ============================================================ */
+/* Quando o body tem esta classe, TUDO do app operacional fica escondido.
+   !important garante que funções como updateSummaryBar() não consigam re-exibir. */
+body.client-portal-active > header,
+body.client-portal-active > .tabs,
+body.client-portal-active > .summary-bar,
+body.client-portal-active > .main,
+body.client-portal-active > #drawer,
+body.client-portal-active > #drawer-scrim,
+body.client-portal-active > #toast,
+body.client-portal-active > .toast-container,
+body.client-portal-active > .modal-overlay {
+  display: none !important;
+  visibility: hidden !important;
+}
+/* Toda a página tem o fundo do portal quando ativo */
+body.client-portal-active {
+  background: linear-gradient(135deg, #f5f0e6 0%, #ede4d3 100%) !important;
+}
 #client-portal {
   min-height: 100vh;
   background: linear-gradient(135deg, #f5f0e6 0%, #ede4d3 100%);
   padding: 0;
 }
 .cp-header {
-  background: var(--olive);
+  background: var(--green);
   color: white;
   padding: 18px 20px;
   display: flex;
@@ -479,7 +497,7 @@
   text-align: center;
   margin-top: 24px;
 }
-.cp-card.cp-success { border-top: 4px solid var(--olive); }
+.cp-card.cp-success { border-top: 4px solid var(--green); }
 .cp-icon-big {
   font-size: 3.5rem;
   margin-bottom: 12px;
@@ -523,7 +541,7 @@
 .cp-form-group input:focus,
 .cp-form-group textarea:focus {
   outline: none;
-  border-color: var(--olive);
+  border-color: var(--green);
 }
 .cp-form-group textarea { resize: vertical; min-height: 60px; }
 .cp-hint {
@@ -533,7 +551,7 @@
   font-style: italic;
 }
 .cp-btn-primary {
-  background: var(--olive);
+  background: var(--green);
   color: white;
   border: none;
   padding: 14px 24px;
@@ -545,11 +563,11 @@
   width: 100%;
   margin-top: 12px;
   transition: transform 0.1s, box-shadow 0.2s;
-  box-shadow: 0 2px 6px rgba(107,124,54,0.3);
+  box-shadow: 0 2px 6px rgba(122,154,46,0.3);
 }
-.cp-btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 10px rgba(107,124,54,0.4); }
+.cp-btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 10px rgba(122,154,46,0.4); }
 .cp-btn-primary:active { transform: translateY(0); }
-.cp-btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+.cp-btn-primary:disabled { background: var(--green-light); color: white; cursor: not-allowed; transform: none; box-shadow: none; opacity: 0.85; }
 .cp-btn-secondary {
   background: white;
   color: var(--brown);
@@ -610,9 +628,9 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  border: 1.5px solid var(--olive);
+  border: 1.5px solid var(--green);
   background: white;
-  color: var(--olive);
+  color: var(--green);
   font-size: 1.3rem;
   font-weight: 700;
   cursor: pointer;
@@ -621,7 +639,7 @@
   justify-content: center;
   transition: all 0.2s;
 }
-.cp-people-btn:hover { background: var(--olive); color: white; }
+.cp-people-btn:hover { background: var(--green); color: white; }
 .cp-people-value {
   font-size: 1.5rem;
   font-weight: 700;
@@ -653,7 +671,7 @@
 .cp-cat-header {
   font-size: 0.8rem;
   font-weight: 700;
-  color: var(--olive);
+  color: var(--green);
   text-transform: uppercase;
   letter-spacing: 1px;
   padding: 8px 0;
@@ -671,7 +689,7 @@
   user-select: none;
 }
 .cp-dish-item:hover { background: var(--cream); }
-.cp-dish-item.selected { background: rgba(107,124,54,0.08); }
+.cp-dish-item.selected { background: rgba(122,154,46,0.08); }
 .cp-dish-check {
   width: 22px;
   height: 22px;
@@ -687,8 +705,8 @@
   transition: all 0.15s;
 }
 .cp-dish-item.selected .cp-dish-check {
-  background: var(--olive);
-  border-color: var(--olive);
+  background: var(--green);
+  border-color: var(--green);
 }
 .cp-dish-name {
   flex: 1;
@@ -3603,7 +3621,8 @@ function cpIsPortalRoute() {
 }
 
 function cpInit() {
-  // Prepara o portal: esconde app operacional, mostra portal
+  // Prepara o portal: adiciona classe no body (CSS !important esconde tudo do operacional)
+  document.body.classList.add('client-portal-active');
   document.getElementById('client-portal').style.display = 'block';
   // Esconde tudo do app operacional
   const opElements = ['drawer-scrim','drawer','#tab-cardapio'];
