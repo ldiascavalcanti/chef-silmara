@@ -647,6 +647,100 @@ body.client-portal-active {
   min-width: 32px;
   text-align: center;
 }
+/* ==== Banner Plano de preparo ==== */
+.cp-plan-info {
+  background: white;
+  border-radius: 14px;
+  padding: 14px 18px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  border-left: 4px solid var(--green);
+}
+.cp-plan-title {
+  font-size: 0.95rem;
+  color: var(--brown);
+  margin-bottom: 4px;
+}
+.cp-plan-title strong { color: var(--green-dark); font-weight: 700; }
+.cp-plan-detail {
+  font-size: 0.82rem;
+  color: var(--text-light);
+  margin-bottom: 8px;
+}
+.cp-plan-tip {
+  font-size: 0.78rem;
+  color: var(--brown);
+  background: #fff9ec;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-style: italic;
+  line-height: 1.4;
+}
+
+/* ==== Barra sticky embaixo ==== */
+.cp-sticky-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  border-top: 2px solid var(--border);
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+  padding: 12px 16px;
+  z-index: 100;
+}
+.cp-footer-content {
+  max-width: 640px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: space-between;
+}
+.cp-footer-info {
+  flex: 1;
+  min-width: 0;
+}
+.cp-total-count {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--brown);
+  line-height: 1.2;
+  margin-bottom: 3px;
+}
+.cp-total-count.complete { color: var(--green-dark); }
+.cp-total-count.excess { color: #d97706; }
+.cp-category-counts {
+  font-size: 0.82rem;
+  color: var(--text-light);
+  line-height: 1.3;
+}
+.cp-category-counts .cp-cat-complete { color: var(--green-dark); font-weight: 600; }
+.cp-category-counts .cp-cat-excess { color: #d97706; font-weight: 600; }
+.cp-double-note {
+  font-size: 0.72rem;
+  color: var(--brown);
+  background: #fff9ec;
+  padding: 4px 8px;
+  border-radius: 4px;
+  margin-top: 5px;
+  display: inline-block;
+  font-style: italic;
+}
+.cp-sticky-footer .cp-btn-send {
+  width: auto;
+  min-width: 120px;
+  padding: 12px 20px;
+  margin: 0;
+  font-size: 0.95rem;
+  flex-shrink: 0;
+}
+@media (max-width: 480px) {
+  .cp-total-count { font-size: 1rem; }
+  .cp-category-counts { font-size: 0.75rem; }
+  .cp-sticky-footer .cp-btn-send { min-width: 90px; padding: 10px 14px; font-size: 0.9rem; }
+}
+
 .cp-menu-section {
   background: white;
   border-radius: 14px;
@@ -806,6 +900,13 @@ body.client-portal-active {
       </button>
     </div>
 
+    <!-- Aviso: Plano de preparo -->
+    <div class="cp-plan-info" id="cp-plan-info">
+      <div class="cp-plan-title">📋 <span data-cp-pt="Plano de preparo" data-cp-en="Preparation plan">Plano de preparo</span>: <strong>10 <span data-cp-pt="pratos" data-cp-en="dishes">pratos</span></strong></div>
+      <div class="cp-plan-detail"><span data-cp-pt="Sugestão" data-cp-en="Suggested">Sugestão</span>: 4 <span data-cp-pt="proteínas" data-cp-en="proteins">proteínas</span> · 3 <span data-cp-pt="carboidratos" data-cp-en="carbs">carboidratos</span> · 3 <span data-cp-pt="legumes" data-cp-en="vegetables">legumes</span></div>
+      <div class="cp-plan-tip">💡 <span data-cp-pt="Massas, sopas e diversos ocupam 2 pratos cada." data-cp-en="Pasta, soups and misc dishes count as 2 dishes each.">Massas, sopas e diversos ocupam 2 pratos cada.</span></div>
+    </div>
+
     <!-- Contador de pessoas -->
     <div class="cp-people-section">
       <div class="cp-people-label" data-cp-pt="Para quantas pessoas?" data-cp-en="For how many people?">Para quantas pessoas?</div>
@@ -829,9 +930,24 @@ body.client-portal-active {
       <textarea id="cp-notes" rows="3" placeholder=""></textarea>
     </div>
 
-    <button class="cp-btn-primary cp-btn-send" onclick="cpSubmit()" id="cp-btn-submit">
-      📤 <span data-cp-pt="Enviar cardápio" data-cp-en="Send menu">Enviar cardápio</span>
-    </button>
+    <!-- Espaço extra pra barra sticky não cobrir conteúdo -->
+    <div style="height:150px;"></div>
+  </div>
+  
+  <!-- Barra sticky fixa embaixo com contadores + botão enviar -->
+  <div class="cp-sticky-footer" id="cp-sticky-footer" style="display:none;">
+    <div class="cp-footer-content">
+      <div class="cp-footer-info">
+        <div class="cp-total-count" id="cp-total-count">0 de 10 pratos</div>
+        <div class="cp-category-counts" id="cp-category-counts">
+          🥩 <span id="cp-count-prot">0/4</span> · 🍚 <span id="cp-count-carb">0/3</span> · 🥦 <span id="cp-count-veg">0/3</span>
+        </div>
+        <div class="cp-double-note" id="cp-double-note" style="display:none;"></div>
+      </div>
+      <button class="cp-btn-primary cp-btn-send" onclick="cpSubmit()" id="cp-btn-submit">
+        📤 <span data-cp-pt="Enviar" data-cp-en="Send">Enviar</span>
+      </button>
+    </div>
   </div>
 
   <!-- === TELA 3: confirmação === -->
@@ -3679,6 +3795,9 @@ function cpShowScreen(n) {
     const el = document.getElementById('cp-screen-'+i);
     if (el) el.style.display = i === n ? 'block' : 'none';
   });
+  // Mostrar/esconder o footer sticky
+  const footer = document.getElementById('cp-sticky-footer');
+  if (footer) footer.style.display = n === 2 ? 'block' : 'none';
   window.scrollTo(0, 0);
 }
 
@@ -3770,6 +3889,57 @@ function cpChangePeople(delta) {
   document.getElementById('cp-people').textContent = cpPeople;
 }
 
+// ==== Plano de preparo — constantes e categorização ====
+const CP_TOTAL_LIMIT = 10;
+const CP_PROT_LIMIT = 4;
+const CP_CARB_LIMIT = 3;
+const CP_VEG_LIMIT = 3;
+// Categorias que contam como proteína "simples" (1 prato = 1 proteína)
+const CP_CATS_PROT = ['Bovino','Frango','Suíno','Peixe','Camarão'];
+// Categorias que contam como acompanhamento "simples" (1 prato = 1 daquele tipo)
+const CP_CATS_CARB = ['Carboidratos'];
+const CP_CATS_VEG = ['Legumes'];
+// Categorias que contam como "duplo" (1 prato = 2 pratos totais: proteína + acompanhamento)
+const CP_CATS_DOUBLE = ['Massas','Sopas','Diversos'];
+
+function cpComputeCounts() {
+  // Calcula os contadores baseado em cpSelected e nas categorias das receitas.
+  // Regra: cada prato simples = 1 no total; cada prato duplo = 2 no total.
+  // Categorias: proteína conta massas/sopas/diversos como 1 proteína,
+  //             mas não incrementa carb/veg diretamente (a segunda "vaga" é flexível).
+  let total = 0;
+  let prot = 0;
+  let carb = 0;
+  let veg = 0;
+  let doubleCount = 0;
+  const doubleNames = [];
+  
+  cpSelected.forEach(dishName => {
+    const r = recipes[dishName];
+    if (!r) return;
+    const cat = r.cat || 'Diversos';
+    if (CP_CATS_PROT.includes(cat)) {
+      total += 1;
+      prot += 1;
+    } else if (CP_CATS_CARB.includes(cat)) {
+      total += 1;
+      carb += 1;
+    } else if (CP_CATS_VEG.includes(cat)) {
+      total += 1;
+      veg += 1;
+    } else if (CP_CATS_DOUBLE.includes(cat)) {
+      total += 2;
+      prot += 1;
+      doubleCount += 1;
+      doubleNames.push(dishName);
+    } else {
+      total += 1;
+    }
+  });
+  
+  return { total, prot, carb, veg, doubleCount, doubleNames };
+}
+
 function cpRenderMenu() {
   const wrap = document.getElementById('cp-menu-list');
   if (!wrap) return;
@@ -3808,17 +3978,78 @@ function cpRenderMenu() {
 
 function cpUpdateSelectedCount() {
   const el = document.getElementById('cp-selected-count');
-  if (!el) return;
   const n = cpSelected.size;
-  if (n === 0) {
-    el.textContent = cpLang === 'pt' ? 'Toque nos pratos para selecionar' : 'Tap dishes to select';
-  } else {
-    el.textContent = n + ' ' + (cpLang === 'pt' 
-      ? (n === 1 ? 'prato selecionado' : 'pratos selecionados')
-      : (n === 1 ? 'dish selected' : 'dishes selected'));
+  
+  // Texto em cima da lista de pratos
+  if (el) {
+    if (n === 0) {
+      el.textContent = cpLang === 'pt' ? 'Toque nos pratos para selecionar' : 'Tap dishes to select';
+    } else {
+      el.textContent = n + ' ' + (cpLang === 'pt' 
+        ? (n === 1 ? 'item marcado' : 'itens marcados')
+        : (n === 1 ? 'item selected' : 'items selected'));
+    }
   }
-  // Habilita/desabilita botão de enviar
+  
+  // === Atualizar barra sticky embaixo ===
+  const footer = document.getElementById('cp-sticky-footer');
+  const totalEl = document.getElementById('cp-total-count');
+  const catEl = document.getElementById('cp-category-counts');
+  const noteEl = document.getElementById('cp-double-note');
   const btn = document.getElementById('cp-btn-submit');
+  
+  if (!footer || !totalEl || !catEl) return;
+  
+  // Mostrar footer se estamos na tela 2
+  const screen2Visible = document.getElementById('cp-screen-2')?.style.display !== 'none';
+  footer.style.display = screen2Visible ? 'block' : 'none';
+  if (!screen2Visible) return;
+  
+  const counts = cpComputeCounts();
+  
+  // Total: "X de 10 pratos"
+  const dishWord = cpLang === 'pt' ? (counts.total === 1 ? 'prato' : 'pratos') : (counts.total === 1 ? 'dish' : 'dishes');
+  const deWord = cpLang === 'pt' ? 'de' : 'of';
+  let totalText = counts.total + ' ' + deWord + ' ' + CP_TOTAL_LIMIT + ' ' + dishWord;
+  totalEl.className = 'cp-total-count';
+  if (counts.total === CP_TOTAL_LIMIT) {
+    totalEl.className += ' complete';
+    totalText += ' ✓';
+  } else if (counts.total > CP_TOTAL_LIMIT) {
+    totalEl.className += ' excess';
+    totalText += ' ⚠';
+  }
+  totalEl.textContent = totalText;
+  
+  // Categorias
+  function catSpan(val, limit) {
+    let cls = '';
+    if (val === limit) cls = 'cp-cat-complete';
+    else if (val > limit) cls = 'cp-cat-excess';
+    return '<span class="' + cls + '">' + val + '/' + limit + '</span>';
+  }
+  catEl.innerHTML = '🥩 ' + catSpan(counts.prot, CP_PROT_LIMIT) +
+    ' · 🍚 ' + catSpan(counts.carb, CP_CARB_LIMIT) +
+    ' · 🥦 ' + catSpan(counts.veg, CP_VEG_LIMIT);
+  
+  // Nota sobre pratos duplos
+  if (noteEl) {
+    if (counts.doubleCount > 0) {
+      const msg = cpLang === 'pt'
+        ? (counts.doubleCount === 1 
+            ? '💡 1 prato ocupou 2 vagas (1 proteína + 1 acompanhamento)'
+            : '💡 ' + counts.doubleCount + ' pratos ocuparam 2 vagas cada')
+        : (counts.doubleCount === 1
+            ? '💡 1 dish took 2 slots (1 protein + 1 side)'
+            : '💡 ' + counts.doubleCount + ' dishes took 2 slots each');
+      noteEl.textContent = msg;
+      noteEl.style.display = 'inline-block';
+    } else {
+      noteEl.style.display = 'none';
+    }
+  }
+  
+  // Habilita/desabilita botão de enviar
   if (btn) btn.disabled = n === 0;
 }
 
